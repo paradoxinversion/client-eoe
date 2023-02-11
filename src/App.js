@@ -1,19 +1,33 @@
 import logo from './logo.svg';
 import './App.css';
-import TitleScreen from './TitleScreen';
+import TitleScreen from './screens/TitleScreen';
 import { useState } from 'react';
+import NewGameScreen from './screens/NewGameScreen';
+import MainScreen from './screens/MainScreen';
+import ScreenNavigator from './elements/ScreeNavigator';
+import IntelScreen from './screens/IntelScreen';
+import PersonnelScreen from './screens/Personnel';
+import PlotsScreen from './screens/PlotsScreen';
+import ScienceScreen from './screens/ScienceScreen';
 
+const screens = {
+  "title": TitleScreen,
+  "new-game": NewGameScreen,
+  "main": MainScreen,
+  "intel": IntelScreen,
+  "personnel": PersonnelScreen,
+  "science": ScienceScreen,
+  "plots": PlotsScreen
+}
 function App() {
 
-  const setCurrentScreen = (NextScreen) => {
-    _setCurrentScreen(<NextScreen setScreen={setCurrentScreen} gameData={gameData} setGameData={_setGameData}/>);
-  }
   const [gameData, _setGameData] = useState({});
-  const [currentScreen, _setCurrentScreen] = useState(<TitleScreen setScreen={setCurrentScreen} gameData={gameData} />);
-
+  const [gameScreen, setGameScreen] = useState("title");
+  const CurrentScreen = screens[gameScreen];
   return (
     <div className="App">
-      {currentScreen}
+      {Object.keys(gameData).length > 0 && <ScreenNavigator setScreen={setGameScreen} />}
+      <CurrentScreen setScreen={setGameScreen} gameData={gameData} setGameData={_setGameData} />
     </div>
   );
 }
