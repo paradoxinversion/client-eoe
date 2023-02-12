@@ -1,10 +1,10 @@
-const Button = ({ buttonText, disabled, onClick: clickHandler }) => {
+const Button = ({ buttonText, disabled, onClick: clickHandler, style }) => {
   return (
     <button
       onClick={() => {
         clickHandler && clickHandler();
       }}
-      className="border rounded p-2 bg-red-600 text-white disabled:opacity-50"
+      className={`rounded p-2 bg-red-600 text-white disabled:opacity-50 ${style}`}
       disabled={disabled}
     >
       {buttonText}
