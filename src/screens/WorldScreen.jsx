@@ -1,11 +1,11 @@
-const PlotsScreen = () => {
+const WorldScreen = () => {
   return (
     <section>
       <header>
-        <p>Plots</p>
+        <p>World</p>
       </header>
     </section>
   );
 };
 
-export default PlotsScreen;
+export default WorldScreen;
