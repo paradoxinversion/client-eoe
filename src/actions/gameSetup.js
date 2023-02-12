@@ -1,6 +1,11 @@
 import settings from "../config";
 const eoe = require("empire-of-evil");
 
+/**
+ * Sets up a new EOE game, spawning Nations, Orgs,
+ * Zones, and People, including the EVIL Empire.
+ * @returns An object containing game data
+ */
 export const handleNewGame = () => {
     // Set up the game data object's shape
     const newGameData = {
@@ -54,11 +59,17 @@ export const handleNewGame = () => {
         });
         newGameData.people[p.id] = p;
     }
+    const evilOverlord = eoe.gameGenerators.generatePerson({
+        nationId: evilEmpireNation.id,
+        homeZoneId: evilZone.id,
+        name: "EVIL Overlord"
+    });
+    newGameData.people[evilOverlord.id] = evilOverlord;
     newGameData.nations[evilEmpireNation.id] = evilEmpireNation;
     newGameData.governingOrganizations[evilEmpireOrg.id] = evilEmpireOrg;
     newGameData.zones[evilZone.id] = evilZone;
-    console.log(Object.values(newGameData.people).filter(person => person.nationId === evilEmpireNation.id))
-    console.log(newGameData)
     newGameData.player.empireId = evilEmpireNation.id;
+    newGameData.player.overlordId = evilOverlord.id;
+    
     return newGameData;
 }

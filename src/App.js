@@ -20,12 +20,11 @@ const screens = {
   "plots": PlotsScreen
 }
 function App() {
-
   const [gameData, _setGameData] = useState({});
   const [gameScreen, setGameScreen] = useState("title");
   const CurrentScreen = screens[gameScreen];
   return (
-    <div className="App">
+    <div className="bg-black text-white h-screen">
       {Object.keys(gameData).length > 0 && <ScreenNavigator setScreen={setGameScreen} />}
       <CurrentScreen setScreen={setGameScreen} gameData={gameData} setGameData={_setGameData} />
     </div>

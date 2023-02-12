@@ -1,11 +1,11 @@
-import NewGameScreen from "./NewGameScreen";
+import Button from "../elements/Button";
 
 const TitleScreen = (props) => {
     const {setScreen} = props;
     return (
         <div>
             <p>Empire of EVIL</p>
-            <button onClick={()=>{setScreen("new-game")}}>Play</button>
+            <Button onClick={()=>{setScreen("new-game")}} buttonText="New Game"/>
         </div>
     )
 }
