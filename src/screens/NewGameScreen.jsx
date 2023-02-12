@@ -3,7 +3,7 @@ import { handleNewGame } from "../actions/gameSetup";
 import Button from "../elements/Button";
 
 const NewGameScreen = ({ setScreen, setGameData }) => {
-  const [overlordName, setOverlordName] = useState("");
+  const [overlordName, setOverlordName] = useState("OVERLORD");
   const onNewGame = () => {
     console.log();
     setGameData(handleNewGame());
@@ -18,6 +18,7 @@ const NewGameScreen = ({ setScreen, setGameData }) => {
           type="text"
           name="overlord-name"
           id="overlord-name"
+          placeholder="OVERLORD"
           onChange={(e) => setOverlordName(e.currentTarget.value)}
         />
       </form>
