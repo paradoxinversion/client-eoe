@@ -1,13 +1,13 @@
-const ZonePanel = ({ title, zones }) => {
+const PersonPanel = ({ title, people }) => {
   return (
     <section className="border rounded border-white mb-4">
       <header className="text-xl font-bold border-b p-4">
         <p>{title}</p>
       </header>
       <div className="p-2">
-        {zones.map((zone) => (
-          <div key={zone.id}>
-            <p>{zone.name}</p>
+        {people.map((person) => (
+          <div key={person.id}>
+            <p>{person.name}</p>
           </div>
         ))}
       </div>
@@ -15,4 +15,4 @@ const ZonePanel = ({ title, zones }) => {
   );
 };
 
-export default ZonePanel;
+export default PersonPanel;
