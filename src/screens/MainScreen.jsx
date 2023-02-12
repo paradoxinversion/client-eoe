@@ -1,34 +1,49 @@
+import advanceDay from "../actions/advanceDay";
+import PersonPanel from "../elements/PersonPanel";
 import ZonePanel from "../elements/ZonePanel";
+import { toDataArray } from "../utilities/dataHelpers";
 
 const eoe = require("empire-of-evil");
-const MainScreen = ({ gameData }) => {
+const MainScreen = ({ gameData, setGameData, setScreen }) => {
   return (
     <div>
-      <section>
-        <header>
-          <p>EVIL Empire Citizens</p>
+      <header>
+        <p className="text-3xl font-bold">EVIL Empire Overview</p>
+      </header>
+      <div className="mb-4 flex items-center justify-between">
+        <p>{new Date("2000-1-1").toDateString()}</p>
+        <button className="border rounded px-2 py-1" onClick={() => {
+            const result = advanceDay(gameData);
+            setGameData(result.updatedGameData);
+            setScreen("events")
+          }}>
+          Next Day
+        </button>
+      </div>
+      <div className="border rounded mb-4">
+        <header className="text-xl font-bold border-b p-4">
+          <p>Empire Resources</p>
         </header>
-        {eoe.citizens
-          .getCitizens(Object.values(gameData.people), gameData.player.empireId)
-          .map((person) => (
-            <div>
-              <p>{person.name}</p>
-            </div>
-          ))}
-      </section>
-      <ZonePanel zones={eoe.zones.getZones(Object.values(gameData.zones))} />
-      <section>
-        <header>
-          <p>EVIL Empire Zones</p>
-        </header>
-        {eoe.zones
-          .getZones(Object.values(gameData.zones), gameData.player.empireId)
-          .map((zone) => (
-            <div>
-              <p>{zone.name}</p>
-            </div>
-          ))}
-      </section>
+        <div className="p-2">
+          <p>Money: $9999</p>
+          <p>Infrastructure: 9999</p>
+          <p>Science: 9999</p>
+        </div>
+      </div>
+      <ZonePanel
+        title={"Evil Empire Zones"}
+        zones={eoe.zones.getZones(
+          Object.values(gameData.zones),
+          gameData.player.empireId
+        )}
+      />
+      <PersonPanel
+        title={"EVIL Roster"}
+        people={eoe.organizations.getAgents(
+          toDataArray(gameData.people),
+          gameData.player.organizationId
+        )}
+      />
     </div>
   );
 };
