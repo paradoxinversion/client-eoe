@@ -5,6 +5,9 @@ import { toDataArray } from "../utilities/dataHelpers";
 
 const eoe = require("empire-of-evil");
 const MainScreen = ({ gameData, setGameData, setScreen }) => {
+  const empireZones = eoe.zones.getZones(toDataArray(gameData.zones), gameData.player.empireId)
+  const empireWealth = eoe.zones.getZonesWealth(toDataArray(gameData.people), empireZones);
+  const infraCost = eoe.zones.getZonesInfrastructureCost(empireZones)
   return (
     <div>
       <header>
@@ -25,8 +28,8 @@ const MainScreen = ({ gameData, setGameData, setScreen }) => {
           <p>Empire Resources</p>
         </header>
         <div className="p-2">
-          <p>Money: $9999</p>
-          <p>Infrastructure: 9999</p>
+          <p>Money: ${gameData.governingOrganizations[gameData.player.organizationId].wealth} (+${empireWealth})</p>
+          <p>Infrastructure: {infraCost}/1</p>
           <p>Science: 9999</p>
         </div>
       </div>
