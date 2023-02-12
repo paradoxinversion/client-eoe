@@ -85,12 +85,13 @@ export const handleNewGame = () => {
     homeZoneId: evilZone.id,
     name: "EVIL Overlord",
   });
+  evilOverlord.agent = eoe.gameGenerators.generateAgentData(evilEmpireOrg.id, 3)
   newGameData.people[evilOverlord.id] = evilOverlord;
   newGameData.nations[evilEmpireNation.id] = evilEmpireNation;
   newGameData.governingOrganizations[evilEmpireOrg.id] = evilEmpireOrg;
   newGameData.zones[evilZone.id] = evilZone;
   newGameData.player.empireId = evilEmpireNation.id;
   newGameData.player.overlordId = evilOverlord.id;
-
+  newGameData.player.organizationId = evilEmpireOrg.id;
   return newGameData;
 };
