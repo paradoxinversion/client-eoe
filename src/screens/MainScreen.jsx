@@ -5,9 +5,15 @@ import { toDataArray } from "../utilities/dataHelpers";
 
 const eoe = require("empire-of-evil");
 const MainScreen = ({ gameData, setGameData, setScreen }) => {
-  const empireZones = eoe.zones.getZones(toDataArray(gameData.zones), gameData.player.empireId)
-  const empireWealth = eoe.zones.getZonesWealth(toDataArray(gameData.people), empireZones);
-  const infraCost = eoe.zones.getZonesInfrastructureCost(empireZones)
+  const empireZones = eoe.zones.getZones(
+    toDataArray(gameData.zones),
+    gameData.player.empireId
+  );
+  const empireWealth = eoe.zones.getZonesWealth(
+    toDataArray(gameData.people),
+    empireZones
+  );
+  const infraCost = eoe.zones.getZonesInfrastructureCost(empireZones);
   return (
     <div>
       <header>
@@ -15,11 +21,16 @@ const MainScreen = ({ gameData, setGameData, setScreen }) => {
       </header>
       <div className="mb-4 flex items-center justify-between">
         <p>{new Date("2000-1-1").toDateString()}</p>
-        <button className="border rounded px-2 py-1" onClick={() => {
+        <button
+          className="border rounded px-2 py-1"
+          onClick={() => {
             const result = advanceDay(gameData);
-            setGameData(result.updatedGameData);
-            setScreen("events")
-          }}>
+            const updatedGameData = JSON.parse(JSON.stringify(gameData));
+            updatedGameData.events = result;
+            setGameData(updatedGameData);
+            setScreen("events");
+          }}
+        >
           Next Day
         </button>
       </div>
@@ -28,7 +39,14 @@ const MainScreen = ({ gameData, setGameData, setScreen }) => {
           <p>Empire Resources</p>
         </header>
         <div className="p-2">
-          <p>Money: ${gameData.governingOrganizations[gameData.player.organizationId].wealth} (+${empireWealth})</p>
+          <p>
+            Money: $
+            {
+              gameData.governingOrganizations[gameData.player.organizationId]
+                .wealth
+            }{" "}
+            (+${empireWealth})
+          </p>
           <p>Infrastructure: {infraCost}/1</p>
           <p>Science: 9999</p>
         </div>
