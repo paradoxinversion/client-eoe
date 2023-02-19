@@ -1,3 +1,4 @@
+import { GameEventQueue } from "empire-of-evil/src/gameEvents";
 import { toDataArray } from "../utilities/dataHelpers";
 
 const eoe = require("empire-of-evil");
@@ -5,10 +6,11 @@ const eoe = require("empire-of-evil");
 /**
  * Determines what events happen at end of turn and returns
  * updated gamedata with those events.
- * @param {*} gameData 
+ * @param {*} gameData
+ * @param {GameEventQueue} - gameEventQueue
  * @returns {object}
  */
-const advanceDay = (gameData) => {
+const advanceDay = (gameData, gameEventQueue) => {
   // SELECT EVENT
   const recruit = eoe.citizens
     .getCitizens(toDataArray(gameData.people), gameData.player.empireId)
@@ -17,21 +19,19 @@ const advanceDay = (gameData) => {
     recruit,
     gameData.player.organizationId
   );
-  // END SELECT EVENT
 
-  TEST_RECRUIT_EVENT.executeEvent();
+  // Setup the game event queue
+  // const gameEventQueue = new eoe.gameEvents.GameEventQueue([TEST_RECRUIT_EVENT]);
+  gameEventQueue.setEvents([TEST_RECRUIT_EVENT]);
+  gameEventQueue.executeCurrentEvent();
+  // END SELECT EVENT
 
   // Make a copy of the game data
   const updatedGameData = JSON.parse(JSON.stringify(gameData));
-  // const updatedRecruit = {
-  //   ...recruit,
-  //   agent: TEST_RECRUIT_EVENT.eventData,
-  // };
-  // updatedGameData.people[recruit.id] = updatedRecruit;
   updatedGameData.events = [TEST_RECRUIT_EVENT];
-  
-  console.log(updatedGameData);
-  return { updatedGameData };
+  updatedGameData.eventQueue = [gameEventQueue];
+
+  return { updatedGameData, gameEventQueue };
 };
 
 export default advanceDay;

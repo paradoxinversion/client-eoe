@@ -10,6 +10,7 @@ import PlotsScreen from "./screens/PlotsScreen";
 import ScienceScreen from "./screens/ScienceScreen";
 import WorldScreen from "./screens/WorldScreen";
 import EventsScreen from "./screens/EventScreen";
+import { GameEventQueue } from "empire-of-evil/src/gameEvents";
 
 const screens = {
   title: TitleScreen,
@@ -20,10 +21,11 @@ const screens = {
   science: ScienceScreen,
   plots: PlotsScreen,
   world: WorldScreen,
-  events: EventsScreen
+  events: EventsScreen,
 };
 function App() {
   const [gameData, _setGameData] = useState({});
+  const [eventQueue, setEventQueue] = useState(new GameEventQueue());
   const [gameScreen, setGameScreen] = useState("title");
   const CurrentScreen = screens[gameScreen];
   return (
@@ -36,6 +38,7 @@ function App() {
           setScreen={setGameScreen}
           gameData={gameData}
           setGameData={_setGameData}
+          eventQueue={eventQueue}
         />
       </div>
     </div>
