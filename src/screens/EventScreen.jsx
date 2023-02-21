@@ -1,44 +1,40 @@
-import { useEffect } from "react";
+import { useState } from "react";
+import EventScreenRecruit from "../elements/EventScreenRecruit";
+const eventScreenMap = {
+  "EVIL Applicant": EventScreenRecruit,
+};
+const EventsScreen = ({ gameData, setGameData, setScreen, eventQueue }) => {
+  const [eventIndex, setEventIndex] = useState(0);
+  const [eventScreen, setEventScreen] = useState(gameData.events[0].eventName);
+  const CurrentEventComponent = eventScreenMap[eventScreen];
 
-const EventsScreen = ({ gameData, setScreen, setGameData }) => {
-  const handleEvent = () => {
-    const eventResult = gameData.events.executeCurrentEvent();
-    const currentEvent = gameData.events.events[gameData.events.eventIndex];
-    const eventClass = currentEvent.constructor.name;
-    const updatedGameData = JSON.parse(JSON.stringify(gameData));
-
-    if (eventClass === "RecruitEvent") {
-      const updatedRecruit = {
-        ...currentEvent.recruit,
-        agent: eventResult,
-      };
-      updatedGameData.people[currentEvent.recruit.id] = updatedRecruit;
-      setGameData(updatedGameData);
+  const resolveEvent = (resolveArgs) => {
+    const resolution = eventQueue.resolveCurrentEvent(gameData, resolveArgs);
+    setGameData(resolution.updatedGameData);
+    if (eventQueue.eventIndex === eventQueue.events.length - 1) {
+      setScreen("main");
+    } else {
+      eventQueue.incrementEventIndex();
     }
   };
 
-  useEffect(() => {
-    handleEvent();
-  }, []);
-
   return (
     <section>
-      <header>
-        <p>{gameData.events.events[gameData.events.eventIndex].eventName}</p>
-        <p>{gameData.events.events[gameData.events.eventIndex].eventText}</p>
-        <button
-          onClick={() => {
-            if (
-              gameData.events.eventIndex ===
-              gameData.events.events.length - 1
-            ) {
-              setScreen("main");
-            }
-          }}
-        >
-          Okay
-        </button>
+      <header className="mb-4">
+        <h1>{gameData.events[eventIndex].eventName}</h1>
+        <p>{gameData.events[eventIndex].eventText}</p>
       </header>
+      <CurrentEventComponent
+        currentGameEvent={eventQueue.getCurrentEvent()}
+        resolveEvent={resolveEvent}
+      />
+      {/* <button onClick={()=>{
+        if (eventIndex === gameData.events.length -1){
+          setScreen("main")
+        } else{
+          setEventIndex(eventIndex++)
+        }
+      }}>Okay</button> */}
     </section>
   );
 };

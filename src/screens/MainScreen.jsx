@@ -4,7 +4,7 @@ import ZonePanel from "../elements/ZonePanel";
 import { toDataArray } from "../utilities/dataHelpers";
 
 const eoe = require("empire-of-evil");
-const MainScreen = ({ gameData, setGameData, setScreen }) => {
+const MainScreen = ({ gameData, setGameData, setScreen, eventQueue }) => {
   const empireZones = eoe.zones.getZones(
     toDataArray(gameData.zones),
     gameData.player.empireId
@@ -24,10 +24,8 @@ const MainScreen = ({ gameData, setGameData, setScreen }) => {
         <button
           className="border rounded px-2 py-1"
           onClick={() => {
-            const result = advanceDay(gameData);
-            const updatedGameData = JSON.parse(JSON.stringify(gameData));
-            updatedGameData.events = result;
-            setGameData(updatedGameData);
+            const result = advanceDay(gameData, eventQueue);
+            setGameData(result.updatedGameData);
             setScreen("events");
           }}
         >
