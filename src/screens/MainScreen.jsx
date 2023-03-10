@@ -5,7 +5,7 @@ import { toDataArray } from "../utilities/dataHelpers";
 
 const eoe = require("empire-of-evil");
 
-const MainScreen = ({ gameData, setGameData, setScreen, eventQueue }) => {
+const MainScreen = ({ gameData, setGameData, setScreen, eventQueue, activityManager }) => {
   const empireZones = eoe.zones.getZones(
     toDataArray(gameData.zones),
     gameData.player.empireId
@@ -15,20 +15,8 @@ const MainScreen = ({ gameData, setGameData, setScreen, eventQueue }) => {
     empireZones
   );
   const infraCost = eoe.zones.getZonesInfrastructureCost(empireZones);
-  const science = eoe.organizations
-    .getAgents(toDataArray(gameData.people), gameData.player.organizationId)
-    .filter((person) => person.agent.department === 2).reduce((acc, curr) => {
-      console.log(curr)
-      return acc + curr.intelligence
-    }, 0);
-
-  const infrastructure = eoe.organizations
-    .getAgents(toDataArray(gameData.people), gameData.player.organizationId)
-    .filter((person) => person.agent.department === 1).reduce((acc, curr) => {
-      console.log(curr)
-      return acc + curr.intelligence
-    }, 0);
-    
+  const science = eoe.organizations.getScience(toDataArray(gameData.people), gameData.player.organizationId);
+  const infrastructure = eoe.organizations.getInfrastructure(toDataArray(gameData.people), gameData.player.organizationId);
   return (
     <div>
       <header>
@@ -39,7 +27,7 @@ const MainScreen = ({ gameData, setGameData, setScreen, eventQueue }) => {
         <button
           className="border rounded px-2 py-1"
           onClick={() => {
-            const result = advanceDay(gameData, eventQueue);
+            const result = advanceDay(gameData, eventQueue, activityManager);
             setGameData(result.updatedGameData);
             setScreen("events");
           }}

@@ -1,40 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import EventScreenProceed from "../elements/EventScreenProceed";
 import EventScreenRecruit from "../elements/EventScreenRecruit";
+import EventScreenStandardReport from "../elements/EventScreenStandardReport";
 const eventScreenMap = {
   "EVIL Applicant": EventScreenRecruit,
+  "Standard Report": EventScreenProceed,
+  "Wealth Change": EventScreenProceed
 };
 const EventsScreen = ({ gameData, setGameData, setScreen, eventQueue }) => {
-  const [eventIndex, setEventIndex] = useState(0);
-  const [eventScreen, setEventScreen] = useState(gameData.events[0].eventName);
+  const [eventScreen, setEventScreen] = useState(eventQueue.getCurrentEvent().eventName);
   const CurrentEventComponent = eventScreenMap[eventScreen];
+
+  useEffect(()=>{
+    if (eventQueue.events.length > 0){
+      eventQueue.executeCurrentEvent();
+    }
+  }, [eventQueue]);
 
   const resolveEvent = (resolveArgs) => {
     const resolution = eventQueue.resolveCurrentEvent(gameData, resolveArgs);
     setGameData(resolution.updatedGameData);
     if (eventQueue.eventIndex === eventQueue.events.length - 1) {
+      eventQueue.clearEvents();
       setScreen("main");
     } else {
       eventQueue.incrementEventIndex();
     }
   };
-
+  const ce = eventQueue.getCurrentEvent();
   return (
     <section>
       <header className="mb-4">
-        <h1>{gameData.events[eventIndex].eventName}</h1>
-        <p>{gameData.events[eventIndex].eventText}</p>
+        <h1>{ce.eventName}</h1>
+        <p>{ce.eventText}</p>
       </header>
       <CurrentEventComponent
-        currentGameEvent={eventQueue.getCurrentEvent()}
+        currentGameEvent={ce}
         resolveEvent={resolveEvent}
       />
-      {/* <button onClick={()=>{
-        if (eventIndex === gameData.events.length -1){
-          setScreen("main")
-        } else{
-          setEventIndex(eventIndex++)
-        }
-      }}>Okay</button> */}
     </section>
   );
 };

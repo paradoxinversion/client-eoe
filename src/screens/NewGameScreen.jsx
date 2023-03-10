@@ -1,12 +1,13 @@
+import { populateActivities } from "empire-of-evil/src/plots";
 import { useState } from "react";
 import { handleNewGame } from "../actions/gameSetup";
 import Button from "../elements/Button";
 
-const NewGameScreen = ({ setScreen, setGameData }) => {
+const NewGameScreen = ({ setScreen, setGameData, activityManager }) => {
   const [overlordName, setOverlordName] = useState("OVERLORD");
   const onNewGame = () => {
-    console.log();
     setGameData(handleNewGame());
+    populateActivities(activityManager);
     setScreen("main");
   };
   return (
