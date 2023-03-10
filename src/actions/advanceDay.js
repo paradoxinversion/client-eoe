@@ -31,6 +31,10 @@ const advanceDay = (gameData, gameEventQueue) => {
   updatedGameData.events = [TEST_RECRUIT_EVENT];
   updatedGameData.eventQueue = [gameEventQueue];
 
+  const gameDate = new Date(gameData.gameDate);
+  gameDate.setDate(gameDate.getDate() + 1);
+  updatedGameData.gameDate = gameDate;
+  
   return { updatedGameData, gameEventQueue };
 };
 
