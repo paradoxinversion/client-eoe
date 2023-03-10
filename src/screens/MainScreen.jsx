@@ -4,6 +4,7 @@ import ZonePanel from "../elements/ZonePanel";
 import { toDataArray } from "../utilities/dataHelpers";
 
 const eoe = require("empire-of-evil");
+
 const MainScreen = ({ gameData, setGameData, setScreen, eventQueue }) => {
   const empireZones = eoe.zones.getZones(
     toDataArray(gameData.zones),
@@ -14,13 +15,27 @@ const MainScreen = ({ gameData, setGameData, setScreen, eventQueue }) => {
     empireZones
   );
   const infraCost = eoe.zones.getZonesInfrastructureCost(empireZones);
+  const science = eoe.organizations
+    .getAgents(toDataArray(gameData.people), gameData.player.organizationId)
+    .filter((person) => person.agent.department === 2).reduce((acc, curr) => {
+      console.log(curr)
+      return acc + curr.intelligence
+    }, 0);
+
+  const infrastructure = eoe.organizations
+    .getAgents(toDataArray(gameData.people), gameData.player.organizationId)
+    .filter((person) => person.agent.department === 1).reduce((acc, curr) => {
+      console.log(curr)
+      return acc + curr.intelligence
+    }, 0);
+    
   return (
     <div>
       <header>
         <p className="text-3xl font-bold">EVIL Empire Overview</p>
       </header>
       <div className="mb-4 flex items-center justify-between">
-        <p>{new Date("2000-1-1").toDateString()}</p>
+        <p>{new Date(gameData.gameDate).toDateString()}</p>
         <button
           className="border rounded px-2 py-1"
           onClick={() => {
@@ -45,8 +60,8 @@ const MainScreen = ({ gameData, setGameData, setScreen, eventQueue }) => {
             }{" "}
             (+${empireWealth})
           </p>
-          <p>Infrastructure: {infraCost}/1</p>
-          <p>Science: 9999</p>
+          <p>Infrastructure: {infraCost}/{infrastructure}</p>
+          <p>Science: {science}</p>
         </div>
       </div>
       <ZonePanel
