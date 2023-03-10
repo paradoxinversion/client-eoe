@@ -14,6 +14,7 @@ export const handleNewGame = () => {
     zones: {},
     people: {},
     player: {},
+    gameDate: new Date("2000-1-1")
   };
 
   // Generate initial nations
