@@ -11,6 +11,7 @@ import ScienceScreen from "./screens/ScienceScreen";
 import WorldScreen from "./screens/WorldScreen";
 import EventsScreen from "./screens/EventScreen";
 import { GameEventQueue } from "empire-of-evil/src/gameEvents";
+import { ActivityManager } from "empire-of-evil/src/plots";
 
 const screens = {
   title: TitleScreen,
@@ -23,9 +24,11 @@ const screens = {
   world: WorldScreen,
   events: EventsScreen,
 };
+
 function App() {
   const [gameData, _setGameData] = useState({});
   const [eventQueue, setEventQueue] = useState(new GameEventQueue());
+  const [activityManager, setActivityManager] = useState(new ActivityManager())
   const [gameScreen, setGameScreen] = useState("title");
   const CurrentScreen = screens[gameScreen];
   return (
@@ -39,6 +42,7 @@ function App() {
           gameData={gameData}
           setGameData={_setGameData}
           eventQueue={eventQueue}
+          activityManager={activityManager}
         />
       </div>
     </div>
