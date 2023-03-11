@@ -1,6 +1,6 @@
 const ZonePanel = ({ title, zones }) => {
   return (
-    <section className="border rounded border-white mb-4">
+    <section className="mb-4">
       <header className="text-xl font-bold border-b p-4">
         <p>{title}</p>
       </header>

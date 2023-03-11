@@ -17,8 +17,8 @@ const AgentSelector = ({agentsArray, cb, participantsArray}) => {
     <div>
       {agentsArray.map(agent => (
         <div key={agent.id}>
-          <label htmlFor={agent.id}>{agent.name}</label>
           <input type={"checkbox"} name={agent.id} onChange={handleCheckbox} defaultChecked={participantsArray.includes(agent)} />
+          <label htmlFor={agent.id}>{agent.name}</label>
         </div>
       ))}
     </div>

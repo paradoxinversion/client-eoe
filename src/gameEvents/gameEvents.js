@@ -3,7 +3,6 @@ import { toDataArray } from "../utilities/dataHelpers";
 const eoe = require("empire-of-evil");
 const { Shufflebag } = require("../utilities/shufflebag");
 
-const RANDOM_EVENTS = [eoe.gameEvents.EvilApplicantEvent, null];
 const shufflebag = Shufflebag({
   EvilApplicantEvent: 1,
   WealthModEvent: 1,

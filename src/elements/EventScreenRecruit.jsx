@@ -1,19 +1,28 @@
+import {
+  getAgents,
+  getAgentSubordinates,
+} from "empire-of-evil/src/organization";
 import { useState } from "react";
+import { toDataArray } from "../utilities/dataHelpers";
 import Button from "./Button";
+import PersonPanel from "./PersonPanel";
 
 /**
  * @param {object} props
- * @param {object} props.currentGameEvent 
+ * @param {object} props.currentGameEvent
  * @param {Function} props.resolveEvent
- * @returns 
+ * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
+ * @returns
  */
-const EventScreenRecruit = ({currentGameEvent, resolveEvent}) => {
+const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
   const [department, setDepartment] = useState(null);
-
+  const [commander, setCommander] = useState(null);
   const onChange = (event) => {
     setDepartment(event.target.value);
-  }
-
+  };
+  const onCommanderSelect = (event) => {
+    setCommander(event.target.value);
+  };
   return (
     <section>
       <section className="mb-4">
@@ -32,44 +41,88 @@ const EventScreenRecruit = ({currentGameEvent, resolveEvent}) => {
         <p>Select a department for this recruit</p>
         <form onChange={onChange}>
           <div>
-            <input type="radio" id="recruit-department-trooper" name="recruit-department" value={0}/>
+            <input
+              type="radio"
+              id="recruit-department-trooper"
+              name="recruit-department"
+              value={0}
+            />
             <label htmlFor="recruit-department-trooper">Henchman</label>
           </div>
           <div>
-            <input type="radio" id="recruit-department-administrator" name="recruit-department" value={1}/>
-            <label htmlFor="recruit-department-administrator">Administrator</label>  
+            <input
+              type="radio"
+              id="recruit-department-administrator"
+              name="recruit-department"
+              value={1}
+            />
+            <label htmlFor="recruit-department-administrator">
+              Administrator
+            </label>
           </div>
           <div>
-            <input type="radio" id="recruit-department-scientist" name="recruit-department" value={2}/>
-            <label htmlFor="recruit-department-scientist">Scientist</label>  
+            <input
+              type="radio"
+              id="recruit-department-scientist"
+              name="recruit-department"
+              value={2}
+            />
+            <label htmlFor="recruit-department-scientist">Scientist</label>
           </div>
+        </form>
+        <p>Commander</p>
+        <form onChange={onCommanderSelect}>
+          {getAgents(
+            toDataArray(gameData.people),
+            gameData.player.organizationId
+          ).map((agent) => {
+            const subordinates = getAgentSubordinates(
+              toDataArray(gameData.people),
+              agent
+            );
+            return (
+              <div>
+                <input
+                  type="radio"
+                  id="recruit-commander"
+                  name="recruit-commander"
+                  value={agent.id}
+                  disabled={subordinates.length === agent.leadership}
+                />
+                <label htmlFor="recruit-commander">
+                  {agent.name} ({subordinates.length}/{agent.leadership})
+                </label>
+              </div>
+            );
+          })}
         </form>
       </section>
       <section className="w-32 flex justify-between">
         <Button
-          disabled={department === null}
+          disabled={department === null || commander === null}
           buttonText="Accept"
-          onClick={()=>{
+          onClick={() => {
             resolveEvent({
               resolutionValue: 1,
               data: {
-                department
-              }
-            })
+                department,
+                commander,
+              },
+            });
           }}
         />
 
-        <Button 
+        <Button
           buttonText="Deny"
-          onClick={()=>{
+          onClick={() => {
             resolveEvent({
-              resolutionValue: 0
-            })
+              resolutionValue: 0,
+            });
           }}
         />
       </section>
     </section>
-  )
-}
+  );
+};
 
 export default EventScreenRecruit;

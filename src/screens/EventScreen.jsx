@@ -37,6 +37,7 @@ const EventsScreen = ({ gameData, setGameData, setScreen, eventQueue }) => {
       <CurrentEventComponent
         currentGameEvent={ce}
         resolveEvent={resolveEvent}
+        gameData={gameData}
       />
     </section>
   );

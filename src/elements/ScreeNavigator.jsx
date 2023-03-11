@@ -11,16 +11,16 @@ const screens = [
 
 const ScreenNavigator = ({ setScreen }) => {
   return (
-    <section className="flex flex-col">
+    <section className="flex flex-col w-32 bg-stone-800 text-white">
+      <p className="text-xs p-2">WELCOME, OVERLORD</p>
       {screens.map((screen) => (
-        <Button
+        <button
           key={screen.screen}
+          className="p-2 text-left hover:bg-stone-700 active:bg-stone-800"
           onClick={() => {
             setScreen(screen.screen);
           }}
-          buttonText={screen.title}
-          style={"mb-4"}
-        />
+        >{screen.title}</button>
       ))}
     </section>
   );
