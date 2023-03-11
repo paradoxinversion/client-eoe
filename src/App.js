@@ -11,7 +11,7 @@ import ScienceScreen from "./screens/ScienceScreen";
 import WorldScreen from "./screens/WorldScreen";
 import EventsScreen from "./screens/EventScreen";
 import { GameEventQueue } from "empire-of-evil/src/gameEvents";
-import { ActivityManager } from "empire-of-evil/src/plots";
+import { ActivityManager, PlotManager } from "empire-of-evil/src/plots";
 
 const screens = {
   title: TitleScreen,
@@ -29,20 +29,22 @@ function App() {
   const [gameData, _setGameData] = useState({});
   const [eventQueue, setEventQueue] = useState(new GameEventQueue());
   const [activityManager, setActivityManager] = useState(new ActivityManager())
+  const [plotManager, setPlotManager] = useState(new PlotManager())
   const [gameScreen, setGameScreen] = useState("title");
   const CurrentScreen = screens[gameScreen];
   return (
-    <div className="bg-black text-white h-screen flex p-4">
+    <div className="bg-stone-900 text-stone-200 h-screen flex">
       {Object.keys(gameData).length > 0 && (
         <ScreenNavigator setScreen={setGameScreen} />
       )}
-      <div className="pl-4 pr-4 overflow-y-auto">
+      <div className="pl-4 pr-4 overflow-y-auto w-5/6">
         <CurrentScreen
           setScreen={setGameScreen}
           gameData={gameData}
           setGameData={_setGameData}
           eventQueue={eventQueue}
           activityManager={activityManager}
+          plotManager={plotManager}
         />
       </div>
     </div>
