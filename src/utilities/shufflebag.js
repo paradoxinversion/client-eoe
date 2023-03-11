@@ -15,7 +15,6 @@ export const Shufflebag = frequencyMap => {
 
   const fmap = frequencyMap;
   let values = getValueSet(fmap);
-  console.log("Shufflebag initialized:", fmap)
   return {
     /**
      * Get the next value in the shufflebag.
@@ -25,7 +24,6 @@ export const Shufflebag = frequencyMap => {
       const selection = values[selectedValue];
       values.splice(selectedValue, 1);
       if (values.length === 0) values = getValueSet(fmap);
-      console.log(values.length);
       return selection;
     }
   };
