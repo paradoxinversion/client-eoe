@@ -1,7 +1,7 @@
 const PersonPanel = ({ title, people, cb }) => {
   return (
     <section className="mb-4">
-      <header className="text-xl font-bold border-b p-4">
+      <header className="text-xl font-bold border-b">
         <p>{title}</p>
       </header>
       <div className="p-2">

@@ -17,6 +17,7 @@ const MainScreen = ({
   setScreen,
   eventQueue,
   activityManager,
+  plotManager
 }) => {
   const zonesArray = toDataArray(gameData.zones);
   const peopleArray = toDataArray(gameData.people);
@@ -44,12 +45,17 @@ const MainScreen = ({
       <header className="h-16">
         <p className="text-3xl font-bold">EVIL Empire Overview</p>
       </header>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4">
         <p>{new Date(gameData.gameDate).toDateString()}</p>
         <button
           className="border rounded px-2 py-1 border-slate-400"
           onClick={() => {
-            const result = advanceDay(gameData, eventQueue, activityManager);
+            const result = advanceDay(gameData, eventQueue, activityManager, plotManager);
+
+            if (result.updatedGameData.people[gameData.player.overlordId].currentHealth <= 0){
+              setScreen("game-over");
+            }
+
             setGameData(result.updatedGameData);
             setScreen("events");
           }}
@@ -59,7 +65,7 @@ const MainScreen = ({
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <header className="text-xl font-bold border-b p-4">
+          <header className="text-xl font-bold border-b">
             <p>Empire Resources</p>
           </header>
           <div className="p-2">
@@ -78,7 +84,7 @@ const MainScreen = ({
           </div>
         </div>
         <div className="mb-4">
-          <header className="text-xl font-bold border-b p-4">
+          <header className="text-xl font-bold border-b">
             <p>Empire Expenses</p>
           </header>
           <div className="p-2">

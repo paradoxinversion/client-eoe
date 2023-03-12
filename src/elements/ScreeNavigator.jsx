@@ -11,7 +11,7 @@ const screens = [
 
 const ScreenNavigator = ({ setScreen }) => {
   return (
-    <section className="flex flex-col w-32 bg-stone-800 text-white">
+    <section className="flex flex-col bg-stone-800 text-white">
       <p className="text-xs p-2">WELCOME, OVERLORD</p>
       {screens.map((screen) => (
         <button
