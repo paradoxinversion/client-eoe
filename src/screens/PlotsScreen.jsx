@@ -1,4 +1,3 @@
-import { getAgents } from "empire-of-evil/src/organization";
 import { useState } from "react";
 import AgentSelector from "../elements/AgentSelector";
 import AttackZonePlot from "../elements/AttackZonePlot";
@@ -31,7 +30,6 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
     }
   };
 
-  const peopleArray = toDataArray(gameData.people);
   const PlotWidget = currentPlot && plotsWidgets[currentPlot.type];
   return (
     <section>
@@ -49,6 +47,8 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
               <div className="grid grid-cols-6">
                 {activityManager.activities.map((activity) => (
                   <button
+                    key={`${activity.name}`}
+                    className="border m-2"
                     onClick={() => {
                       onClickActivity(activity);
                     }}
@@ -88,6 +88,7 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
               <div className="grid grid-cols-2">
                 {plotManager.plots.map((plot) => (
                   <button
+                  className="m-2 border"
                     onClick={() => {
                       setCurrentPlot(plot);
                     }}
@@ -98,25 +99,34 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
               </div>
             </div>
             {currentPlot && (
-              // <div>
-              //   <p className="text-xl font-bold">
-              //     {currentPlot.name}: Participants
-              //   </p>
-              //   {getAgents(peopleArray, gameData.player.organizationId).map(
-              //     (agent) => {
-              //       return (
-              //         <div>
-              //           <input type={"checkbox"} name="plot-participants" />
-              //           <label htmlFor="plot-participants">{agent.name}</label>
-              //         </div>
-              //       );
-              //     }
-              //   )}
-              //   <button className="hover:bg-stone-500 p-2">Confirm</button>
-              //   <button className="hover:bg-stone-500 p-2">Cancel</button>
-              // </div>
-              <PlotWidget gameData={gameData} plotManager={plotManager} />
+              <PlotWidget gameData={gameData} plotManager={plotManager} cb={()=>{
+                setCurrentPlot(null)
+              }} />
             )}
+          </div>
+        </section>
+
+        <section>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+
+              <header>
+                <p className="text-xl font-bold border-b">Queued Plots</p>
+              </header>
+              <table>
+                <thead>
+                  <th>Plot</th>
+                  <th>Agents</th>
+                </thead>
+                {plotManager.plotQueue.map(plot=>(
+                  <tr>
+                    <td>{plot.name}</td>
+                    <td>{plot?.agents?.length}</td>
+                    <td><button className="border rounded px-2">cancel</button></td>
+                  </tr>
+                ))}
+              </table>
+            </div>
           </div>
         </section>
       </section>
