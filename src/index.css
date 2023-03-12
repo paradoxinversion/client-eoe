@@ -18,6 +18,10 @@ input[type=radio]{
   @apply mr-2;
 }
 
+.header-font{
+  @apply text-3xl font-bold
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
