@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import EventScreenCombatResults from "../elements/EventScreenCombatResults";
 import EventScreenProceed from "../elements/EventScreenProceed";
 import EventScreenRecruit from "../elements/EventScreenRecruit";
-import EventScreenStandardReport from "../elements/EventScreenStandardReport";
 const eventScreenMap = {
   "EVIL Applicant": EventScreenRecruit,
   "Standard Report": EventScreenProceed,
-  "Wealth Change": EventScreenProceed
+  "Wealth Change": EventScreenProceed,
+  "Attack Zone": EventScreenCombatResults
 };
 const EventsScreen = ({ gameData, setGameData, setScreen, eventQueue }) => {
   const [eventScreen, setEventScreen] = useState(eventQueue.getCurrentEvent().eventName);
@@ -25,6 +26,7 @@ const EventsScreen = ({ gameData, setGameData, setScreen, eventQueue }) => {
       setScreen("main");
     } else {
       eventQueue.incrementEventIndex();
+      setEventScreen(eventQueue.getCurrentEvent().eventName)
     }
   };
   const ce = eventQueue.getCurrentEvent();

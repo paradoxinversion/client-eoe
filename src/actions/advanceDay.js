@@ -1,3 +1,4 @@
+import { addPlotResolutions } from "empire-of-evil/src/gameEvents";
 import { prepareRandomEvents } from "../gameEvents/gameEvents";
 
 /**
@@ -8,11 +9,14 @@ import { prepareRandomEvents } from "../gameEvents/gameEvents";
  * @param {ActivityManager} - activityManager
  * @returns {object}
  */
-const advanceDay = (gameData, gameEventQueue, activityManager) => {
+const advanceDay = (gameData, gameEventQueue, activityManager, plotManager) => {
   const events = prepareRandomEvents(gameData);
 
   const activities = activityManager.executeActivities();
   gameEventQueue.setEvents(events);
+
+  const plots = plotManager.executePlots(gameData);
+  const plotEvents = addPlotResolutions(plots, gameEventQueue)
 
   /**
    * @type {import("empire-of-evil/src/typedef").GameData}
