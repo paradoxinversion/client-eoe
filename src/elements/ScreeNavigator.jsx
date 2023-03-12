@@ -1,3 +1,4 @@
+import { saveGame } from "../actions/dataManagement";
 import Button from "./Button";
 
 const screens = [
@@ -9,7 +10,7 @@ const screens = [
   { screen: "plots", title: "Plots" },
 ];
 
-const ScreenNavigator = ({ setScreen }) => {
+const ScreenNavigator = ({ setScreen, gameData }) => {
   return (
     <section className="flex flex-col bg-stone-800 text-white">
       <p className="text-xs p-2">WELCOME, OVERLORD</p>
@@ -22,6 +23,13 @@ const ScreenNavigator = ({ setScreen }) => {
           }}
         >{screen.title}</button>
       ))}
+      <button
+  
+        className="p-2 text-left hover:bg-stone-700 active:bg-stone-800"
+        onClick={() => {
+          saveGame(gameData)
+        }}
+      >Save</button>
     </section>
   );
 };

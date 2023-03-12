@@ -64,6 +64,7 @@ const PersonnelScreen = ({gameData}) => {
           <div>
             <p>{selectedAgent.name}</p>
             <p>Salary: ${selectedAgent.agent.salary}</p>
+            <p>Health: {selectedAgent.currentHealth}/{selectedAgent.health}</p>
             <p>Combat: {selectedAgent.combat}</p>
             <p>Administration: {selectedAgent.administration}</p>
             <p>Intelligence: {selectedAgent.intelligence}</p>

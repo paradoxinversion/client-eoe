@@ -110,6 +110,7 @@ const MainScreen = ({
             toDataArray(gameData.people),
             gameData.player.organizationId
           )}
+          gameData={gameData}
         />
       </div>
 

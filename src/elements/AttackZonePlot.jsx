@@ -22,7 +22,6 @@ const AttackZonePlot = ({ gameData, plotManager, cb }) => {
 
   const onUpdateAttackers = (e, agent) => {
     if (e.currentTarget.checked) {
-      console.log(attackers.includes(agent), agent);
       if (!attackers.includes(agent)) {
         const updatedAttackers = JSON.parse(JSON.stringify(attackers));
         updatedAttackers.push(agent);

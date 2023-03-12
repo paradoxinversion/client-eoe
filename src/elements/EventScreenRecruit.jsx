@@ -38,9 +38,11 @@ const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
       </section>
 
       <section className="mb-4">
-        <p>Select a department for this recruit</p>
-        <form onChange={onChange}>
-          <div>
+        <p className="text-lg border-b mb-4">
+          Select a department for this recruit
+        </p>
+        <form className="grid grid-cols-3 gap-2" onChange={onChange}>
+          <div className="bg-stone-800 rounded p-2">
             <input
               type="radio"
               id="recruit-department-trooper"
@@ -49,7 +51,7 @@ const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
             />
             <label htmlFor="recruit-department-trooper">Henchman</label>
           </div>
-          <div>
+          <div className="bg-stone-800 rounded p-2">
             <input
               type="radio"
               id="recruit-department-administrator"
@@ -60,7 +62,7 @@ const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
               Administrator
             </label>
           </div>
-          <div>
+          <div className="bg-stone-800 rounded p-2">
             <input
               type="radio"
               id="recruit-department-scientist"
@@ -70,37 +72,39 @@ const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
             <label htmlFor="recruit-department-scientist">Scientist</label>
           </div>
         </form>
-        <p>Commander</p>
+        <p className="text-lg border-b mb-4">Commander</p>
         <form onChange={onCommanderSelect}>
-          {getAgents(
-            toDataArray(gameData.people),
-            gameData.player.organizationId
-          ).map((agent) => {
-            const subordinates = getAgentSubordinates(
+          <div className="grid grid-cols-6 gap-2">
+            {getAgents(
               toDataArray(gameData.people),
-              agent
-            );
-            return (
-              <div>
-                <input
-                  type="radio"
-                  id="recruit-commander"
-                  name="recruit-commander"
-                  value={agent.id}
-                  disabled={subordinates.length === agent.leadership}
-                />
-                <label htmlFor="recruit-commander">
-                  {agent.name} ({subordinates.length}/{agent.leadership})
-                </label>
-              </div>
-            );
-          })}
+              gameData.player.organizationId
+            ).map((agent) => {
+              const subordinates = getAgentSubordinates(
+                toDataArray(gameData.people),
+                agent
+              );
+              return (
+                <div className="bg-stone-800 rounded p-2">
+                  <input
+                    type="radio"
+                    id="recruit-commander"
+                    name="recruit-commander"
+                    value={agent.id}
+                    disabled={subordinates.length === agent.leadership}
+                  />
+                  <label htmlFor="recruit-commander">
+                    {agent.name} ({subordinates.length}/{agent.leadership})
+                  </label>
+                </div>
+              );
+            })}
+          </div>
         </form>
       </section>
       <section className="w-32 flex justify-between">
-        <Button
+        <button
+          className="p-2 hover:bg-stone-700 disabled:bg-stone-900"
           disabled={department === null || commander === null}
-          buttonText="Accept"
           onClick={() => {
             resolveEvent({
               resolutionValue: 1,
@@ -110,16 +114,20 @@ const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
               },
             });
           }}
-        />
-
-        <Button
-          buttonText="Deny"
+        >
+          Accept
+        </button>
+        <button
+          className="p-2 hover:bg-red-700 disabled:bg-stone-400"
           onClick={() => {
             resolveEvent({
               resolutionValue: 0,
             });
           }}
-        />
+        >
+          {" "}
+          Deny
+        </button>
       </section>
     </section>
   );

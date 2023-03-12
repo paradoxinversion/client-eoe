@@ -35,11 +35,9 @@ export const prepareRandomEvents = (gameData) => {
     }
     
   }
-
   if (events.length === 0){
     events.push(eoe.gameEvents.generateStandardReportEvent())
   }
-
-  console.log(events);
   return events;
 };
+

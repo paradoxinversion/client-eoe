@@ -37,7 +37,7 @@ function App() {
   return (
     <div className="bg-stone-900 text-stone-200 h-screen grid grid-cols-12 gap-4">
       {Object.keys(gameData).length > 0 && (
-        <ScreenNavigator setScreen={setGameScreen} />
+        <ScreenNavigator gameData={gameData} setScreen={setGameScreen} />
       )}
       <div className={`overflow-y-auto w-full ${Object.keys(gameData).length > 0 ? "col-span-11" : "col-span-12"}`}>
         <CurrentScreen

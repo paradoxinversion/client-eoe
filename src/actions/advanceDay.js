@@ -17,7 +17,7 @@ const advanceDay = (gameData, gameEventQueue, activityManager, plotManager) => {
 
   const plots = plotManager.executePlots(gameData);
   const plotEvents = addPlotResolutions(plots, gameEventQueue)
-
+  gameEventQueue.addEvents(plotEvents);
   /**
    * @type {import("empire-of-evil/src/typedef").GameData}
    */
