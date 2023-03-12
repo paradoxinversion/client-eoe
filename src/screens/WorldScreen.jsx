@@ -1,11 +1,11 @@
 import { getNationCitizens } from "empire-of-evil/src/nations";
 import { getAgents } from "empire-of-evil/src/organization";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ZonePanel from "../elements/ZonePanel";
 import { toDataArray } from "../utilities/dataHelpers";
 const eoe = require("empire-of-evil");
 const WorldScreen = ({ gameData }) => {
-  const [selectedNation, setSelectedNation] = useState(null);
+  const [selectedNation] = useState(null);
 
   const peopleArray = toDataArray(gameData.people);
   const nationsArray = toDataArray(gameData.nations);
@@ -33,16 +33,8 @@ const WorldScreen = ({ gameData }) => {
           {nationsArray
             .filter((nation) => nation.id !== gameData.player.empireId)
             .map((nation) => (
-              <tr>
+              <tr key={nation.id}>
                 <td className="border">
-                  {/* <button
-                    className="mb-2 px-2 border rounded"
-                    onClick={() => {
-                      setSelectedNation(nation);
-                    }}
-                  >
-                    {nation.name}
-                  </button> */}
                   {nation.name}
                 </td>
                 <td className="border">{getNationCitizens(peopleArray, nation.id).length}</td>

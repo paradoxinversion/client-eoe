@@ -21,21 +21,26 @@ const ScienceScreen = ({gameData}) => {
           <p>Labs</p>
         </header>
         <table>
-          <tr className="text-left">
-            <th>Lab</th>
-            <th>Max Scientists</th>
-          </tr>
-          {
-            labs.map(lab => {
-              
-              return (
-                <tr key={lab.id} className="">
-                  <td>{lab.name}</td>
-                  <td className="text-right">{lab.maxPersonnel}</td>
-                </tr>
-              )
-            })
-          }
+          <thead>
+
+            <tr className="text-left">
+              <th>Lab</th>
+              <th>Max Scientists</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              labs.map(lab => {
+                
+                return (
+                  <tr key={lab.id} className="">
+                    <td>{lab.name}</td>
+                    <td className="text-right">{lab.maxPersonnel}</td>
+                  </tr>
+                )
+              })
+            }
+          </tbody>
         </table>
       </section>
     </section>

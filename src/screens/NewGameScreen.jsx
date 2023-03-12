@@ -1,7 +1,6 @@
 import { populateActivities, populatePlots } from "empire-of-evil/src/plots";
 import { useState } from "react";
 import { handleNewGame, hireStartingAgents } from "../actions/gameSetup";
-import Button from "../elements/Button";
 
 const NewGameScreen = ({
   setScreen,

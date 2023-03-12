@@ -21,7 +21,7 @@ const EventsScreen = ({ gameData, setGameData, setScreen, eventQueue }) => {
   const resolveEvent = (resolveArgs) => {
     const resolution = eventQueue.resolveCurrentEvent(gameData, resolveArgs);
     const updatedGameData = {...gameData, ...resolution.updatedGameData}
-    if (updatedGameData.people[gameData.player.overlordId].currentHealth <= 0){
+    if (updatedGameData.people[gameData.player.overlordId]?.currentHealth <= 0){
       setScreen("game-over");
     }
     setGameData(updatedGameData);

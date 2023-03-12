@@ -1,5 +1,5 @@
 import { getAgents, getControlledZones } from "empire-of-evil/src/organization";
-import { Plot, plotConfig } from "empire-of-evil/src/plots";
+import { Plot } from "empire-of-evil/src/plots";
 import { useState } from "react";
 import { toDataArray } from "../utilities/dataHelpers";
 

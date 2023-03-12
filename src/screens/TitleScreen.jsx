@@ -1,5 +1,4 @@
 import { populateActivities, populatePlots } from "empire-of-evil/src/plots";
-import Button from "../elements/Button";
 
 const TitleScreen = (props) => {
   const { setScreen, setGameData, activityManager, plotManager } = props;

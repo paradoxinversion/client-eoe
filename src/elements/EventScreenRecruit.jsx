@@ -4,8 +4,6 @@ import {
 } from "empire-of-evil/src/organization";
 import { useState } from "react";
 import { toDataArray } from "../utilities/dataHelpers";
-import Button from "./Button";
-import PersonPanel from "./PersonPanel";
 
 /**
  * @param {object} props
@@ -84,7 +82,7 @@ const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
                 agent
               );
               return (
-                <div className="bg-stone-800 rounded p-2">
+                <div key={`event-screen-recruit-${agent.id}`} className="bg-stone-800 rounded p-2">
                   <input
                     type="radio"
                     id="recruit-commander"

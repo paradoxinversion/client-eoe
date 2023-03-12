@@ -29,9 +29,9 @@ const screens = {
 
 function App() {
   const [gameData, _setGameData] = useState({});
-  const [eventQueue, setEventQueue] = useState(new GameEventQueue());
-  const [activityManager, setActivityManager] = useState(new ActivityManager())
-  const [plotManager, setPlotManager] = useState(new PlotManager())
+  const [eventQueue] = useState(new GameEventQueue());
+  const [activityManager] = useState(new ActivityManager())
+  const [plotManager] = useState(new PlotManager())
   const [gameScreen, setGameScreen] = useState("title");
   const CurrentScreen = screens[gameScreen];
   return (

@@ -1,5 +1,4 @@
 import { saveGame } from "../actions/dataManagement";
-import Button from "./Button";
 
 const screens = [
   { screen: "main", title: "Home" },

@@ -88,6 +88,7 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
               <div className="grid grid-cols-2">
                 {plotManager.plots.map((plot) => (
                   <button
+                  key={plot.name}
                   className="m-2 border"
                     onClick={() => {
                       setCurrentPlot(plot);
@@ -115,16 +116,22 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
               </header>
               <table>
                 <thead>
-                  <th>Plot</th>
-                  <th>Agents</th>
-                </thead>
-                {plotManager.plotQueue.map(plot=>(
                   <tr>
-                    <td>{plot.name}</td>
-                    <td>{plot?.agents?.length}</td>
-                    <td><button className="border rounded px-2">cancel</button></td>
+
+                    <th>Plot</th>
+                    <th>Agents</th>
                   </tr>
-                ))}
+                </thead>
+                <tbody>
+
+                  {plotManager.plotQueue.map((plot, index)=>(
+                    <tr key={`plot-${index}-${plot.type}`} >
+                      <td>{plot.name}</td>
+                      <td>{plot?.agents?.length}</td>
+                      <td><button className="border rounded px-2">cancel</button></td>
+                    </tr>
+                  ))}
+                </tbody>
               </table>
             </div>
           </div>

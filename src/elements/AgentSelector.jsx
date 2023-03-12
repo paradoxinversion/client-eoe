@@ -1,5 +1,5 @@
 /**
- * 
+ * A component to select Agents.
  * @param {Object} props 
  * @param {import("empire-of-evil/src/typedef").Person[]} props.agentsArray
  */
