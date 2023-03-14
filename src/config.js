@@ -1,4 +1,4 @@
-const NATIONS_AMT = 10;
+const NATIONS_AMT = 1;
 
 const settings = {
   NATIONS_AMT,
