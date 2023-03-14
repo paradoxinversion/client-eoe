@@ -8,7 +8,7 @@ const eventScreenMap = {
   "Wealth Change": EventScreenProceed,
   "Attack Zone": EventScreenCombatResults
 };
-const EventsScreen = ({ gameData, setGameData, setScreen, eventQueue }) => {
+const EventsScreen = ({ gameData, setScreen, eventQueue, updateGameData }) => {
   const [eventScreen, setEventScreen] = useState(eventQueue.getCurrentEvent().eventName);
   const CurrentEventComponent = eventScreenMap[eventScreen];
 
@@ -24,7 +24,7 @@ const EventsScreen = ({ gameData, setGameData, setScreen, eventQueue }) => {
     if (updatedGameData.people[gameData.player.overlordId]?.currentHealth <= 0){
       setScreen("game-over");
     }
-    setGameData(updatedGameData);
+    updateGameData(updatedGameData);
     if (eventQueue.eventIndex === eventQueue.events.length - 1) {
       eventQueue.clearEvents();
       setScreen("main");

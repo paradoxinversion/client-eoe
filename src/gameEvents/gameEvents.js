@@ -1,5 +1,3 @@
-import { toDataArray } from "../utilities/dataHelpers";
-
 const eoe = require("empire-of-evil");
 const { Shufflebag } = require("../utilities/shufflebag");
 
@@ -18,11 +16,15 @@ export const prepareRandomEvents = (gameData) => {
     let event;
     switch (eventType) {
       case "EvilApplicantEvent":
-        event = eoe.gameEvents.generateEvilApplicantEvent(
-          eoe.citizens.getCitizens(toDataArray(gameData.people)),
-          gameData.player.organizationId
-        );
-        events.push(event);
+        try{
+          event = eoe.gameEvents.generateEvilApplicantEvent(
+            gameData
+          );
+          events.push(event);
+        }catch(e){
+          console.log(e)
+          break;
+        }
         break;
 
       case "WealthModEvent":

@@ -5,7 +5,7 @@ const EventScreenCombatResults = ({currentGameEvent, resolveEvent}) => {
         <p className="text-xl font-bold border-b">Combat Log</p>
       </header>
       <div className="h-64 overflow-y-auto">
-        {currentGameEvent?.plot?.resolution?.combatLog?.map((logString, index) => (
+        {currentGameEvent?.plot?.resolution?.data?.combatLog?.map((logString, index) => (
           <p key={`log-${index}`}>{logString}</p>
         ))}
       </div>

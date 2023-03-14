@@ -5,43 +5,49 @@ import ZonePanel from "../elements/ZonePanel";
 import { toDataArray } from "../utilities/dataHelpers";
 const eoe = require("empire-of-evil");
 const WorldScreen = ({ gameData }) => {
-  const [selectedNation] = useState(null);
+  const [selectedNation, setSelectedNation] = useState(null);
 
   const peopleArray = toDataArray(gameData.people);
   const nationsArray = toDataArray(gameData.nations);
-  const zonesArray = toDataArray(gameData.zones);
   const nationAgents =
-    selectedNation && getAgents(peopleArray, selectedNation.organizationId);
+    selectedNation && getAgents(gameData, selectedNation.organizationId);
 
   return (
     <section>
-      <header>
+      <header className="h-16">
         <p className="text-3xl font-bold">World</p>
       </header>
-      <div className="flex">
+      <div className="grid grid-cols-2">
         <section>
           <header className="text-2xl font-bold mb-2">
-            <p>Nations</p>
+            <p className="border-b">Nations</p>
           </header>
-          <table className="table-auto border border-separate border-spacing-2">
-          <tr>
-            <th className="border">Nation</th>
-            <th className="border">Population</th>
-            <th className="border">Zones</th>
-            <th className="border">Agents</th>
-          </tr>
-          {nationsArray
-            .filter((nation) => nation.id !== gameData.player.empireId)
-            .map((nation) => (
-              <tr key={nation.id}>
-                <td className="border">
-                  {nation.name}
-                </td>
-                <td className="border">{getNationCitizens(peopleArray, nation.id).length}</td>
-                <td className="border">{nation.size}</td>
-                <td className="border">{getAgents(peopleArray, nation.organizationId).length}</td>
+          <table className="table-auto border-spacing-2">
+            <thead>
+              <tr className="text-left">
+                <th className="pr-4">Nation</th>
+                <th className="pr-4">Population</th>
+                <th className="pr-4">Zones</th>
+                <th className="pr-4">Agents</th>
               </tr>
-            ))}
+            </thead>
+            <tbody>
+
+              {nationsArray
+                .filter((nation) => nation.id !== gameData.player.empireId)
+                .map((nation) => (
+                  <tr key={nation.id} onClick={()=>{
+                    setSelectedNation(nation)
+                  }}>
+                    <td className="text-right pr-4">
+                      {nation.name}
+                    </td>
+                    <td className="text-right pr-4">{getNationCitizens(gameData, nation.id).length}</td>
+                    <td className="text-right pr-4">{nation.size}</td>
+                    <td className="text-right pr-4">{getAgents(gameData, nation.organizationId).length}</td>
+                  </tr>
+                ))}
+            </tbody>
           </table>
         </section>
 
@@ -64,9 +70,10 @@ const WorldScreen = ({ gameData }) => {
             </section>
             <ZonePanel
               title={`${
-                eoe.zones.getZones(zonesArray, selectedNation.id).length
+                eoe.zones.getZones(gameData, selectedNation.id).length
               } Zones`}
-              zones={eoe.zones.getZones(zonesArray, selectedNation.id)}
+              zones={eoe.zones.getZones(gameData, selectedNation.id)}
+              gameData={gameData}
             />
           </section>
         )}

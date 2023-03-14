@@ -74,11 +74,11 @@ const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
         <form onChange={onCommanderSelect}>
           <div className="grid grid-cols-6 gap-2">
             {getAgents(
-              toDataArray(gameData.people),
+              gameData,
               gameData.player.organizationId
             ).map((agent) => {
               const subordinates = getAgentSubordinates(
-                toDataArray(gameData.people),
+                gameData,
                 agent
               );
               return (

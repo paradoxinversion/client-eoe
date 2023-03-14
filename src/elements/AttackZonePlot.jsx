@@ -72,7 +72,7 @@ const AttackZonePlot = ({ gameData, plotManager, cb }) => {
             </header>
             <div className="grid grid-cols-3 gap-4">
               {getControlledZones(
-                toDataArray(gameData.zones),
+                gameData,
                 nation.organizationId
               ).map((zone) => (
                 <div key={`zs-${zone.id}`} className="bg-stone-800 rounded p-2">
@@ -100,7 +100,7 @@ const AttackZonePlot = ({ gameData, plotManager, cb }) => {
             </header>
             <div className="grid grid-cols-3 gap-2">
               {getAgents(
-                toDataArray(gameData.people),
+                gameData,
                 gameData.player.organizationId
               )
                 .filter(

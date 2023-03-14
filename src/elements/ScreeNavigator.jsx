@@ -9,7 +9,7 @@ const screens = [
   { screen: "plots", title: "Plots" },
 ];
 
-const ScreenNavigator = ({ setScreen, gameData }) => {
+const ScreenNavigator = ({ setScreen, gameData, activityManager }) => {
   return (
     <section className="flex flex-col bg-stone-800 text-white">
       <p className="text-xs p-2">WELCOME, OVERLORD</p>
@@ -26,7 +26,7 @@ const ScreenNavigator = ({ setScreen, gameData }) => {
   
         className="p-2 text-left hover:bg-stone-700 active:bg-stone-800"
         onClick={() => {
-          saveGame(gameData)
+          saveGame(gameData, activityManager)
         }}
       >Save</button>
     </section>

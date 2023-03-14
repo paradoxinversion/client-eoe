@@ -22,16 +22,17 @@ const PersonnelScreen = ({ gameData }) => {
   const onAgentSelected = (agent) => {
     setSelectedAgent(agent);
   };
+
   return (
     <section className="flex">
       <div className="mr-4">
-        <header className="text-3xl font-bold">
-          <p>Empire Personnel</p>
+        <header className="h-16">
+          <p className="text-3xl font-bold">Empire Personnel</p>
         </header>
         <p>
           Payroll: $
           {eoe.organizations.getPayroll(
-            toDataArray(gameData.people),
+            gameData,
             gameData.player.organizationId
           )}
         </p>
@@ -39,28 +40,29 @@ const PersonnelScreen = ({ gameData }) => {
           Empire Roster Total:{" "}
           {
             eoe.organizations.getAgents(
-              toDataArray(gameData.people),
+              gameData,
               gameData.player.organizationId
             ).length
           }
           /
           {eoe.organizations.getMaxAgents(
-            toDataArray(gameData.people),
+            gameData,
             gameData.player.organizationId
           )}
         </p>
-        <Button
-          buttonText={"EVIL Overlord"}
+
+        <button 
+          className="p-2 border rounded hover:bg-stone-700"
           onClick={() => {
             setSelectedAgent(gameData.people[gameData.player.overlordId]);
           }}
-        />
+        >EVIL Overlord</button>
         <PersonPanel
           gameData={gameData}
           title={"Troopers"}
           people={eoe.organizations
             .getAgents(
-              toDataArray(gameData.people),
+              gameData,
               gameData.player.organizationId
             )
             .filter((person) => person.agent.department === 0)}
@@ -71,7 +73,7 @@ const PersonnelScreen = ({ gameData }) => {
           title={"Administrators"}
           people={eoe.organizations
             .getAgents(
-              toDataArray(gameData.people),
+              gameData,
               gameData.player.organizationId
             )
             .filter((person) => person.agent.department === 1)}
@@ -81,7 +83,7 @@ const PersonnelScreen = ({ gameData }) => {
           title={"Scientists"}
           people={eoe.organizations
             .getAgents(
-              toDataArray(gameData.people),
+              gameData,
               gameData.player.organizationId
             )
             .filter((person) => person.agent.department === 2)}
@@ -91,14 +93,34 @@ const PersonnelScreen = ({ gameData }) => {
         {selectedAgent && (
           <div>
             <p>{selectedAgent.name}</p>
-            <p>Salary: ${selectedAgent.agent.salary}</p>
-            <p>
-              Health: {selectedAgent.currentHealth}/{selectedAgent.health}
-            </p>
-            <p>Combat: {selectedAgent.combat}</p>
-            <p>Administration: {selectedAgent.administration}</p>
-            <p>Intelligence: {selectedAgent.intelligence}</p>
-            <p>Leadership: {selectedAgent.leadership}</p>
+            <table>
+             <tbody>
+              <tr>
+                <td className="pr-4">Salary</td>
+                <td>${selectedAgent.agent.salary}</td>
+              </tr>
+              <tr>
+                <td className="pr-4">Health</td>
+                <td> {selectedAgent.currentHealth}/{selectedAgent.health}</td>
+              </tr>
+              <tr>
+                <td className="pr-4">Combat</td>
+                <td> {selectedAgent.combat}</td>
+              </tr>
+              <tr>
+                <td className="pr-4">Administration</td>
+                <td>{selectedAgent.administration}</td>
+              </tr>
+              <tr>
+                <td className="pr-4">Intelligence</td>
+                <td> {selectedAgent.intelligence}</td>
+              </tr>
+              <tr>
+                <td className="pr-4">Leadership</td>
+                <td> {selectedAgent.currentHealth}/{selectedAgent.health}</td>
+              </tr>
+             </tbody>
+            </table>
             {selectedAgent.id !== gameData.player.overlordId && (
               <div className="">
                 <Button
@@ -115,12 +137,10 @@ const PersonnelScreen = ({ gameData }) => {
                 />
               </div>
             )}
-            <Button
-              buttonText={"close"}
-              onClick={() => {
+
+            <button className="p-2 border rounded hover:bg-stone-700" onClick={() => {
                 setSelectedAgent(null);
-              }}
-            />
+              }}>Close</button>
           </div>
         )}
       </div>

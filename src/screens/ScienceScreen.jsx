@@ -8,8 +8,7 @@ import { toDataArray } from "../utilities/dataHelpers";
  * @returns 
  */
 const ScienceScreen = ({gameData}) => {
-  const buildingsArray = toDataArray(gameData.buildings);
-  const labs = getOrgLabs(buildingsArray, gameData.player.organizationId);
+  const labs = getOrgLabs(gameData, gameData.player.organizationId);
   console.log(labs)
   return (
     <section>

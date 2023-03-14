@@ -21,12 +21,16 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
     setCurrentActivity(activityName);
   };
 
+  /**
+   * 
+   * @param {string} participantId 
+   * @param {boolean} add 
+   */
   const onUpdateActivityParticipant = (participantId, add) => {
-    console.log(participantId, add);
     if (add) {
-      currentActivity.addAgent(gameData.people[participantId]);
+      currentActivity.addAgent(gameData.people[participantId].id);
     } else {
-      currentActivity.removeAgent(gameData.people[participantId]);
+      currentActivity.removeAgent(gameData.people[participantId].id);
     }
   };
 
@@ -48,7 +52,7 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
                 {activityManager.activities.map((activity) => (
                   <button
                     key={`${activity.name}`}
-                    className="border m-2"
+                    className="border m-2 rounded hover:bg-stone-700"
                     onClick={() => {
                       onClickActivity(activity);
                     }}
@@ -68,7 +72,7 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
               </header>
               <AgentSelector
                 agentsArray={eoe.organizations.getAgents(
-                  toDataArray(gameData.people),
+                  gameData,
                   gameData.player.organizationId
                 )}
                 cb={onUpdateActivityParticipant}
@@ -89,7 +93,7 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
                 {plotManager.plots.map((plot) => (
                   <button
                   key={plot.name}
-                  className="m-2 border"
+                  className="m-2 border rounded hover:bg-stone-700"
                     onClick={() => {
                       setCurrentPlot(plot);
                     }}

@@ -1,3 +1,5 @@
+import { getControlledZones } from "empire-of-evil/src/organization";
+import { useEffect } from "react";
 import advanceDay from "../actions/advanceDay";
 import PersonPanel from "../elements/PersonPanel";
 import ZonePanel from "../elements/ZonePanel";
@@ -13,33 +15,39 @@ const eoe = require("empire-of-evil");
  */
 const MainScreen = ({
   gameData,
-  setGameData,
+  updateGameData,
   setScreen,
   eventQueue,
   activityManager,
   plotManager
 }) => {
-  const zonesArray = toDataArray(gameData.zones);
-  const peopleArray = toDataArray(gameData.people);
-  const buildingArray = toDataArray(gameData.buildings);
 
-  const empireZones = eoe.zones.getZones(zonesArray, gameData.player.empireId);
-  const empireWealth = eoe.zones.getZonesWealth(peopleArray, empireZones);
+  const empireZones = eoe.zones.getZones(gameData, gameData.player.empireId);
+  const empireWealth = eoe.zones.getZonesWealth(gameData, empireZones);
   const infraCost = eoe.buildings.getInfrastructureLoad(
-    buildingArray,
+    gameData,
     gameData.player.organizationId
   );
   const science = eoe.organizations.getScience(
-    peopleArray,
+    gameData,
     gameData.player.organizationId
   );
   const infrastructure = eoe.organizations.getInfrastructure(
-    peopleArray,
+    gameData,
     gameData.player.organizationId
   );
-  const buildingUpkeep = eoe.buildings.getUpkeep(buildingArray, gameData.player.organizationId);
-  const payroll = eoe.organizations.getPayroll(peopleArray, gameData.player.organizationId);
-  const wealthBonuses = eoe.buildings.getWealthBonuses(buildingArray, gameData.player.organizationId);
+  const buildingUpkeep = eoe.buildings.getUpkeep(gameData, gameData.player.organizationId);
+  const payroll = eoe.organizations.getPayroll(gameData, gameData.player.organizationId);
+  const wealthBonuses = eoe.buildings.getWealthBonuses(gameData, gameData.player.organizationId);
+  useEffect(()=>{
+    const playerZones = getControlledZones(gameData, gameData.player.organizationId);
+    if (gameData.people[gameData.player.overlordId]?.currentHealth <= 0){
+      setScreen("game-over");
+    }
+    if (playerZones.length === Object.keys(gameData.zones).length){
+      setScreen("victory")
+    }
+  },[gameData, setScreen])
   return (
     <div>
       <header className="h-16">
@@ -52,11 +60,10 @@ const MainScreen = ({
           onClick={() => {
             const result = advanceDay(gameData, eventQueue, activityManager, plotManager);
 
-            if (result.updatedGameData.people[gameData.player.overlordId].currentHealth <= 0){
+            if (result.updatedGameData.people[gameData.player.overlordId]?.currentHealth <= 0){
               setScreen("game-over");
             }
-
-            setGameData(result.updatedGameData);
+            updateGameData(result.updatedGameData);
             setScreen("events");
           }}
         >
@@ -100,14 +107,15 @@ const MainScreen = ({
         <ZonePanel
           title={"Evil Empire Zones"}
           zones={eoe.zones.getZones(
-            Object.values(gameData.zones),
+            gameData,
             gameData.player.empireId
           )}
+          gameData={gameData}
         />
         <PersonPanel
           title={"EVIL Roster"}
           people={eoe.organizations.getAgents(
-            toDataArray(gameData.people),
+            gameData,
             gameData.player.organizationId
           )}
           gameData={gameData}
