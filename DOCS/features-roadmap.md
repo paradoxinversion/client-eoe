@@ -1,0 +1,53 @@
+- [ ] General
+  - [ ] Victory/Loss
+    - [x] Game ends if player is killed
+    - [ ] Game ends if player loses all zones
+    - [x] Game ends if player takes over all zones 
+- [ ] Screens
+  - [ ] Title Screen
+    - [x] Title Screen Options
+      - [x] New Game
+      - [x] Continue Game
+      - [x] Delete Game
+  - [ ] New Game
+    - [ ] New Game Form
+      - [ ] Overlord Name
+    - [x] Start New Game
+  - [ ] Main Screen
+    - [ ] Resources
+      - [x] EOE Money
+      - [x] EOE Infrastructure
+      - [x] EOE Science
+      - [ ] EOE EVIL
+    - [ ] Expenses
+      - [x] Payroll
+      - [x] Upkeep
+      - [x] Total Expenses
+    - [ ] Zones
+      - [x] EOE Zones List
+    - [ ] Roster
+      - [x] EOE Personnel List
+    - [ ] Plots
+      - [ ] Current Plots list 
+      - [ ] Agents in activities (amt)
+- [ ] Naming
+  - [x] People are named
+  - [x] Nations are named
+  - [x] Zones are named
+  - [ ] Orgs are named
+- [ ] Time/Date Handling
+  - [ ] Days/months/years increment properly (ie, the last day of the month proceeds to the next month and the end of the year proceeds to the next year)
+- [ ] Plots
+  - [ ] Plot Manager
+  - [x] Attack Zone Plot
+    - [ ] Zone is in player control after successful resolution
+  - [ ] Activities
+    - [ ] Training
+- [ ] Events
+  - [ ] Recruitment
+    - [ ] Agent can be recruited
+    - [ ] If no agents can be recruited
+- [ ] Infrastructure
+  - [ ] If player infrastructure is less than the required amt, reduce (halve or quarter) all bonuses
+  - [ ] Make citizens should respect housing capacity
+    - [ ] If housing capacity is reduced below the min, loyalty to eoe in eoe zones goes down
