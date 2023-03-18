@@ -36,15 +36,15 @@ const TitleScreen = (props) => {
               /**
                * @type {import("empire-of-evil/src/typedef").SaveData}
                */
-              const saveData = JSON.parse(saveData);
+              const sd = JSON.parse(saveData);
               populateActivities(activityManager);
               populatePlots(plotManager);
-              console.log(saveData)
-              Object.values(saveData.plotData.activities).map(activity => {
+              console.log(sd)
+              Object.values(sd.plotData.activities).map(activity => {
                 const currentActivity = activityManager.activities.find(a => a.name === activity.name);
                 currentActivity.setAgents(activity.agents);
               })
-              setGameData(saveData.gameData);
+              setGameData(sd.gameData);
               setScreen("main");
             }}
           >
