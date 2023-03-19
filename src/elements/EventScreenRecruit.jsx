@@ -28,11 +28,11 @@ const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
           <h2>Recruit Details</h2>
         </header>
         <p>{currentGameEvent.recruit?.name}</p>
-        <p>Combat: {currentGameEvent.recruit?.combat}</p>
-        <p>Administration: {currentGameEvent.recruit?.administration}</p>
-        <p>Intelligence: {currentGameEvent.recruit?.intelligence}</p>
-        <p>Leadership: {currentGameEvent.recruit?.leadership}</p>
-        <p>Loyalty: {currentGameEvent.recruit?.loyalty}?</p>
+        <p>Combat: {currentGameEvent.params.recruit?.combat}</p>
+        <p>Administration: {currentGameEvent.params.recruit?.administration}</p>
+        <p>Intelligence: {currentGameEvent.params.recruit?.intelligence}</p>
+        <p>Leadership: {currentGameEvent.params.recruit?.leadership}</p>
+        <p>Loyalty: {currentGameEvent.params.recruit?.loyalty}?</p>
       </section>
 
       <section className="mb-4">
