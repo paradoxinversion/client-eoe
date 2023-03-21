@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import EventScreenCombatResults from "../elements/EventScreenCombatResults";
 import EventScreenProceed from "../elements/EventScreenProceed";
 import EventScreenRecruit from "../elements/EventScreenRecruit";
@@ -8,19 +8,19 @@ const eventScreenMap = {
   "Wealth Change": EventScreenProceed,
   "Attack Zone": EventScreenCombatResults
 };
+
+/**
+ * @param {Object} props
+ * @param {GameEventQueue} props.eventQueue 
+ * @returns 
+ */
 const EventsScreen = ({ gameData, setScreen, eventQueue, updateGameData }) => {
   const [eventScreen, setEventScreen] = useState(eventQueue.getCurrentEvent().eventName);
   const CurrentEventComponent = eventScreenMap[eventScreen];
 
-  useEffect(()=>{
-    if (eventQueue.events.length > 0){
-      eventQueue.executeCurrentEvent();
-    }
-  }, [eventQueue]);
-
   const resolveEvent = (resolveArgs) => {
-    const resolution = eventQueue.resolveCurrentEvent(gameData, resolveArgs);
-    const updatedGameData = {...gameData, ...resolution.updatedGameData}
+    const resolvedEventData = eventQueue.getCurrentEvent().eventData;
+    const updatedGameData = {...gameData, ...resolvedEventData.resolution.updatedGameData}
     if (updatedGameData.people[gameData.player.overlordId]?.currentHealth <= 0){
       setScreen("game-over");
     }

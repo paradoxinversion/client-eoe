@@ -1,12 +1,10 @@
-import { eventConfig } from "empire-of-evil/src/gameEvents";
-
 const eoe = require("empire-of-evil");
 const { Shufflebag } = require("../utilities/shufflebag");
 
 const shufflebag = Shufflebag({
   EvilApplicantEvent: 1,
-  // WealthModEvent: 1,
-  // nothing: 1,
+  WealthModEvent: 1,
+  nothing: 1,
 });
 /**
  * Add a set of random events to the event queue
