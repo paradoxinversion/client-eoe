@@ -1,6 +1,6 @@
+import { handleNewGame, hireStartingAgents } from "empire-of-evil/src/gameSetup";
 import { populateActivities, populatePlots } from "empire-of-evil/src/plots";
 import { useState } from "react";
-import { handleNewGame, hireStartingAgents } from "../actions/gameSetup";
 
 const NewGameScreen = ({
   setScreen,

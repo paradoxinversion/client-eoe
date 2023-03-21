@@ -19,6 +19,7 @@ const EventsScreen = ({ gameData, setScreen, eventQueue, updateGameData }) => {
   const CurrentEventComponent = eventScreenMap[eventScreen];
 
   const resolveEvent = (resolveArgs) => {
+    eventQueue.resolveCurrentEvent(gameData, resolveArgs)
     const resolvedEventData = eventQueue.getCurrentEvent().eventData;
     const updatedGameData = {...gameData, ...resolvedEventData.resolution.updatedGameData}
     if (updatedGameData.people[gameData.player.overlordId]?.currentHealth <= 0){

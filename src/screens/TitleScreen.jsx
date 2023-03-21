@@ -1,5 +1,6 @@
-import { ActivityManager, populateActivities, populatePlots } from "empire-of-evil/src/plots";
+import { populateActivities, populatePlots } from "empire-of-evil/src/plots";
 import { useState } from "react";
+import { deleteSavedGame } from "../actions/dataManagement";
 
 /**
  * 
@@ -39,8 +40,7 @@ const TitleScreen = (props) => {
               const sd = JSON.parse(saveData);
               populateActivities(activityManager);
               populatePlots(plotManager);
-              console.log(sd)
-              Object.values(sd.plotData.activities).map(activity => {
+              Object.values(sd.plotData.activities).forEach(activity => {
                 const currentActivity = activityManager.activities.find(a => a.name === activity.name);
                 currentActivity.setAgents(activity.agents);
               })
@@ -55,7 +55,7 @@ const TitleScreen = (props) => {
           <button
             className="p-2 bg-stone-700 hover:bg-stone-800"
             onClick={() => {
-              localStorage.removeItem("eoe-save");
+              deleteSavedGame()
               setSaveData(null)
             }}
           >

@@ -1,23 +1,19 @@
+import { serializeGameData } from "empire-of-evil/src/dataManagement";
+
 /**
  * 
  * @param {import("empire-of-evil/src/typedef").GameData} gameData 
  * @param {ActivityManager} activityManager 
  */
 export const saveGame = (gameData, activityManager) => {
-  // const data = JSON.stringify(gameData);
-  const activitiesData = activityManager.serializeActivities()
-  
-  /**
-   * @type {import("empire-of-evil/src/typedef").SaveData}
-   */
-  const saveData =  {
-    gameData,
-    plotData: {
-      activities: activitiesData
-    }
-  }
-  console.log(saveData)
+  localStorage.setItem("eoe-save", serializeGameData(gameData, activityManager));
+}
 
-  const data = JSON.stringify(saveData);
-  localStorage.setItem("eoe-save", data);
+/**
+ * 
+ * @param {import("empire-of-evil/src/typedef").GameData} gameData 
+ * @param {ActivityManager} activityManager 
+ */
+export const deleteSavedGame = () => {
+  localStorage.removeItem("eoe-save");
 }
