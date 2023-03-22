@@ -2,11 +2,13 @@ import { useState } from "react";
 import EventScreenCombatResults from "../elements/EventScreenCombatResults";
 import EventScreenProceed from "../elements/EventScreenProceed";
 import EventScreenRecruit from "../elements/EventScreenRecruit";
+import MonthlyReportScreen from "./MonthlyReportScreen";
 const eventScreenMap = {
   "EVIL Applicant": EventScreenRecruit,
   "Standard Report": EventScreenProceed,
   "Wealth Change": EventScreenProceed,
-  "Attack Zone": EventScreenCombatResults
+  "Attack Zone": EventScreenCombatResults,
+  "Monthly Report": MonthlyReportScreen
 };
 
 /**
