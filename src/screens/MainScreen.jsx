@@ -1,5 +1,6 @@
 import { advanceDay } from "empire-of-evil/src/actions";
 import { getControlledZones } from "empire-of-evil/src/organization";
+import { checkGameOverState, checkVictoryState } from "empire-of-evil/src/utilities";
 import { useEffect } from "react";
 import PersonPanel from "../elements/PersonPanel";
 import ZonePanel from "../elements/ZonePanel";
@@ -39,13 +40,14 @@ const MainScreen = ({
   const payroll = eoe.organizations.getPayroll(gameData, gameData.player.organizationId);
   const wealthBonuses = eoe.buildings.getWealthBonuses(gameData, gameData.player.organizationId);
   useEffect(()=>{
-    const playerZones = getControlledZones(gameData, gameData.player.organizationId);
-    if (gameData.people[gameData.player.overlordId]?.currentHealth <= 0){
+    const gameOver = checkGameOverState(gameData);
+    if (gameOver){
       setScreen("game-over");
     }
-    if (playerZones.length === Object.keys(gameData.zones).length){
-      setScreen("victory")
-    }
+    // const victory = checkVictoryState(gameData);
+    // if (victory){
+    //   setScreen("victory")
+    // }
   },[gameData, setScreen])
   return (
     <div>
@@ -58,10 +60,14 @@ const MainScreen = ({
           className="border rounded px-2 py-1 border-slate-400"
           onClick={() => {
             const result = advanceDay(gameData, eventQueue, activityManager, plotManager);
-
-            if (result.updatedGameData.people[gameData.player.overlordId]?.currentHealth <= 0){
+            const gameOver = checkGameOverState(result.updatedGameData);
+            if (gameOver){
               setScreen("game-over");
             }
+            // const victory = checkVictoryState(result.updatedGameData);
+            // if (victory){
+            //   setScreen("victory")
+            // }
             updateGameData(result.updatedGameData);
             setScreen("events");
           }}

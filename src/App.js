@@ -14,6 +14,7 @@ import { GameEventQueue } from "empire-of-evil/src/gameEvents";
 import { ActivityManager, PlotManager } from "empire-of-evil/src/plots";
 import GameOverScreen from "./screens/GameOverScreen";
 import VictoryScreen from "./screens/VictoryScreen";
+import { checkGameOverState, checkVictoryState } from "empire-of-evil/src/utilities";
 
 const screens = {
   title: TitleScreen,
@@ -42,7 +43,7 @@ function App() {
    * @param {import("empire-of-evil/src/typedef").GameData} updatedGameData 
    */
   const updateGameData = (updatedGameData) => {
-    _setGameData({
+    const update = {
       ...gameData,
       people: { ...gameData.people, ...updatedGameData.people },
       zones: { ...gameData.zones,...updatedGameData.zones},
@@ -51,7 +52,10 @@ function App() {
       buildings: { ...gameData.buildings,...updatedGameData.buildings},
       player: { ...gameData.player, ...updatedGameData.player},
       gameDate: updatedGameData.gameDate || gameData.gameDate
-    });
+    }
+    _setGameData(update);
+   
+
   };
   return (
     <div className="bg-stone-900 text-stone-200 h-screen grid grid-cols-12 gap-4">
