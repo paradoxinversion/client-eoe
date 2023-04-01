@@ -1,33 +1,74 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer base{
 
-h1 {
-  @apply text-3xl font-bold;
+  h1 {
+    @apply text-3xl font-bold;
+  }
+  
+  h2 {
+    @apply text-2xl font-bold;
+  }
+  
+  input {
+    @apply border border-stone-300 rounded shadow bg-transparent p-1;
+  }
+  
+  input[type=radio]{
+    @apply mr-2;
+  }
+  
+  .header-font{
+    @apply text-3xl font-bold
+  }
+  
+  body {
+    @apply bg-stone-800
+  }
+  
+  table {
+    @apply table-auto border-spacing-2 w-full
+  }
+
+  thead {
+    @apply text-xs text-stone-600 border-b-2 border-stone-500
+  }
+
+  thead > tr {
+    @apply text-left
+  }
+
+  th {
+    @apply pr-8
+  }
+
+  td {
+    @apply pr-8
+  }
 }
 
-h2 {
-  @apply text-2xl font-bold;
-}
-
-input {
-  @apply bg-black text-white;
-}
-
-input[type=radio]{
-  @apply mr-2;
-}
-
-.header-font{
-  @apply text-3xl font-bold
-}
-
-body {
-  @apply bg-stone-800
-}
-
-tr:hover{
+/* tr:hover{
   @apply bg-stone-700
+} */
+
+@layer components {
+
+  .btn {
+    @apply p-2
+  }
+
+  .btn-primary {
+    @apply btn rounded shadow border border-stone-300 hover:bg-stone-100
+  }
+  
+  .btn-confirm {
+    @apply btn rounded shadow bg-green-500 text-stone-100 
+  }
+  
+  .title-feature-card {
+    @apply border rounded border-stone-300 p-4 shadow-md w-80 text-center
+  }
 }
 
 code {

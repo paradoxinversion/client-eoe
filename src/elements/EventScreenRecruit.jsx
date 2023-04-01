@@ -40,7 +40,7 @@ const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
           Select a department for this recruit
         </p>
         <form className="grid grid-cols-3 gap-2" onChange={onChange}>
-          <div className="bg-stone-800 rounded p-2">
+          <div className=" rounded p-2">
             <input
               type="radio"
               id="recruit-department-trooper"
@@ -49,7 +49,7 @@ const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
             />
             <label htmlFor="recruit-department-trooper">Henchman</label>
           </div>
-          <div className="bg-stone-800 rounded p-2">
+          <div className=" rounded p-2">
             <input
               type="radio"
               id="recruit-department-administrator"
@@ -60,7 +60,7 @@ const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
               Administrator
             </label>
           </div>
-          <div className="bg-stone-800 rounded p-2">
+          <div className=" rounded p-2">
             <input
               type="radio"
               id="recruit-department-scientist"
@@ -72,7 +72,7 @@ const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
         </form>
         <p className="text-lg border-b mb-4">Commander</p>
         <form onChange={onCommanderSelect}>
-          <div className="grid grid-cols-6 gap-2">
+          <div className="flex flex-wrap">
             {getAgents(
               gameData,
               gameData.player.organizationId
@@ -82,7 +82,7 @@ const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
                 agent
               );
               return (
-                <div key={`event-screen-recruit-${agent.id}`} className="bg-stone-800 rounded p-2">
+                <div key={`event-screen-recruit-${agent.id}`} className=" rounded p-2">
                   <input
                     type="radio"
                     id="recruit-commander"

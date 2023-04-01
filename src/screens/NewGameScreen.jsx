@@ -18,13 +18,15 @@ const NewGameScreen = ({
     setScreen("main");
   };
   return (
-    <div className="grid justify-center justify-items-center">
-      <p className="header-font mt-4 place-self-center">New Game</p>
-      <form className="bg-stone-700 p-4 rounded m-4">
-        <div className="grid">
-          <label className="mr-4 text-sm mb-1">EVIL Overlord Name</label>
+    <div className="p-4">
+      <header className="mb-4">
+        <p className="header-font">Welcome to your EVIL Interface</p>
+        <p>Welcome, Overlord! Before we can authorize your session and take you to the Dashboard, we'll need to handle some <em>minor</em> onboarding items.</p>
+      </header>
+      <form className="w-64 mb-4 ">
+        <div className="flex flex-col">
+          <label className="text-sm text-stone-700">What is your name?</label>
           <input
-            className="rounded pl-1"
             type="text"
             name="overlord-name"
             id="overlord-name"
@@ -35,7 +37,7 @@ const NewGameScreen = ({
       </form>
 
       <button
-        className="p-2 bg-stone-700 w-fit hover:bg-stone-800"
+        className="btn-confirm"
         disabled={overlordName.length === 0}
         onClick={onNewGame}
       >

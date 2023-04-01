@@ -3,6 +3,7 @@ import EventScreenCombatResults from "../elements/EventScreenCombatResults";
 import EventScreenProceed from "../elements/EventScreenProceed";
 import EventScreenRecruit from "../elements/EventScreenRecruit";
 import MonthlyReportScreen from "./MonthlyReportScreen";
+import Modal from "../elements/Modal";
 const eventScreenMap = {
   "EVIL Applicant": EventScreenRecruit,
   "Standard Report": EventScreenProceed,
@@ -39,15 +40,18 @@ const EventsScreen = ({ gameData, setScreen, eventQueue, updateGameData }) => {
   const ce = eventQueue.getCurrentEvent();
   return (
     <section>
-      <header className="mb-4">
-        <h1>{ce.eventName}</h1>
-        <p>{ce.eventText}</p>
-      </header>
-      <CurrentEventComponent
-        currentGameEvent={ce}
-        resolveEvent={resolveEvent}
-        gameData={gameData}
-      />
+      <Modal>
+        <header className="mb-4">
+          <h1>{ce.eventName}</h1>
+          <p>{ce.eventText}</p>
+        </header>
+
+        <CurrentEventComponent
+          currentGameEvent={ce}
+          resolveEvent={resolveEvent}
+          gameData={gameData}
+        />
+      </Modal>
     </section>
   );
 };

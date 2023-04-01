@@ -37,17 +37,17 @@ const AttackZonePlot = ({ gameData, plotManager, cb }) => {
     }
   };
   return (
-    <div className="p-4 h-64 overflow-y-auto">
+    <div className="overflow-y-auto">
       <p className="text-xl font-bold">Attack Zone</p>
-      <form className="bg-stone-700 rounded p-2">
+      <form className="rounded p-2">
         <div>
           <header>
             <p className="text-lg border-b mb-4">Select a Nation</p>
           </header>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="flex flex-wrap">
             {nations.map((n) => {
               return (
-                <div key={`ns-${n.id}`} className="bg-stone-800 rounded p-2">
+                <div key={`ns-${n.id}`} className="shadow-md rounded p-2">
                   <input
                     type={"radio"}
                     name="nation-select"
@@ -70,12 +70,12 @@ const AttackZonePlot = ({ gameData, plotManager, cb }) => {
                 Select the zone for this mission
               </p>
             </header>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="flex flex-wrap">
               {getControlledZones(
                 gameData,
                 nation.organizationId
               ).map((zone) => (
-                <div key={`zs-${zone.id}`} className="bg-stone-800 rounded p-2">
+                <div key={`zs-${zone.id}`} className="shadow-md rounded p-2 w-fit">
                   <input
                     type={"radio"}
                     name="zone-select"
@@ -98,7 +98,7 @@ const AttackZonePlot = ({ gameData, plotManager, cb }) => {
                 Select the Agents attending this mission
               </p>
             </header>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="flex flex-wrap">
               {getAgents(
                 gameData,
                 gameData.player.organizationId
@@ -108,7 +108,7 @@ const AttackZonePlot = ({ gameData, plotManager, cb }) => {
                     agent.agent.department === 0 || agent.agent.department === 3
                 )
                 .map((agent) => (
-                  <div key={`as-${agent.id}`} className="bg-stone-800 rounded p-2">
+                  <div key={`as-${agent.id}`} className="shadow-md rounded p-2">
                     <input
                       className="mr-2"
                       type={"checkbox"}
@@ -125,9 +125,9 @@ const AttackZonePlot = ({ gameData, plotManager, cb }) => {
             </div>
             <div>
               <p className="text-lg border-b mb-4">Selected Agents</p>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="flex flex-wrap">
                 {attackers.map((agent) => (
-                  <div key={`attackers-${agent.id}`} className="bg-stone-800 rounded p-2">
+                  <div key={`attackers-${agent.id}`} className="shadow-md rounded p-2">
                     <p>{agent.name}</p>
                   </div>
                 ))}
@@ -141,7 +141,7 @@ const AttackZonePlot = ({ gameData, plotManager, cb }) => {
           </div>
         )}
         <button
-          className="p-2 bg-stone-800 rounded"
+          className="p-2 shadow-md rounded"
           onClick={(e) => {
             e.preventDefault();
             preparePlot();

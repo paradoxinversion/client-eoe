@@ -3,6 +3,8 @@ import { getAgents } from "empire-of-evil/src/organization";
 import { useState } from "react";
 import ZonePanel from "../elements/ZonePanel";
 import { toDataArray } from "../utilities/dataHelpers";
+import { MetricCard } from "../elements/MetricCard";
+import Modal from "../elements/Modal";
 const eoe = require("empire-of-evil");
 const WorldScreen = ({ gameData }) => {
   const [selectedNation, setSelectedNation] = useState(null);
@@ -14,44 +16,8 @@ const WorldScreen = ({ gameData }) => {
 
   return (
     <section>
-      <header className="h-16">
-        <p className="text-3xl font-bold">World</p>
-      </header>
-      <div className="grid grid-cols-2">
-        <section>
-          <header className="text-2xl font-bold mb-2">
-            <p className="border-b">Nations</p>
-          </header>
-          <table className="table-auto border-spacing-2">
-            <thead>
-              <tr className="text-left">
-                <th className="pr-4">Nation</th>
-                <th className="pr-4">Population</th>
-                <th className="pr-4">Zones</th>
-                <th className="pr-4">Agents</th>
-              </tr>
-            </thead>
-            <tbody>
-
-              {nationsArray
-                .filter((nation) => nation.id !== gameData.player.empireId)
-                .map((nation) => (
-                  <tr key={nation.id} onClick={()=>{
-                    setSelectedNation(nation)
-                  }}>
-                    <td className="text-right pr-4">
-                      {nation.name}
-                    </td>
-                    <td className="text-right pr-4">{getNationCitizens(gameData, nation.id).length}</td>
-                    <td className="text-right pr-4">{nation.size}</td>
-                    <td className="text-right pr-4">{getAgents(gameData, nation.organizationId).length}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </section>
-
-        {selectedNation && (
+      {selectedNation && (
+        <Modal>
           <section className="ml-4">
             <header className="text-2xl font-bold mb-2">
               <p>{selectedNation.name}</p>
@@ -76,8 +42,64 @@ const WorldScreen = ({ gameData }) => {
               gameData={gameData}
             />
           </section>
-        )}
-      </div>
+          <button className="btn btn-primary" onClick={()=>{setSelectedNation(null)}}>Close</button>
+        </Modal>
+      )}
+      <div
+        id="top-bar"
+        className="bg-stone-900 w-full text-stone-300 flex justify-end items-center h-10"
+      />
+      <section className="p-2">
+        <header className="h-16">
+          <p className="text-3xl font-bold">World</p>
+        </header>
+        <div className="grid grid-cols-3 gap-4 w-fit mb-4">
+          <MetricCard title="Foreign Nations">
+            {nationsArray.length - 1}
+          </MetricCard>
+        </div>
+        <div className="">
+          <section>
+            <header className="text-2xl font-bold mb-2">
+              <p className="border-b">Nations</p>
+            </header>
+            <table>
+              <thead>
+                <tr>
+                  <th>Nation</th>
+                  <th>Population</th>
+                  <th>Zones</th>
+                  <th>Agents</th>
+                </tr>
+              </thead>
+              <tbody>
+                {nationsArray
+                  .filter((nation) => nation.id !== gameData.player.empireId)
+                  .map((nation) => (
+                    <tr
+                      key={nation.id}
+                      className="border-b border-stone-400"
+                      onClick={() => {
+                        setSelectedNation(nation);
+                      }}
+                    >
+                      <td className=" pr-8">{nation.name}</td>
+                      <td className=" pr-8">
+                        {getNationCitizens(gameData, nation.id).length}
+                      </td>
+                      <td className=" pr-8">{nation.size}</td>
+                      <td className=" pr-8">
+                        {getAgents(gameData, nation.organizationId).length}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </section>
+
+          
+        </div>
+      </section>
     </section>
   );
 };

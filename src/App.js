@@ -58,7 +58,7 @@ function App() {
 
   };
   return (
-    <div className="bg-stone-900 text-stone-200 h-screen grid grid-cols-12 gap-4">
+    <div className="bg-stone-200 text-stone-900 h-screen grid grid-cols-12">
       {Object.keys(gameData).length > 0 && (
         <ScreenNavigator gameData={gameData} setScreen={setGameScreen} activityManager={activityManager} />
       )}

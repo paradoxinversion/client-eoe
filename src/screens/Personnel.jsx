@@ -2,6 +2,9 @@ import { useState } from "react";
 import PersonPanel from "../elements/PersonPanel";
 import { toDataArray } from "../utilities/dataHelpers";
 import Button from "../elements/Button";
+import { MetricCard } from "../elements/MetricCard";
+import Modal from "../elements/Modal";
+// import { fireAgent, terminateAgent } from "empire-of-evil/src/organization";
 const eoe = require("empire-of-evil");
 /**
  *
@@ -9,7 +12,7 @@ const eoe = require("empire-of-evil");
  * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
  * @returns
  */
-const PersonnelScreen = ({ gameData }) => {
+const PersonnelScreen = ({ gameData, updateGameData }) => {
   /**
    * @type {Person} selectedAgent
    */
@@ -24,126 +27,155 @@ const PersonnelScreen = ({ gameData }) => {
   };
 
   return (
-    <section className="flex">
-      <div className="mr-4">
+    <section className="">
+      {selectedAgent && (
+        <Modal>
+          <div>
+            {selectedAgent && (
+              <div>
+                <p>{selectedAgent.name}</p>
+                <table>
+                  <tbody>
+                    <tr>
+                      <td className="pr-4">Salary</td>
+                      <td>${selectedAgent.agent.salary}</td>
+                    </tr>
+                    <tr>
+                      <td className="pr-4">Health</td>
+                      <td>
+                        {" "}
+                        {selectedAgent.currentHealth}/{selectedAgent.health}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="pr-4">Combat</td>
+                      <td> {selectedAgent.combat}</td>
+                    </tr>
+                    <tr>
+                      <td className="pr-4">Administration</td>
+                      <td>{selectedAgent.administration}</td>
+                    </tr>
+                    <tr>
+                      <td className="pr-4">Intelligence</td>
+                      <td> {selectedAgent.intelligence}</td>
+                    </tr>
+                    <tr>
+                      <td className="pr-4">Leadership</td>
+                      <td>
+                        {" "}
+                        {selectedAgent.currentHealth}/{selectedAgent.health}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                {selectedAgent.id !== gameData.player.overlordId && (
+                  <div className="">
+                    <Button
+                      buttonText={"Fire Agent"}
+                      onClick={() => {
+                        updateGameData(
+                          eoe.organizations.fireAgent(selectedAgent)
+                        );
+                        setSelectedAgent(null);
+                      }}
+                    />
+                    <Button
+                      buttonText={"Terminate Agent"}
+                      onClick={() => {
+                        updateGameData(
+                          eoe.organizations.terminateAgent(selectedAgent)
+                        );
+                        setSelectedAgent(null);
+                      }}
+                    />
+                  </div>
+                )}
+
+                <button
+                  className="p-2 border rounded hover:bg-stone-700"
+                  onClick={() => {
+                    setSelectedAgent(null);
+                  }}
+                >
+                  Close
+                </button>
+              </div>
+            )}
+          </div>
+        </Modal>
+      )}
+
+      <div
+        id="top-bar"
+        className="bg-stone-900 w-full text-stone-300 flex justify-end items-center h-10"
+      />
+      <div className="p-2">
         <header className="h-16">
           <p className="text-3xl font-bold">Empire Personnel</p>
         </header>
-        <p>
-          Payroll: $
-          {eoe.organizations.getPayroll(
-            gameData,
-            gameData.player.organizationId
-          )}
-        </p>
-        <p>
-          Empire Roster Total:{" "}
-          {
-            eoe.organizations.getAgents(
-              gameData,
-              gameData.player.organizationId
-            ).length
-          }
-          /
-          {eoe.organizations.getMaxAgents(
-            gameData,
-            gameData.player.organizationId
-          )}
-        </p>
+        <div className="grid grid-cols-4 w-fit gap-4">
+          <MetricCard title="Payroll">
+            <p>
+              $
+              {eoe.organizations.getPayroll(
+                gameData,
+                gameData.player.organizationId
+              )}
+            </p>
+          </MetricCard>
+          <MetricCard title="EVIL Agents">
+            <p>
+              {
+                eoe.organizations.getAgents(
+                  gameData,
+                  gameData.player.organizationId
+                ).length
+              }
+              /
+              {eoe.organizations.getMaxAgents(
+                gameData,
+                gameData.player.organizationId
+              )}
+            </p>
+          </MetricCard>
+        </div>
 
-        <button 
-          className="p-2 border rounded hover:bg-stone-700"
+        <button
+          className="btn btn-primary border rounded border-stone-300 shadow my-4"
           onClick={() => {
             setSelectedAgent(gameData.people[gameData.player.overlordId]);
           }}
-        >EVIL Overlord</button>
-        <PersonPanel
-          gameData={gameData}
-          title={"Troopers"}
-          people={eoe.organizations
-            .getAgents(
-              gameData,
-              gameData.player.organizationId
-            )
-            .filter((person) => person.agent.department === 0)}
-          cb={onAgentSelected}
-        />
-        <PersonPanel
-          gameData={gameData}
-          title={"Administrators"}
-          people={eoe.organizations
-            .getAgents(
-              gameData,
-              gameData.player.organizationId
-            )
-            .filter((person) => person.agent.department === 1)}
-        />
-        <PersonPanel
-          gameData={gameData}
-          title={"Scientists"}
-          people={eoe.organizations
-            .getAgents(
-              gameData,
-              gameData.player.organizationId
-            )
-            .filter((person) => person.agent.department === 2)}
-        />
+        >
+          View EVIL Overlord
+        </button>
+        <div className="grid grid-cols-3 grid-gap-4">
+          <PersonPanel
+            gameData={gameData}
+            title={"Troopers"}
+            people={eoe.organizations
+              .getAgents(gameData, gameData.player.organizationId)
+              .filter((person) => person.agent.department === 0)}
+            cb={onAgentSelected}
+          />
+          <PersonPanel
+            gameData={gameData}
+            title={"Administrators"}
+            people={eoe.organizations
+              .getAgents(gameData, gameData.player.organizationId)
+              .filter((person) => person.agent.department === 1)}
+            cb={onAgentSelected}
+          />
+          <PersonPanel
+            gameData={gameData}
+            title={"Scientists"}
+            people={eoe.organizations
+              .getAgents(gameData, gameData.player.organizationId)
+              .filter((person) => person.agent.department === 2)}
+            cb={onAgentSelected}
+          />
+        </div>
       </div>
-      <div>
-        {selectedAgent && (
-          <div>
-            <p>{selectedAgent.name}</p>
-            <table>
-             <tbody>
-              <tr>
-                <td className="pr-4">Salary</td>
-                <td>${selectedAgent.agent.salary}</td>
-              </tr>
-              <tr>
-                <td className="pr-4">Health</td>
-                <td> {selectedAgent.currentHealth}/{selectedAgent.health}</td>
-              </tr>
-              <tr>
-                <td className="pr-4">Combat</td>
-                <td> {selectedAgent.combat}</td>
-              </tr>
-              <tr>
-                <td className="pr-4">Administration</td>
-                <td>{selectedAgent.administration}</td>
-              </tr>
-              <tr>
-                <td className="pr-4">Intelligence</td>
-                <td> {selectedAgent.intelligence}</td>
-              </tr>
-              <tr>
-                <td className="pr-4">Leadership</td>
-                <td> {selectedAgent.currentHealth}/{selectedAgent.health}</td>
-              </tr>
-             </tbody>
-            </table>
-            {selectedAgent.id !== gameData.player.overlordId && (
-              <div className="">
-                <Button
-                  buttonText={"Fire Agent"}
-                  onClick={() => {
-                    setSelectedAgent(null);
-                  }}
-                />
-                <Button
-                  buttonText={"Terminate Agent"}
-                  onClick={() => {
-                    setSelectedAgent(null);
-                  }}
-                />
-              </div>
-            )}
-
-            <button className="p-2 border rounded hover:bg-stone-700" onClick={() => {
-                setSelectedAgent(null);
-              }}>Close</button>
-          </div>
-        )}
-      </div>
+      
     </section>
   );
 };
