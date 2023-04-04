@@ -36,8 +36,6 @@ const EventsScreen = ({ gameData, setScreen, eventQueue, updateGameData }) => {
       
       setScreen("main");
     } else {
-      debugger;
-
       eventQueue.incrementEventIndex();
       setEventScreen(eventQueue.getCurrentEvent().eventName)
     }

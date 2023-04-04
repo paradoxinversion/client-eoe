@@ -84,7 +84,6 @@ const MainScreen = ({
             //   setScreen("victory")
             // }
             updateGameData(result.updatedGameData);
-            debugger;
             setScreen("events");
           }}
         >
