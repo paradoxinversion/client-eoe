@@ -101,7 +101,7 @@ const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
       </section>
       <section className="w-32 flex justify-between">
         <button
-          className="p-2 hover:bg-stone-700 disabled:bg-stone-900"
+          className="btn btn-confirm"
           disabled={department === null || commander === null}
           onClick={() => {
             resolveEvent({
@@ -116,7 +116,7 @@ const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
           Accept
         </button>
         <button
-          className="p-2 hover:bg-red-700 disabled:bg-stone-400"
+          className="btn btn-cancel disabled:bg-stone-400"
           onClick={() => {
             resolveEvent({
               resolutionValue: 0,

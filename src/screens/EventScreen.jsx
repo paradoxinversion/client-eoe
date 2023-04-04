@@ -4,12 +4,14 @@ import EventScreenProceed from "../elements/EventScreenProceed";
 import EventScreenRecruit from "../elements/EventScreenRecruit";
 import MonthlyReportScreen from "./MonthlyReportScreen";
 import Modal from "../elements/Modal";
+import EventScreenReconZone from "../elements/EventScreenReconZone";
 const eventScreenMap = {
   "EVIL Applicant": EventScreenRecruit,
   "Standard Report": EventScreenProceed,
   "Wealth Change": EventScreenProceed,
   "Attack Zone": EventScreenCombatResults,
-  "Monthly Report": MonthlyReportScreen
+  "Monthly Report": MonthlyReportScreen,
+  "Recon Zone": EventScreenReconZone
 };
 
 /**
@@ -31,8 +33,11 @@ const EventsScreen = ({ gameData, setScreen, eventQueue, updateGameData }) => {
     updateGameData(updatedGameData);
     if (eventQueue.eventIndex === eventQueue.events.length - 1) {
       eventQueue.clearEvents();
+      
       setScreen("main");
     } else {
+      debugger;
+
       eventQueue.incrementEventIndex();
       setEventScreen(eventQueue.getCurrentEvent().eventName)
     }

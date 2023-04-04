@@ -23,14 +23,13 @@ const WorldScreen = ({ gameData }) => {
               <p>{selectedNation.name}</p>
             </header>
             <section className="mb-4">
-              <p>Nation Size: {selectedNation.size}?</p>
+              <p>Nation Size: {selectedNation.size}</p>
               <p>
                 Nation Citizens:{" "}
                 {
                   eoe.citizens.getCitizens(peopleArray, selectedNation.id)
                     .length
                 }
-                ?
               </p>
               <p>Nation Agents: {nationAgents.length}</p>
             </section>

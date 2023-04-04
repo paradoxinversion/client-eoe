@@ -1,12 +1,13 @@
 import { useState } from "react";
 import AgentSelector from "../elements/AgentSelector";
 import AttackZonePlot from "../elements/AttackZonePlot";
-import { toDataArray } from "../utilities/dataHelpers";
 import Modal from "../elements/Modal";
+import ReconPlot from "../elements/ReconPlot";
 const eoe = require("empire-of-evil");
 
 const plotsWidgets = {
   "attack-zone": AttackZonePlot,
+  "recon-zone": ReconPlot
 };
 
 /**
