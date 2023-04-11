@@ -1,5 +1,5 @@
 import { populateActivities, populatePlots } from "empire-of-evil/src/plots";
-import { useState } from "react";
+import React, { useState } from "react";
 import { deleteSavedGame } from "../actions/dataManagement";
 
 /**
@@ -9,7 +9,7 @@ import { deleteSavedGame } from "../actions/dataManagement";
  * @param {PlotManager} props.plotManager
  * @returns
  */
-const TitleScreen = (props) => {
+function TitleScreen(props) {
   const [saveData, setSaveData] = useState(localStorage.getItem("eoe-save"));
   const { setScreen, setGameData, activityManager, plotManager } = props;
   return (
@@ -48,6 +48,7 @@ const TitleScreen = (props) => {
                 const sd = JSON.parse(saveData);
                 populateActivities(activityManager);
                 populatePlots(plotManager);
+                plotManager.setPlotQueue(sd.plotData.plots)
                 Object.values(sd.plotData.activities).forEach((activity) => {
                   const currentActivity = activityManager.activities.find(
                     (a) => a.name === activity.name

@@ -1,8 +1,15 @@
 import { getAgents, getControlledZones } from "empire-of-evil/src/organization";
-import { Plot } from "empire-of-evil/src/plots";
+import { Plot, PlotManager } from "empire-of-evil/src/plots";
 import { useState } from "react";
 import { toDataArray } from "../utilities/dataHelpers";
 
+/**
+ * 
+ * @param {Object} props 
+ * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
+ * @param {PlotManager} props.plotManager
+ * @returns 
+ */
 const AttackZonePlot = ({ gameData, plotManager, cb }) => {
   const [nation, setNation] = useState(null);
   const [zone, setZone] = useState(null);
@@ -13,22 +20,30 @@ const AttackZonePlot = ({ gameData, plotManager, cb }) => {
 
   const preparePlot = () => {
     const plotParams = {
-      zone,
+      zone: {
+        id: zone.id,
+        organizationId: zone.organizationId
+      },
       participants: attackers,
     };
-    const plot = new Plot("Attack Zone", attackers, "attack-zone", plotParams);
+    const plot = new Plot("Attack Zone", "attack-zone", plotParams);
     plotManager.addPlot(plot);
   };
 
+  /**
+   * 
+   * @param {Event} e 
+   * @param {import("empire-of-evil/src/typedef").Person} agent 
+   */
   const onUpdateAttackers = (e, agent) => {
     if (e.currentTarget.checked) {
-      if (!attackers.includes(agent)) {
+      if (!attackers.includes(agent.id)) {
         const updatedAttackers = JSON.parse(JSON.stringify(attackers));
-        updatedAttackers.push(agent);
+        updatedAttackers.push(agent.id);
         setAttackers(updatedAttackers);
       }
     } else {
-      if (attackers.includes(agent)) {
+      if (attackers.includes(agent.id)) {
         const updatedAttackers = JSON.parse(JSON.stringify(attackers));
         setAttackers(
           updatedAttackers.filter((person) => person.id !== agent.id)
@@ -126,9 +141,9 @@ const AttackZonePlot = ({ gameData, plotManager, cb }) => {
             <div>
               <p className="text-lg border-b mb-4">Selected Agents</p>
               <div className="flex flex-wrap">
-                {attackers.map((agent) => (
-                  <div key={`attackers-${agent.id}`} className="shadow-md rounded p-2">
-                    <p>{agent.name}</p>
+                {attackers.map((agentId) => (
+                  <div key={`attackers-${agentId}`} className="shadow-md rounded p-2">
+                    <p>{gameData.people[agentId].name}</p>
                   </div>
                 ))}
               </div>

@@ -60,7 +60,7 @@ function App() {
   return (
     <div className="bg-stone-200 text-stone-900 h-screen grid grid-cols-12">
       {Object.keys(gameData).length > 0 && (
-        <ScreenNavigator gameData={gameData} setScreen={setGameScreen} activityManager={activityManager} />
+        <ScreenNavigator gameData={gameData} setScreen={setGameScreen} activityManager={activityManager} plotManager={plotManager}/>
       )}
       <div
         className={`overflow-y-auto w-full ${

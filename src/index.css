@@ -23,10 +23,6 @@
     @apply text-3xl font-bold
   }
   
-  body {
-    @apply bg-stone-800
-  }
-  
   table {
     @apply table-auto border-spacing-2 w-full
   }
@@ -55,19 +51,19 @@
 @layer components {
 
   .btn {
-    @apply p-2
+    @apply px-2 py-1 rounded shadow border
   }
 
   .btn-primary {
-    @apply btn rounded shadow border border-stone-300 hover:bg-stone-100
+    @apply border-stone-300 hover:bg-stone-100
   }
 
   .btn-cancel {
-    @apply btn rounded shadow border text-white bg-red-500 border-red-300 hover:bg-red-100
+    @apply text-white bg-red-500 hover:bg-red-400 border-transparent
   }
   
   .btn-confirm {
-    @apply btn rounded shadow bg-green-500 text-stone-100 
+    @apply bg-green-500 text-stone-100  border-transparent hover:bg-green-400
   }
   
   .title-feature-card {

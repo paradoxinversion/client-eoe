@@ -1,3 +1,4 @@
+import { getActivityParticipants } from "empire-of-evil/src/plots";
 import { useState } from "react";
 import AgentSelector from "../elements/AgentSelector";
 import AttackZonePlot from "../elements/AttackZonePlot";
@@ -30,9 +31,9 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
    */
   const onUpdateActivityParticipant = (participantId, add) => {
     if (add) {
-      currentActivity.addAgent(gameData.people[participantId].id);
+      currentActivity.addAgent(gameData, gameData.people[participantId].id);
     } else {
-      currentActivity.removeAgent(gameData.people[participantId].id);
+      currentActivity.removeAgent(gameData, gameData.people[participantId].id);
     }
   };
 
@@ -59,9 +60,14 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
               </p>
             </header>
             <AgentSelector
-              agentsArray={eoe.organizations.getAgents(
+              agentsArray={eoe.organizations._getAgents(
                 gameData,
-                gameData.player.organizationId
+                {
+                  organizationId: gameData.player.organizationId,
+                  exclude: {
+                    unavailable: true
+                  }
+                }
               )}
               cb={onUpdateActivityParticipant}
               participantsArray={currentActivity.agents}
@@ -137,7 +143,7 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
                     {plotManager.plotQueue.map((plot, index) => (
                       <tr key={`plot-${index}-${plot.type}`}>
                         <td>{plot.name}</td>
-                        <td>{plot?.agents?.length}</td>
+                        <td>{plot?.plotParams?.participants?.length}</td>
                         <td>
                           <button className="border rounded px-2">
                             cancel
@@ -178,6 +184,33 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
             </div>
             
           </div>
+          <section>
+            <div className="mb-4">
+              <div>
+                <header className="mb-4">
+                  <p className="text-lg text-stone-700 font-bold border-b border-stone-700">
+                    Activity Participants
+                  </p>
+                </header>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Agent</th>
+                      <th>Activity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {getActivityParticipants(gameData, activityManager).map((participant, index) => (
+                      <tr key={`plot-${index}-${participant.type}`}>
+                        <td>{participant.participant.name}</td>
+                        <td>{participant.activity}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
         </section>
       </div>
     </section>

@@ -17,22 +17,22 @@ const ReconPlot = ({ gameData, plotManager, cb }) => {
   );
   const preparePlot = () => {
     const plotParams = {
-      zone,
+      zoneId: zone.id,
       participants,
     };
-    const plot = new Plot("Recon Zone", participants, "recon-zone", plotParams);
+    const plot = new Plot("Recon Zone", "recon-zone", plotParams);
     plotManager.addPlot(plot);
   };
   const onUpdateParticipants = (e, agent) => {
     if (e.currentTarget.checked) {
-      if (!participants.includes(agent)) {
-        const updatedParticipants = JSON.parse(JSON.stringify(participants));
-        updatedParticipants.push(agent);
+      if (!participants.includes(agent.id)) {
+        const updatedParticipants = [...participants]
+        updatedParticipants.push(agent.id);
         setParticipants(updatedParticipants);
       }
     } else {
-      if (participants.includes(agent)) {
-        const updatedParticipants = JSON.parse(JSON.stringify(participants));
+      if (participants.includes(agent.id)) {
+        const updatedParticipants = [...participants];
         setParticipants(
           updatedParticipants.filter((person) => person.id !== agent.id)
         );
@@ -128,8 +128,8 @@ const ReconPlot = ({ gameData, plotManager, cb }) => {
               <p className="text-lg border-b mb-4">Selected Agents</p>
               <div className="flex flex-wrap">
                 {participants.map((agent) => (
-                  <div key={`attackers-${agent.id}`} className="shadow-md rounded p-2">
-                    <p>{agent.name}</p>
+                  <div key={`attackers-${agent}`} className="shadow-md rounded p-2">
+                    <p>{gameData.people[agent].name}</p>
                   </div>
                 ))}
               </div>

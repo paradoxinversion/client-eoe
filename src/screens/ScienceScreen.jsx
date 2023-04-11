@@ -1,5 +1,5 @@
 import { addPersonnel, getOrgLabs } from "empire-of-evil/src/buildings";
-import { getAgentsInZone } from "empire-of-evil/src/organization";
+import { getAgentsInZone, _getAgents } from "empire-of-evil/src/organization";
 import { useState } from "react";
 import { toDataArray } from "../utilities/dataHelpers";
 import { MetricCard } from "../elements/MetricCard";
@@ -91,17 +91,24 @@ const ScienceScreen = ({ gameData, updateGameData }) => {
       </section>
       {addingPersonnel && (
         <div>
-          {getAgentsInZone(
+          {_getAgents(
             gameData,
-            gameData.player.organizationId,
-            selectedLab.zoneId
+            {
+              organizationId: gameData.player.organizationId,
+              filter: {
+                zoneId: selectedLab.zoneId,
+                department: 2
+              },
+              exclude: {
+                personnel: true
+              }
+            }
           )
-            .filter(
-              (agent) =>
-                agent.agent.department === 2 &&
-                !selectedLab.personnel.includes(agent.id) &&
-                !agent.isPersonnel
-            )
+            // .filter(
+            //   (agent) =>
+            //     !selectedLab.personnel.includes(agent.id) &&
+            //     !agent.isPersonnel
+            // )
             .map((agent) => {
               return (
                 <button
