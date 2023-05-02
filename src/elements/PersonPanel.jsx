@@ -1,7 +1,9 @@
 import { getAgentSubordinates } from "empire-of-evil/src/organization";
 import { toDataArray } from "../utilities/dataHelpers";
+import { GameManager } from "empire-of-evil";
 
-const PersonPanel = ({ gameData, title, people, cb }) => {
+const PersonPanel = ({ gameManager, title, people, cb }) => {
+  const {gameData} = gameManager
   return (
     <section className="mb-4 h-64">
       <header className="text-lg text-stone-700 font-bold border-b">
@@ -24,7 +26,7 @@ const PersonPanel = ({ gameData, title, people, cb }) => {
                 <td>{person.name}</td>
                 <td>{person.currentHealth}/{person.health}</td>
                 <td>{person.agent.department}</td>
-                <td>{getAgentSubordinates(gameData, person).length}/{person.leadership}</td>
+                <td>{getAgentSubordinates(gameManager, person).length}/{person.leadership}</td>
                 <td>{gameData?.zones[person.homeZoneId]?.name}</td>
               </tr>
             ))}

@@ -2,15 +2,17 @@ import { getAgents, getControlledZones } from "empire-of-evil/src/organization";
 import { Plot, PlotManager } from "empire-of-evil/src/plots";
 import { useState } from "react";
 import { toDataArray } from "../utilities/dataHelpers";
+import { GameManager } from "empire-of-evil";
 
 /**
  * 
  * @param {Object} props 
- * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
+ * @param {GameManager} props.gameManager
  * @param {PlotManager} props.plotManager
  * @returns 
  */
-const AttackZonePlot = ({ gameData, plotManager, cb }) => {
+const AttackZonePlot = ({ gameManager, cb }) => {
+  const {gameData, plotManager} = gameManager;
   const [nation, setNation] = useState(null);
   const [zone, setZone] = useState(null);
   const nations = toDataArray(gameData.nations).filter(
@@ -87,7 +89,7 @@ const AttackZonePlot = ({ gameData, plotManager, cb }) => {
             </header>
             <div className="flex flex-wrap">
               {getControlledZones(
-                gameData,
+                gameManager,
                 nation.organizationId
               ).map((zone) => (
                 <div key={`zs-${zone.id}`} className="shadow-md rounded p-2 w-fit">
@@ -115,7 +117,7 @@ const AttackZonePlot = ({ gameData, plotManager, cb }) => {
             </header>
             <div className="flex flex-wrap">
               {getAgents(
-                gameData,
+                gameManager,
                 gameData.player.organizationId
               )
                 .filter(

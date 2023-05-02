@@ -7,13 +7,22 @@ export default {
 };
 
 export const Primary = {
-    render: () => <Button type="primary">Primary</Button>,
+  args: {
+    type: 'primary',
+    children: "Primary"
+  },
 };
 
 export const Cancel = {
-  render: () => <Button type="cancel">Cancel</Button>,
+  args: {
+    type: 'cancel',
+    children: "Cancel"
+  },
 };
 
 export const Confirm = {
-  render: () => <Button type="confirm">Confirm</Button>,
+  args: {
+    type: 'confirm',
+    children: "Confirm"
+  },
 };

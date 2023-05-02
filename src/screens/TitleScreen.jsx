@@ -1,17 +1,17 @@
 import { populateActivities, populatePlots } from "empire-of-evil/src/plots";
 import React, { useState } from "react";
 import { deleteSavedGame } from "../actions/dataManagement";
+import {GameManager} from "empire-of-evil";
 
 /**
  *
  * @param {Object} props
- * @param {ActivityManager} props.activityManager
- * @param {PlotManager} props.plotManager
+ * @param {GameManager} props.gameManager
  * @returns
  */
 function TitleScreen(props) {
   const [saveData, setSaveData] = useState(localStorage.getItem("eoe-save"));
-  const { setScreen, setGameData, activityManager, plotManager } = props;
+  const { setScreen, setGameData, gameManager } = props;
   return (
     <div className="grid justify-items-center">
       <section className="flex justify-end bg-stone-900 w-full text-white shadow-lg">
@@ -46,16 +46,17 @@ function TitleScreen(props) {
                  * @type {import("empire-of-evil/src/typedef").SaveData}
                  */
                 const sd = JSON.parse(saveData);
-                populateActivities(activityManager);
-                populatePlots(plotManager);
-                plotManager.setPlotQueue(sd.plotData.plots)
+                populateActivities(gameManager);
+                populatePlots(gameManager);
+                gameManager.plotManager.setPlotQueue(sd.plotData.plots)
                 Object.values(sd.plotData.activities).forEach((activity) => {
-                  const currentActivity = activityManager.activities.find(
+                  const currentActivity = gameManager.activityManager.activities.find(
                     (a) => a.name === activity.name
                   );
                   currentActivity.setAgents(activity.agents);
                 });
-                setGameData(sd.gameData);
+                gameManager.setGameData(sd.gameData);
+                gameManager.setInitialized(true);
                 setScreen("main");
               }}
             >

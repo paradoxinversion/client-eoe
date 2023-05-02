@@ -2,7 +2,7 @@ import { addPersonnel, getOrgLabs } from "empire-of-evil/src/buildings";
 import { getAgentsInZone, _getAgents } from "empire-of-evil/src/organization";
 import { useState } from "react";
 import { toDataArray } from "../utilities/dataHelpers";
-import { MetricCard } from "../elements/MetricCard";
+import MetricCard from "../elements/MetricCard/MetricCard";
 
 /**
  *
@@ -10,10 +10,11 @@ import { MetricCard } from "../elements/MetricCard";
  * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
  * @returns
  */
-const ScienceScreen = ({ gameData, updateGameData }) => {
+const ScienceScreen = ({ gameManager, updateGameData }) => {
+  const {gameData} = gameManager;
   const [selectedLab, setSelectedLab] = useState(null);
   const [addingPersonnel, setAddingPersonnel] = useState(false);
-  const labs = getOrgLabs(gameData, gameData.player.organizationId);
+  const labs = getOrgLabs(gameManager, gameData.player.organizationId);
   return (
     <section>
       <div
@@ -71,7 +72,6 @@ const ScienceScreen = ({ gameData, updateGameData }) => {
               </header>
               <p>Personnel</p>
               {selectedLab.personnel.map((labPersonnel) => {
-                console.log(gameData.people[labPersonnel]);
                 return (
                   <div>
                     <p>{gameData.people[labPersonnel].name}</p>
@@ -92,7 +92,7 @@ const ScienceScreen = ({ gameData, updateGameData }) => {
       {addingPersonnel && (
         <div>
           {_getAgents(
-            gameData,
+            gameManager,
             {
               organizationId: gameData.player.organizationId,
               filter: {
@@ -104,11 +104,6 @@ const ScienceScreen = ({ gameData, updateGameData }) => {
               }
             }
           )
-            // .filter(
-            //   (agent) =>
-            //     !selectedLab.personnel.includes(agent.id) &&
-            //     !agent.isPersonnel
-            // )
             .map((agent) => {
               return (
                 <button

@@ -2,7 +2,7 @@ import { useState } from "react";
 import PersonPanel from "../elements/PersonPanel";
 import { toDataArray } from "../utilities/dataHelpers";
 import Button from "../elements/Button";
-import { MetricCard } from "../elements/MetricCard";
+import MetricCard from "../elements/MetricCard/MetricCard";
 import Modal from "../elements/Modal";
 // import { fireAgent, terminateAgent } from "empire-of-evil/src/organization";
 const eoe = require("empire-of-evil");
@@ -12,7 +12,8 @@ const eoe = require("empire-of-evil");
  * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
  * @returns
  */
-const PersonnelScreen = ({ gameData, updateGameData }) => {
+const PersonnelScreen = ({ gameManager, updateGameData }) => {
+  const {gameData} = gameManager;
   /**
    * @type {Person} selectedAgent
    */
@@ -118,7 +119,7 @@ const PersonnelScreen = ({ gameData, updateGameData }) => {
             <p>
               $
               {eoe.organizations.getPayroll(
-                gameData,
+                gameManager,
                 gameData.player.organizationId
               )}
             </p>
@@ -127,13 +128,13 @@ const PersonnelScreen = ({ gameData, updateGameData }) => {
             <p>
               {
                 eoe.organizations.getAgents(
-                  gameData,
+                  gameManager,
                   gameData.player.organizationId
                 ).length
               }
               /
               {eoe.organizations.getMaxAgents(
-                gameData,
+                gameManager,
                 gameData.player.organizationId
               )}
             </p>
@@ -153,25 +154,28 @@ const PersonnelScreen = ({ gameData, updateGameData }) => {
             gameData={gameData}
             title={"Troopers"}
             people={eoe.organizations
-              .getAgents(gameData, gameData.player.organizationId)
+              .getAgents(gameManager, gameData.player.organizationId)
               .filter((person) => person.agent.department === 0)}
             cb={onAgentSelected}
+            gameManager={gameManager}
           />
           <PersonPanel
             gameData={gameData}
             title={"Administrators"}
             people={eoe.organizations
-              .getAgents(gameData, gameData.player.organizationId)
+              .getAgents(gameManager, gameData.player.organizationId)
               .filter((person) => person.agent.department === 1)}
             cb={onAgentSelected}
+            gameManager={gameManager}
           />
           <PersonPanel
             gameData={gameData}
             title={"Scientists"}
             people={eoe.organizations
-              .getAgents(gameData, gameData.player.organizationId)
+              .getAgents(gameManager, gameData.player.organizationId)
               .filter((person) => person.agent.department === 2)}
             cb={onAgentSelected}
+            gameManager={gameManager}
           />
         </div>
       </div>

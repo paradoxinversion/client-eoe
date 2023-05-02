@@ -5,6 +5,7 @@ import EventScreenRecruit from "../elements/EventScreenRecruit";
 import MonthlyReportScreen from "./MonthlyReportScreen";
 import Modal from "../elements/Modal";
 import EventScreenReconZone from "../elements/EventScreenReconZone";
+import { GameManager } from "empire-of-evil";
 const eventScreenMap = {
   "EVIL Applicant": EventScreenRecruit,
   "Standard Report": EventScreenProceed,
@@ -16,21 +17,22 @@ const eventScreenMap = {
 
 /**
  * @param {Object} props
- * @param {GameEventQueue} props.eventQueue 
+ * @param {GameManager} props.gameManager 
  * @returns 
  */
-const EventsScreen = ({ gameData, setScreen, eventQueue, updateGameData }) => {
+const EventsScreen = ({ gameManager, setScreen }) => {
+  const {gameData, eventManager: eventQueue} = gameManager;
   const [eventScreen, setEventScreen] = useState(eventQueue.getCurrentEvent().eventName);
   const CurrentEventComponent = eventScreenMap[eventScreen];
 
   const resolveEvent = (resolveArgs) => {
-    eventQueue.resolveCurrentEvent(gameData, resolveArgs)
+    eventQueue.resolveCurrentEvent(gameManager, resolveArgs)
     const resolvedEventData = eventQueue.getCurrentEvent().eventData;
     const updatedGameData = {...gameData, ...resolvedEventData.resolution.updatedGameData}
     if (updatedGameData.people[gameData.player.overlordId]?.currentHealth <= 0){
       setScreen("game-over");
     }
-    updateGameData(updatedGameData);
+    gameManager.updateGameData(updatedGameData)
     if (eventQueue.eventIndex === eventQueue.events.length - 1) {
       eventQueue.clearEvents();
       
@@ -53,6 +55,7 @@ const EventsScreen = ({ gameData, setScreen, eventQueue, updateGameData }) => {
           currentGameEvent={ce}
           resolveEvent={resolveEvent}
           gameData={gameData}
+          gameManager={gameManager}
         />
       </Modal>
     </section>

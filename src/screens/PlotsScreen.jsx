@@ -1,6 +1,6 @@
 import { getActivityParticipants } from "empire-of-evil/src/plots";
 import { useState } from "react";
-import AgentSelector from "../elements/AgentSelector";
+import AgentSelector from "../elements/AgentSelector/AgentSelector";
 import AttackZonePlot from "../elements/AttackZonePlot";
 import Modal from "../elements/Modal";
 import ReconPlot from "../elements/ReconPlot";
@@ -17,7 +17,8 @@ const plotsWidgets = {
  * @param {ActivityManager} props.activityManager
  * @returns
  */
-const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
+const PlotsScreen = ({ gameManager }) => {
+  const {gameData, activityManager, plotManager} = gameManager;
   const [currentActivity, setCurrentActivity] = useState(null);
   const [currentPlot, setCurrentPlot] = useState(null);
   const onClickActivity = (activityName) => {
@@ -31,9 +32,9 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
    */
   const onUpdateActivityParticipant = (participantId, add) => {
     if (add) {
-      currentActivity.addAgent(gameData, gameData.people[participantId].id);
+      currentActivity.addAgent(gameManager, gameData.people[participantId].id);
     } else {
-      currentActivity.removeAgent(gameData, gameData.people[participantId].id);
+      currentActivity.removeAgent(gameManager, gameData.people[participantId].id);
     }
   };
 
@@ -44,6 +45,7 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
         <Modal>
           <PlotWidget
             gameData={gameData}
+            gameManager={gameManager}
             plotManager={plotManager}
             cb={() => {
               setCurrentPlot(null);
@@ -61,7 +63,7 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
             </header>
             <AgentSelector
               agentsArray={eoe.organizations._getAgents(
-                gameData,
+                gameManager,
                 {
                   organizationId: gameData.player.organizationId,
                   exclude: {
@@ -115,6 +117,7 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
               {currentPlot && (
                 <PlotWidget
                   gameData={gameData}
+                  gameManager={gameManager}
                   plotManager={plotManager}
                   cb={() => {
                     setCurrentPlot(null);
@@ -200,7 +203,7 @@ const PlotsScreen = ({ gameData, activityManager, plotManager }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {getActivityParticipants(gameData, activityManager).map((participant, index) => (
+                    {getActivityParticipants(gameManager).map((participant, index) => (
                       <tr key={`plot-${index}-${participant.type}`}>
                         <td>{participant.participant.name}</td>
                         <td>{participant.activity}</td>

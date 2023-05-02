@@ -44,10 +44,6 @@
   }
 }
 
-/* tr:hover{
-  @apply bg-stone-700
-} */
-
 @layer components {
 
   .btn {

@@ -14,7 +14,10 @@ import { GameEventQueue } from "empire-of-evil/src/gameEvents";
 import { ActivityManager, PlotManager } from "empire-of-evil/src/plots";
 import GameOverScreen from "./screens/GameOverScreen";
 import VictoryScreen from "./screens/VictoryScreen";
-import { checkGameOverState, checkVictoryState } from "empire-of-evil/src/utilities";
+import {
+  checkGameOverState,
+  checkVictoryState,
+} from "empire-of-evil/src/utilities";
 
 const screens = {
   title: TitleScreen,
@@ -27,54 +30,50 @@ const screens = {
   world: WorldScreen,
   events: EventsScreen,
   "game-over": GameOverScreen,
-  victory: VictoryScreen
+  victory: VictoryScreen,
 };
 
-function App() {
+function App({gameManager}) {
+
   const [gameData, _setGameData] = useState({});
-  const [eventQueue] = useState(new GameEventQueue());
-  const [activityManager] = useState(new ActivityManager());
-  const [plotManager] = useState(new PlotManager());
   const [gameScreen, setGameScreen] = useState("title");
   const CurrentScreen = screens[gameScreen];
 
   /**
-   * 
-   * @param {import("empire-of-evil/src/typedef").GameData} updatedGameData 
+   *
+   * @param {import("empire-of-evil/src/typedef").GameData} updatedGameData
    */
   const updateGameData = (updatedGameData) => {
     const update = {
       ...gameData,
       people: { ...gameData.people, ...updatedGameData.people },
-      zones: { ...gameData.zones,...updatedGameData.zones},
-      nations: { ...gameData.nations,...updatedGameData.nations},
-      governingOrganizations: { ...gameData.governingOrganizations,...updatedGameData.governingOrganizations},
-      buildings: { ...gameData.buildings,...updatedGameData.buildings},
-      player: { ...gameData.player, ...updatedGameData.player},
-      gameDate: updatedGameData.gameDate || gameData.gameDate
-    }
+      zones: { ...gameData.zones, ...updatedGameData.zones },
+      nations: { ...gameData.nations, ...updatedGameData.nations },
+      governingOrganizations: {
+        ...gameData.governingOrganizations,
+        ...updatedGameData.governingOrganizations,
+      },
+      buildings: { ...gameData.buildings, ...updatedGameData.buildings },
+      player: { ...gameData.player, ...updatedGameData.player },
+      gameDate: updatedGameData.gameDate || gameData.gameDate,
+    };
+    gameManager.gameData = update;
     _setGameData(update);
-   
-
   };
   return (
     <div className="bg-stone-200 text-stone-900 h-screen grid grid-cols-12">
-      {Object.keys(gameData).length > 0 && (
-        <ScreenNavigator gameData={gameData} setScreen={setGameScreen} activityManager={activityManager} plotManager={plotManager}/>
+      {gameManager?.initialized && Object.keys(gameManager.gameData).length > 0 && (
+        <ScreenNavigator
+          setScreen={setGameScreen}
+          gameManager={gameManager}
+        />
       )}
       <div
-        className={`overflow-y-auto w-full ${
-          Object.keys(gameData).length > 0 ? "col-span-11" : "col-span-12"
-        }`}
+        className={`overflow-y-auto w-full ${gameManager?.initialized ? 'col-span-11' : 'col-span-12'}`}
       >
         <CurrentScreen
-          updateGameData={updateGameData}
+          gameManager={gameManager}
           setScreen={setGameScreen}
-          gameData={gameData}
-          setGameData={_setGameData}
-          eventQueue={eventQueue}
-          activityManager={activityManager}
-          plotManager={plotManager}
         />
       </div>
     </div>

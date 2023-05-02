@@ -1,7 +1,9 @@
 import { numberWithErrorMargin } from "empire-of-evil/src/utilities";
 import { getZoneCitizens } from "empire-of-evil/src/zones";
 import { toDataArray } from "../utilities/dataHelpers";
-const ZonePanel = ({ title, zones, gameData }) => {
+import { GameManager } from "empire-of-evil";
+const ZonePanel = ({ title, zones, gameManager }) => {
+  const {gameData} = gameManager;
   return (
     <section className="mb-4">
       <header className="text-xl font-bold border-b">
@@ -22,8 +24,8 @@ const ZonePanel = ({ title, zones, gameData }) => {
             <tr key={zone.id}>
               <td>{zone.name}</td>
               {/* <td>{getZoneCitizens(gameData, zone.id, false, true).length}</td> */}
-              <td>{parseInt(numberWithErrorMargin(getZoneCitizens(gameData, zone.id, false, true).length, zone.intelligenceLevel))}{zone.intelligenceLevel !== 100 && "?"}</td>
-              <td>{parseInt(numberWithErrorMargin(getZoneCitizens(gameData, zone.id, true, true).length, zone.intelligenceLevel))}{zone.intelligenceLevel !== 100 && "?"}</td>
+              <td>{parseInt(numberWithErrorMargin(getZoneCitizens(gameManager, zone.id, false, true).length, zone.intelligenceLevel))}{zone.intelligenceLevel !== 100 && "?"}</td>
+              <td>{parseInt(numberWithErrorMargin(getZoneCitizens(gameManager, zone.id, true, true).length, zone.intelligenceLevel))}{zone.intelligenceLevel !== 100 && "?"}</td>
               <td>{zone.intelligenceLevel}%</td>
             </tr>
           ))}

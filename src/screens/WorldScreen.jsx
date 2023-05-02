@@ -3,16 +3,17 @@ import { getAgents } from "empire-of-evil/src/organization";
 import { useState } from "react";
 import ZonePanel from "../elements/ZonePanel";
 import { toDataArray } from "../utilities/dataHelpers";
-import { MetricCard } from "../elements/MetricCard";
+import MetricCard from "../elements/MetricCard/MetricCard"
 import Modal from "../elements/Modal";
 const eoe = require("empire-of-evil");
-const WorldScreen = ({ gameData }) => {
+const WorldScreen = ({ gameManager }) => {
+  const {gameData} = gameManager;
   const [selectedNation, setSelectedNation] = useState(null);
 
   const peopleArray = toDataArray(gameData.people);
   const nationsArray = toDataArray(gameData.nations);
   const nationAgents =
-    selectedNation && getAgents(gameData, selectedNation.organizationId);
+    selectedNation && getAgents(gameManager, selectedNation.organizationId);
 
   return (
     <section>
@@ -35,10 +36,11 @@ const WorldScreen = ({ gameData }) => {
             </section>
             <ZonePanel
               title={`${
-                eoe.zones.getZones(gameData, selectedNation.id).length
+                eoe.zones.getZones(gameManager, selectedNation.id).length
               } Zones`}
-              zones={eoe.zones.getZones(gameData, selectedNation.id)}
+              zones={eoe.zones.getZones(gameManager, selectedNation.id)}
               gameData={gameData}
+              gameManager={gameManager}
             />
           </section>
           <button className="btn btn-primary" onClick={()=>{setSelectedNation(null)}}>Close</button>
@@ -84,11 +86,11 @@ const WorldScreen = ({ gameData }) => {
                     >
                       <td className=" pr-8">{nation.name}</td>
                       <td className=" pr-8">
-                        {getNationCitizens(gameData, nation.id).length}
+                        {getNationCitizens(gameManager, nation.id).length}
                       </td>
                       <td className=" pr-8">{nation.size}</td>
                       <td className=" pr-8">
-                        {getAgents(gameData, nation.organizationId).length}
+                        {getAgents(gameManager, nation.organizationId).length}
                       </td>
                     </tr>
                   ))}

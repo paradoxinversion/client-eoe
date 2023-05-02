@@ -1,20 +1,26 @@
+import { GameManager } from "empire-of-evil";
 import { handleNewGame, hireStartingAgents } from "empire-of-evil/src/gameSetup";
 import { populateActivities, populatePlots } from "empire-of-evil/src/plots";
 import { useState } from "react";
 
+/**
+ * 
+ * @param {Object} props 
+ * @param {GameManager} props.gameManager
+ * @returns 
+ */
 const NewGameScreen = ({
+  gameManager,
   setScreen,
-  setGameData,
-  activityManager,
-  plotManager,
 }) => {
   const [overlordName, setOverlordName] = useState("OVERLORD");
   const onNewGame = () => {
-    const startingGameData = handleNewGame();
-    setGameData(startingGameData);
-    hireStartingAgents(startingGameData);
-    populateActivities(activityManager);
-    populatePlots(plotManager);
+    handleNewGame(gameManager);
+    hireStartingAgents(gameManager);
+    populateActivities(gameManager);
+    populatePlots(gameManager);
+    gameManager.setInitialized(true)
+
     setScreen("main");
   };
   return (

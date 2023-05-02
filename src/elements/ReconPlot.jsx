@@ -8,7 +8,8 @@ import { toDataArray } from "../utilities/dataHelpers";
  * @param {Object} props
  * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
  */
-const ReconPlot = ({ gameData, plotManager, cb }) => {
+const ReconPlot = ({ gameManager, cb }) => {
+  const {gameData, plotManager} = gameManager
   const [nation, setNation] = useState(null);
   const [zone, setZone] = useState(null);
   const [participants, setParticipants] = useState([]);
@@ -74,7 +75,7 @@ const ReconPlot = ({ gameData, plotManager, cb }) => {
             </header>
             <div className="flex flex-wrap">
               {getControlledZones(
-                gameData,
+                gameManager,
                 nation.organizationId
               ).map((zone) => (
                 <div key={`zs-${zone.id}`} className="shadow-md rounded p-2 w-fit">
@@ -101,7 +102,7 @@ const ReconPlot = ({ gameData, plotManager, cb }) => {
             </header>
             <div className="flex flex-wrap">
               {getAgents(
-                gameData,
+                gameManager,
                 gameData.player.organizationId
               )
                 .filter(

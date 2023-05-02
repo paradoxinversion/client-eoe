@@ -128,7 +128,8 @@ const screens = [
   },
 ];
 
-function ScreenNavigator({ setScreen, gameData, activityManager, plotManager }){
+function ScreenNavigator({ setScreen, gameManager }){
+  const {gameData, activityManager, plotManager} = gameManager;
   return (
     <section className="flex flex-col bg-stone-900 text-white">
       {/* <p className="text-xs p-2">WELCOME, OVERLORD</p> */}
@@ -147,7 +148,7 @@ function ScreenNavigator({ setScreen, gameData, activityManager, plotManager }){
         <button
           className="flex items-center tracking-wider text-sm p-2"
           onClick={() => {
-            saveGame(gameData, activityManager, plotManager);
+            saveGame(gameManager, activityManager, plotManager);
           }}
         >
           <svg

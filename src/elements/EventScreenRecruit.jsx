@@ -12,7 +12,8 @@ import { toDataArray } from "../utilities/dataHelpers";
  * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
  * @returns
  */
-const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
+const EventScreenRecruit = ({ gameManager, currentGameEvent, resolveEvent }) => {
+  const {gameData} = gameManager;
   const [department, setDepartment] = useState(null);
   const [commander, setCommander] = useState(null);
   const onChange = (event) => {
@@ -74,11 +75,11 @@ const EventScreenRecruit = ({ gameData, currentGameEvent, resolveEvent }) => {
         <form onChange={onCommanderSelect}>
           <div className="flex flex-wrap">
             {getAgents(
-              gameData,
+              gameManager,
               gameData.player.organizationId
             ).map((agent) => {
               const subordinates = getAgentSubordinates(
-                gameData,
+                gameManager,
                 agent
               );
               return (

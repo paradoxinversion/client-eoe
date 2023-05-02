@@ -4,10 +4,9 @@ import { getPayroll } from "empire-of-evil/src/organization";
 /**
  *
  * @param {Object} props
- * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
  * @returns
  */
-const MonthlyReportScreen = ({ gameData, currentGameEvent, resolveEvent }) => {
+const MonthlyReportScreen = ({ currentGameEvent, resolveEvent }) => {
   return (
     <section>
       <header>
