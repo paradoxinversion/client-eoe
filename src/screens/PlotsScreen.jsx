@@ -4,12 +4,26 @@ import AgentSelector from "../elements/AgentSelector/AgentSelector";
 import AttackZonePlot from "../elements/AttackZonePlot";
 import Modal from "../elements/Modal";
 import ReconPlot from "../elements/ReconPlot";
+import { dataGridButton } from "../datagridRenderers/dataGridButton";
+import DataGrid from 'react-data-grid';
+
 const eoe = require("empire-of-evil");
 
 const plotsWidgets = {
   "attack-zone": AttackZonePlot,
   "recon-zone": ReconPlot
 };
+
+const queuedPlotsColumns = [
+  { key: 'plot', name: 'Plot' },
+  { key: 'agents', name: 'Agents' },
+  { key: 'cancel', name: 'Cancel', renderCell: dataGridButton}
+];
+
+const activitiesColumns = [
+  { key: 'agent', name: 'Agent' },
+  { key: 'activity', name: 'Activity' },
+];
 
 /**
  *
@@ -37,7 +51,15 @@ const PlotsScreen = ({ gameManager }) => {
       currentActivity.removeAgent(gameManager, gameData.people[participantId].id);
     }
   };
+  const plotRows = plotManager.plotQueue.map((plot, index) => ({
+    plot: plot.name,
+    agents: plot?.plotParams?.participants?.length
+  }));
 
+  const activityRows = getActivityParticipants(gameManager).map((participant, index) => ({
+    agent: participant.participant.name,
+    activity: participant.activity
+  }))
   const PlotWidget = currentPlot && plotsWidgets[currentPlot.type];
   return (
     <section>
@@ -135,27 +157,7 @@ const PlotsScreen = ({ gameManager }) => {
                     Queued Plots
                   </p>
                 </header>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Plot</th>
-                      <th>Agents</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {plotManager.plotQueue.map((plot, index) => (
-                      <tr key={`plot-${index}-${plot.type}`}>
-                        <td>{plot.name}</td>
-                        <td>{plot?.plotParams?.participants?.length}</td>
-                        <td>
-                          <button className="border rounded px-2">
-                            cancel
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <DataGrid rows={plotRows} columns={queuedPlotsColumns} />
               </div>
             </div>
           </section>
@@ -195,22 +197,7 @@ const PlotsScreen = ({ gameManager }) => {
                     Activity Participants
                   </p>
                 </header>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Agent</th>
-                      <th>Activity</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {getActivityParticipants(gameManager).map((participant, index) => (
-                      <tr key={`plot-${index}-${participant.type}`}>
-                        <td>{participant.participant.name}</td>
-                        <td>{participant.activity}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <DataGrid rows={activityRows} columns={activitiesColumns} />
               </div>
             </div>
           </section>

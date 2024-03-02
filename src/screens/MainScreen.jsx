@@ -4,6 +4,8 @@ import {
   checkVictoryState,
 } from "empire-of-evil/src/utilities";
 import { useEffect } from "react";
+import MetricCard from "../elements/MetricCard/MetricCard";
+import MetricNumber from "../elements/MetricNumber/MetricNumber";
 
 const eoe = require("empire-of-evil");
 
@@ -201,18 +203,15 @@ const MainScreen = ({
               </p>
             </div>
           </div>
-          <div
-            id="empire-zones"
-            className="shadow border rounded border-stone-300 w-48 flex flex-col p-2"
-          >
-            <header className="font-semibold text-center">
-              <p>Empire Zones</p>
-              <p className="text-3xl">
-                {eoe.zones.getZones(gameManager, gameData.player.empireId).length}/
-                {Object.keys(gameData.zones).length}
-              </p>
-            </header>
-          </div>
+          <MetricCard title="Empire Zones">
+            <MetricNumber number={`${eoe.zones.getZones(gameManager, gameData.player.empireId).length}/${Object.keys(gameData.zones).length}`} />
+          </MetricCard>
+          <MetricCard title="Empire Agents">
+            <MetricNumber number={ eoe.organizations.getAgents(
+                    gameManager,
+                    gameData.player.organizationId
+                  ).length} />
+          </MetricCard>
           <div
             id="empire-agents"
             className="shadow border rounded border-stone-300 w-48 flex flex-col p-2"

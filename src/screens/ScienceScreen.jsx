@@ -3,7 +3,12 @@ import { getAgentsInZone, _getAgents } from "empire-of-evil/src/organization";
 import { useState } from "react";
 import { toDataArray } from "../utilities/dataHelpers";
 import MetricCard from "../elements/MetricCard/MetricCard";
+import DataGrid from 'react-data-grid';
 
+const columns = [
+  { key: 'lab', name: 'Lab' },
+  { key: 'maxScientists', name: 'Max Scientists' },
+];
 /**
  *
  * @param {Object} props
@@ -15,6 +20,10 @@ const ScienceScreen = ({ gameManager, updateGameData }) => {
   const [selectedLab, setSelectedLab] = useState(null);
   const [addingPersonnel, setAddingPersonnel] = useState(false);
   const labs = getOrgLabs(gameManager, gameData.player.organizationId);
+  const rows = labs.map((lab) =>({
+    lab: lab.name,
+    maxScientists: lab.maxPersonnel
+  }))
   return (
     <section>
       <div
@@ -36,33 +45,7 @@ const ScienceScreen = ({ gameManager, updateGameData }) => {
                 {labs.length}
               </MetricCard>
             </div>
-            <table >
-              <thead >
-                <tr>
-                  <th>Lab</th>
-                  <th>Max Scientists</th>
-                </tr>
-              </thead>
-              <tbody>
-                {labs.map((lab) => {
-                  return (
-                    <tr key={lab.id} className="border-b border-stone-400">
-                      <td>{lab.name}</td>
-                      <td>{lab.maxPersonnel}</td>
-                      <td>
-                        <button
-                          onClick={() => {
-                            setSelectedLab(lab);
-                          }}
-                        >
-                          Select Lab
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <DataGrid columns={columns} rows={rows} />
           </section>
 
           {selectedLab && (
