@@ -65,16 +65,14 @@ function App({gameManager}) {
     _setGameData(update);
   };
   return (
-    <Box className="bg-stone-200 text-stone-900 h-screen grid grid-cols-12">
+    <Box>
       {gameManager?.initialized && Object.keys(gameManager.gameData).length > 0 && (
         <ScreenNavigator
           setScreen={setGameScreen}
           gameManager={gameManager}
         />
       )}
-      <Box
-        className={`overflow-y-auto w-full ${gameManager?.initialized ? 'col-span-11' : 'col-span-12'}`}
-      >
+      <Box>
         <CurrentScreen
           gameManager={gameManager}
           setScreen={setGameScreen}

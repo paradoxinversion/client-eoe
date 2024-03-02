@@ -1,3 +1,4 @@
+import {Box, Checkbox, FormGroup, FormControlLabel} from "@mui/material";
 /**
  * A component to select Agents.
  * @param {Object} props 
@@ -14,14 +15,17 @@ const AgentSelector = ({agentsArray, cb, participantsArray}) => {
     cb && cb(agentId, value);
   }
   return (
-    <div>
-      {agentsArray.map(agent => (
-        <div key={agent.id}>
-          <input className="mr-2" type={"checkbox"} name={agent.id} onChange={handleCheckbox} defaultChecked={participantsArray.includes(agent.id)} />
-          <label htmlFor={agent.id}>{agent.name}</label>
-        </div>
-      ))}
-    </div>
+    <Box>
+      <FormGroup>
+        {agentsArray.map(agent => (
+          // <Box key={agent.id}>
+          //   <input className="mr-2" type={"checkbox"} name={agent.id} onChange={handleCheckbox} defaultChecked={participantsArray.includes(agent.id)} />
+          //   <label htmlFor={agent.id}>{agent.name}</label>
+          // </Box>
+            <FormControlLabel control={<Checkbox />} label={agent.name} onChange={handleCheckbox} checked={participantsArray.includes(agent.id)}/>
+        ))}
+      </FormGroup>
+    </Box>
   )
 }
 

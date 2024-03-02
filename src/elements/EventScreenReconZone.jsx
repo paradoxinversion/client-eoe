@@ -1,4 +1,4 @@
-import Button from "./Button";
+import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 
 /**
  * @param {object} props
@@ -10,21 +10,20 @@ const EventScreenReconZone = ({ resolveEvent, currentGameEvent }) => {
   const { intelligenceModifier, success } =
     currentGameEvent.params.plot.resolution.data;
   return (
-    <section>
-      <p>Mission {success ? "Success" : "Failure"}</p>
-      <p>Your recon mission has failed.</p>
-      <p>Intelligence modifier: {intelligenceModifier}</p>
-      <section className="w-32 flex justify-between">
-        <button
-          className="btn btn-primary"
+    <Box>
+      <Typography>Mission {success ? "Success" : "Failure"}</Typography>
+      <Typography>Your recon mission has failed.</Typography>
+      <Typography>Intelligence modifier: {intelligenceModifier}</Typography>
+      <Box>
+        <Button
           onClick={() => {
             resolveEvent();
           }}
         >
           Okay
-        </button>
-      </section>
-    </section>
+        </Button>
+      </Box>
+    </Box>
   );
 };
 

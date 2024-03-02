@@ -6,6 +6,8 @@ import MonthlyReportScreen from "./MonthlyReportScreen";
 import Modal from "../elements/Modal";
 import EventScreenReconZone from "../elements/EventScreenReconZone";
 import { GameManager } from "empire-of-evil";
+import { Box, Button, Card, CardContent, Typography } from "@mui/material";
+
 const eventScreenMap = {
   "EVIL Applicant": EventScreenRecruit,
   "Standard Report": EventScreenProceed,
@@ -44,12 +46,12 @@ const EventsScreen = ({ gameManager, setScreen }) => {
   };
   const ce = eventQueue.getCurrentEvent();
   return (
-    <section>
+    <Box component="section">
       <Modal>
-        <header className="mb-4">
-          <h1>{ce.eventName}</h1>
-          <p>{ce.eventText}</p>
-        </header>
+        <Box component="header">
+          <Typography>{ce.eventName}</Typography>
+          <Typography>{ce.eventText}</Typography>
+        </Box>
 
         <CurrentEventComponent
           currentGameEvent={ce}
@@ -58,7 +60,7 @@ const EventsScreen = ({ gameManager, setScreen }) => {
           gameManager={gameManager}
         />
       </Modal>
-    </section>
+    </Box>
   );
 };
 

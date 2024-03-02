@@ -2,36 +2,32 @@ import { numberWithErrorMargin } from "empire-of-evil/src/utilities";
 import { getZoneCitizens } from "empire-of-evil/src/zones";
 import { toDataArray } from "../utilities/dataHelpers";
 import { GameManager } from "empire-of-evil";
+import { Box, Card, CardContent, Typography } from "@mui/material";
+import DataGrid from 'react-data-grid';
+
+const zonePanelColumns = [
+  {key: "zone", name: "Zone"},
+  {key: "citizens", name: "Citizens"},
+  {key: "civillians", name: "Civillians"},
+  {key: "intel", name: "Intel Confidence"},
+];
+
 const ZonePanel = ({ title, zones, gameManager }) => {
   const {gameData} = gameManager;
-  return (
-    <section className="mb-4">
-      <header className="text-xl font-bold border-b">
-        <p>{title}</p>
-      </header>
-      <table className="p-2">
-        <thead>
-          <tr>
-            <th>Zone</th>
-            <th>Citizens</th>
-            <th>Civillians</th>
-            <th>Intel Confidence</th>
-          </tr>
-        </thead>
-        <tbody>
+  const zonePanelRows = zones.map((zone) => ({
+      zone: zone.name,
+      citizens: `${parseInt(numberWithErrorMargin(getZoneCitizens(gameManager, zone.id, false, true).length, zone.intelligenceLevel))}${zone.intelligenceLevel !== 100 && "?"}`,
+      civillians: `${parseInt(numberWithErrorMargin(getZoneCitizens(gameManager, zone.id, true, true).length, zone.intelligenceLevel))}${zone.intelligenceLevel !== 100 && "?"}`,
+      intel: zone.intelligenceLevel,
+  }))
 
-          {zones.map((zone) => (
-            <tr key={zone.id}>
-              <td>{zone.name}</td>
-              {/* <td>{getZoneCitizens(gameData, zone.id, false, true).length}</td> */}
-              <td>{parseInt(numberWithErrorMargin(getZoneCitizens(gameManager, zone.id, false, true).length, zone.intelligenceLevel))}{zone.intelligenceLevel !== 100 && "?"}</td>
-              <td>{parseInt(numberWithErrorMargin(getZoneCitizens(gameManager, zone.id, true, true).length, zone.intelligenceLevel))}{zone.intelligenceLevel !== 100 && "?"}</td>
-              <td>{zone.intelligenceLevel}%</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </section>
+  return (
+    <Box component={"section"}>
+      <Box component={"header"}>
+        <p>{title}</p>
+      </Box>
+      <DataGrid rows={zonePanelRows} columns={zonePanelColumns} />
+    </Box>
   );
 };
 

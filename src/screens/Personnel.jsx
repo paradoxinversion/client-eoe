@@ -3,7 +3,7 @@ import PersonPanel from "../elements/PersonPanel";
 import { toDataArray } from "../utilities/dataHelpers";
 import MetricCard from "../elements/MetricCard/MetricCard";
 import Modal from "../elements/Modal";
-import {Button, Box} from '@mui/material';
+import {Button, Box, Typography} from '@mui/material';
 // import { fireAgent, terminateAgent } from "empire-of-evil/src/organization";
 const eoe = require("empire-of-evil");
 /**
@@ -70,7 +70,7 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
                   </tbody>
                 </table>
                 {selectedAgent.id !== gameData.player.overlordId && (
-                  <Box className="">
+                  <Box>
                     <Button
                       buttonText={"Fire Agent"}
                       onClick={() => {
@@ -105,26 +105,23 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
         </Modal>
       )}
 
-      <Box
-        id="top-bar"
-        className="bg-stone-900 w-full text-stone-300 flex justify-end items-center h-10"
-      />
-      <Box className="p-2">
-        <header className="h-16">
-          <p className="text-3xl font-bold">Empire Personnel</p>
-        </header>
-        <Box className="grid grid-cols-4 w-fit gap-4">
+      <Box id="top-bar" />
+      <Box>
+        <Box component="header">
+          <Typography>Empire Personnel</Typography>
+        </Box>
+        <Box>
           <MetricCard title="Payroll">
-            <p>
+            <Typography>
               $
               {eoe.organizations.getPayroll(
                 gameManager,
                 gameData.player.organizationId
               )}
-            </p>
+            </Typography>
           </MetricCard>
           <MetricCard title="EVIL Agents">
-            <p>
+            <Typography>
               {
                 eoe.organizations.getAgents(
                   gameManager,
@@ -136,7 +133,7 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
                 gameManager,
                 gameData.player.organizationId
               )}
-            </p>
+            </Typography>
           </MetricCard>
         </Box>
 
@@ -148,7 +145,7 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
         >
           View EVIL Overlord
         </Button>
-        <Box className="grid grid-cols-3 grid-gap-4">
+        <Box>
           <PersonPanel
             gameData={gameData}
             title={"Troopers"}

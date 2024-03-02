@@ -1,16 +1,19 @@
+import { Box, Button, Card, CardContent, Typography } from "@mui/material";
+
+
 const EventScreenCombatResults = ({currentGameEvent, resolveEvent}) => {
   return (
-    <div>
-      <header>
-        <p className="text-xl font-bold border-b">Combat Log</p>
-      </header>
-      <div className="h-64 overflow-y-auto">
+    <Box>
+      <Box component="section">
+        <Typography>Combat Log</Typography>
+      </Box>
+      <Box>
         {currentGameEvent?.params?.plot?.resolution?.data?.combatLog?.map((logString, index) => (
-          <p key={`log-${index}`}>{logString}</p>
+          <Typography key={`log-${index}`}>{logString}</Typography>
         ))}
-      </div>
-      <button className="p-2" onClick={()=>{resolveEvent()}}>Okay</button>
-    </div>
+      </Box>
+      <Button onClick={()=>{resolveEvent()}}>Okay</Button>
+    </Box>
   )
 }
 

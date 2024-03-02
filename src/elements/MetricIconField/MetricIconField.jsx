@@ -1,9 +1,11 @@
+import { Typography } from "@mui/material";
+
 const MetricIconField = ({ icon, children }) => {
   return (
-    <p className="flex items-center">
+    <Typography>
       {icon}
       {children}
-    </p>
+    </Typography>
   );
 
 };

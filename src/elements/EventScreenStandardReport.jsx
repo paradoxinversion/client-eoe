@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Button from "./Button";
+import {Box, Button} from "@mui/material";
 
 /**
  * @param {object} props
@@ -9,16 +9,14 @@ import Button from "./Button";
  */
 const EventScreenStandardReport = ({ resolveEvent }) => {
   return (
-    <section>
-      <section className="w-32 flex justify-between">
-        <Button
-          buttonText="Okay"
-          onClick={() => {
-            resolveEvent();
-          }}
-        />
-      </section>
-    </section>
+    <Box>
+      <Button
+        buttonText="Okay"
+        onClick={() => {
+          resolveEvent();
+        }}
+      />
+    </Box>
   );
 };
 

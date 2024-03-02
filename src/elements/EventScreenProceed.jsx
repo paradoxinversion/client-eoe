@@ -1,4 +1,4 @@
-import Button from "./Button";
+import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 
 /**
  * @param {object} props
@@ -8,16 +8,16 @@ import Button from "./Button";
  */
 const EventScreenProceed = ({ resolveEvent }) => {
   return (
-    <section>
-      <section className="w-32 flex justify-between">
+    <Box>
+      <Box>
         <Button
           buttonText="Okay"
           onClick={() => {
             resolveEvent();
           }}
-        />
-      </section>
-    </section>
+        >Okay</Button>
+      </Box>
+    </Box>
   );
 };
 

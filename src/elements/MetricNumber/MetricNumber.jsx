@@ -1,5 +1,7 @@
+import { Typography } from "@mui/material";
+
 const MetricNumber = ({ number }) => {
-  return <span className="text-5xl font-semibold grow mt-4 self-center">{number}</span>;
+  return <Typography>{number}</Typography>;
 };
 
 export default MetricNumber;
