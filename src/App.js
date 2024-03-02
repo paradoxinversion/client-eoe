@@ -10,8 +10,6 @@ import PlotsScreen from "./screens/PlotsScreen";
 import ScienceScreen from "./screens/ScienceScreen";
 import WorldScreen from "./screens/WorldScreen";
 import EventsScreen from "./screens/EventScreen";
-import { GameEventQueue } from "empire-of-evil/src/gameEvents";
-import { ActivityManager, PlotManager } from "empire-of-evil/src/plots";
 import GameOverScreen from "./screens/GameOverScreen";
 import VictoryScreen from "./screens/VictoryScreen";
 import {
@@ -66,12 +64,10 @@ function App({gameManager}) {
   };
   return (
     <Box>
-      {gameManager?.initialized && Object.keys(gameManager.gameData).length > 0 && (
-        <ScreenNavigator
-          setScreen={setGameScreen}
-          gameManager={gameManager}
-        />
-      )}
+      <ScreenNavigator
+        setScreen={setGameScreen}
+        gameManager={gameManager}
+      />
       <Box>
         <CurrentScreen
           gameManager={gameManager}
