@@ -1,9 +1,9 @@
 import { useState } from "react";
 import PersonPanel from "../elements/PersonPanel";
 import { toDataArray } from "../utilities/dataHelpers";
-import Button from "../elements/Button";
 import MetricCard from "../elements/MetricCard/MetricCard";
 import Modal from "../elements/Modal";
+import {Button, Box} from '@mui/material';
 // import { fireAgent, terminateAgent } from "empire-of-evil/src/organization";
 const eoe = require("empire-of-evil");
 /**
@@ -28,12 +28,12 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
   };
 
   return (
-    <section className="">
+    <Box className="">
       {selectedAgent && (
         <Modal>
-          <div>
+          <Box>
             {selectedAgent && (
-              <div>
+              <Box>
                 <p>{selectedAgent.name}</p>
                 <table>
                   <tbody>
@@ -70,7 +70,7 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
                   </tbody>
                 </table>
                 {selectedAgent.id !== gameData.player.overlordId && (
-                  <div className="">
+                  <Box className="">
                     <Button
                       buttonText={"Fire Agent"}
                       onClick={() => {
@@ -89,32 +89,31 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
                         setSelectedAgent(null);
                       }}
                     />
-                  </div>
+                  </Box>
                 )}
 
-                <button
-                  className="p-2 border rounded hover:bg-stone-700"
+                <Button
                   onClick={() => {
                     setSelectedAgent(null);
                   }}
                 >
                   Close
-                </button>
-              </div>
+                </Button>
+              </Box>
             )}
-          </div>
+          </Box>
         </Modal>
       )}
 
-      <div
+      <Box
         id="top-bar"
         className="bg-stone-900 w-full text-stone-300 flex justify-end items-center h-10"
       />
-      <div className="p-2">
+      <Box className="p-2">
         <header className="h-16">
           <p className="text-3xl font-bold">Empire Personnel</p>
         </header>
-        <div className="grid grid-cols-4 w-fit gap-4">
+        <Box className="grid grid-cols-4 w-fit gap-4">
           <MetricCard title="Payroll">
             <p>
               $
@@ -139,17 +138,17 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
               )}
             </p>
           </MetricCard>
-        </div>
+        </Box>
 
-        <button
-          className="btn btn-primary border rounded border-stone-300 shadow my-4"
+        <Button
+          variant='outline'
           onClick={() => {
             setSelectedAgent(gameData.people[gameData.player.overlordId]);
           }}
         >
           View EVIL Overlord
-        </button>
-        <div className="grid grid-cols-3 grid-gap-4">
+        </Button>
+        <Box className="grid grid-cols-3 grid-gap-4">
           <PersonPanel
             gameData={gameData}
             title={"Troopers"}
@@ -177,10 +176,10 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
             cb={onAgentSelected}
             gameManager={gameManager}
           />
-        </div>
-      </div>
+        </Box>
+      </Box>
       
-    </section>
+    </Box>
   );
 };
 

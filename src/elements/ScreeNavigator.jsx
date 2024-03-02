@@ -1,4 +1,5 @@
 import { saveGame } from "../actions/dataManagement";
+import {Drawer, List, Box} from "@mui/material";
 
 const screens = [
   {
@@ -131,20 +132,21 @@ const screens = [
 function ScreenNavigator({ setScreen, gameManager }){
   const {gameData, activityManager, plotManager} = gameManager;
   return (
-    <section className="flex flex-col bg-stone-900 text-white">
-      {/* <p className="text-xs p-2">WELCOME, OVERLORD</p> */}
-      <div className="pt-8">
-        {screens.map((screen) => (
-          <button
-            key={screen.screen}
-            className="flex items-center tracking-wider text-sm p-2"
-            onClick={() => {
-              setScreen(screen.screen);
-            }}
-          >
-            {screen.icon && screen.icon} {screen.title}
-          </button>
-        ))}
+    <Box >
+      <Drawer variant="permanent" anchor="left">
+        <List>
+          {screens.map((screen) => (
+            <button
+              key={screen.screen}
+              className="flex items-center tracking-wider text-sm p-2"
+              onClick={() => {
+                setScreen(screen.screen);
+              }}
+            >
+              {screen.icon && screen.icon} {screen.title}
+            </button>
+          ))}
+        </List>
         <button
           className="flex items-center tracking-wider text-sm p-2"
           onClick={() => {
@@ -167,8 +169,8 @@ function ScreenNavigator({ setScreen, gameManager }){
           </svg>
           Save
         </button>
-      </div>
-    </section>
+      </Drawer>
+    </Box>
   );
 };
 

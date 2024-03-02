@@ -18,7 +18,11 @@ import {
   checkGameOverState,
   checkVictoryState,
 } from "empire-of-evil/src/utilities";
-
+import {Box} from "@mui/material"
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 const screens = {
   title: TitleScreen,
   "new-game": NewGameScreen,
@@ -61,22 +65,22 @@ function App({gameManager}) {
     _setGameData(update);
   };
   return (
-    <div className="bg-stone-200 text-stone-900 h-screen grid grid-cols-12">
+    <Box className="bg-stone-200 text-stone-900 h-screen grid grid-cols-12">
       {gameManager?.initialized && Object.keys(gameManager.gameData).length > 0 && (
         <ScreenNavigator
           setScreen={setGameScreen}
           gameManager={gameManager}
         />
       )}
-      <div
+      <Box
         className={`overflow-y-auto w-full ${gameManager?.initialized ? 'col-span-11' : 'col-span-12'}`}
       >
         <CurrentScreen
           gameManager={gameManager}
           setScreen={setGameScreen}
         />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 

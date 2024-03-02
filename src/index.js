@@ -2,7 +2,12 @@ import { createRoot } from "react-dom/client";
 import App from "./App.js";
 import React from "react";
 import { gameSetup } from "empire-of-evil"
-
+console.log(process.env.NODE_ENV)
+if (process.env.NODE_ENV === 'development'){
+    if (module.hot) {
+        module.hot.accept();
+      }
+}
 const container = document.getElementById("app");
 const root = createRoot(container);
 const gameManager = gameSetup.createGameManager()
