@@ -16,59 +16,7 @@ function TitleScreen(props) {
   const { setScreen, setGameData, gameManager } = props;
   return (
     <Box >
-      <AppBar position="static">
-        <Toolbar>
-
-          <ButtonGroup>
-            <Button 
-              color='inherit'
-              onClick={() => {
-                setScreen("new-game");
-              }}
-              variant="outlined"
-            >
-              New Session Bon
-            </Button>
-
-            {saveData && (
-              <>
-                <Button
-                  color='inherit'
-                  onClick={() => {
-                    /**
-                     * @type {import("empire-of-evil/src/typedef").SaveData}
-                     */
-                    const sd = JSON.parse(saveData);
-                    populateActivities(gameManager);
-                    populatePlots(gameManager);
-                    gameManager.plotManager.setPlotQueue(sd.plotData.plots)
-                    Object.values(sd.plotData.activities).forEach((activity) => {
-                      const currentActivity = gameManager.activityManager.activities.find(
-                        (a) => a.name === activity.name
-                      );
-                      currentActivity.setAgents(activity.agents);
-                    });
-                    gameManager.setGameData(sd.gameData);
-                    gameManager.setInitialized(true);
-                    setScreen("main");
-                  }}
-                >
-                  Continue Session
-                </Button>
-                <Button
-                  color='inherit'
-                  onClick={() => {
-                    deleteSavedGame();
-                    setSaveData(null);
-                  }}
-                >
-                  Delete Session
-                </Button>
-              </>
-            )}
-          </ButtonGroup>
-        </Toolbar>
-      </AppBar>
+      <Toolbar />
       <Typography>
         Empire of EVIL
       </Typography>

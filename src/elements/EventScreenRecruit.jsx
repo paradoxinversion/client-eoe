@@ -4,7 +4,21 @@ import {
 } from "empire-of-evil/src/organization";
 import { useState } from "react";
 import { toDataArray } from "../utilities/dataHelpers";
-
+import {
+  Box,
+  Button,
+  Typography,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+} from "@mui/material";
+import Datagrid from "react-data-grid";
+const recruitGridColumns = [
+  { key: "attribute", name: "" },
+  { key: "value", name: "" },
+];
 /**
  * @param {object} props
  * @param {object} props.currentGameEvent
@@ -12,8 +26,12 @@ import { toDataArray } from "../utilities/dataHelpers";
  * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
  * @returns
  */
-const EventScreenRecruit = ({ gameManager, currentGameEvent, resolveEvent }) => {
-  const {gameData} = gameManager;
+const EventScreenRecruit = ({
+  gameManager,
+  currentGameEvent,
+  resolveEvent,
+}) => {
+  const { gameData } = gameManager;
   const [department, setDepartment] = useState(null);
   const [commander, setCommander] = useState(null);
   const onChange = (event) => {
@@ -23,85 +41,77 @@ const EventScreenRecruit = ({ gameManager, currentGameEvent, resolveEvent }) => 
     setCommander(event.target.value);
   };
   return (
-    <section>
-      <section className="mb-4">
-        <header>
-          <h2>Recruit Details</h2>
-        </header>
-        <p>{currentGameEvent.recruit?.name}</p>
-        <p>Combat: {currentGameEvent.params.recruit?.combat}</p>
-        <p>Administration: {currentGameEvent.params.recruit?.administration}</p>
-        <p>Intelligence: {currentGameEvent.params.recruit?.intelligence}</p>
-        <p>Leadership: {currentGameEvent.params.recruit?.leadership}</p>
-        <p>Loyalty: {currentGameEvent.params.recruit?.loyalty}?</p>
-      </section>
+    <Box component="section">
+      <Box component="section">
+        <Box component="header">
+          <Typography>Recruit Details</Typography>
+        </Box>
+        <Box xs={{ height: 100 }}>
+          <Datagrid
+            style={{ height: "auto" }}
+            columns={recruitGridColumns}
+            rows={[
+              {
+                attribute: "Combat",
+                value: currentGameEvent.params.recruit?.combat,
+              },
+              {
+                attribute: "Administration",
+                value: currentGameEvent.params.recruit?.administration,
+              },
+              {
+                attribute: "Intelligence",
+                value: currentGameEvent.params.recruit?.intelligence,
+              },
+              {
+                attribute: "Leadership",
+                value: currentGameEvent.params.recruit?.leadership,
+              },
+              {
+                attribute: "Loyalty",
+                value: `${currentGameEvent.params.recruit?.loyalty}?`,
+              },
+            ]}
+          />
+        </Box>
+      </Box>
 
       <section className="mb-4">
         <p className="text-lg border-b mb-4">
           Select a department for this recruit
         </p>
-        <form className="grid grid-cols-3 gap-2" onChange={onChange}>
-          <div className=" rounded p-2">
-            <input
-              type="radio"
-              id="recruit-department-trooper"
-              name="recruit-department"
-              value={0}
-            />
-            <label htmlFor="recruit-department-trooper">Henchman</label>
-          </div>
-          <div className=" rounded p-2">
-            <input
-              type="radio"
-              id="recruit-department-administrator"
-              name="recruit-department"
+        <FormControl className="grid grid-cols-3 gap-2" onChange={onChange}>
+          <RadioGroup row name="recruit-department">
+            <FormControlLabel value={0} control={<Radio />} label="Henchman" />
+            <FormControlLabel
               value={1}
+              control={<Radio />}
+              label="Administrator"
             />
-            <label htmlFor="recruit-department-administrator">
-              Administrator
-            </label>
-          </div>
-          <div className=" rounded p-2">
-            <input
-              type="radio"
-              id="recruit-department-scientist"
-              name="recruit-department"
-              value={2}
-            />
-            <label htmlFor="recruit-department-scientist">Scientist</label>
-          </div>
-        </form>
+            <FormControlLabel value={2} control={<Radio />} label="Scientist" />
+          </RadioGroup>
+        </FormControl>
         <p className="text-lg border-b mb-4">Commander</p>
-        <form onChange={onCommanderSelect}>
-          <div className="flex flex-wrap">
-            {getAgents(
-              gameManager,
-              gameData.player.organizationId
-            ).map((agent) => {
-              const subordinates = getAgentSubordinates(
-                gameManager,
-                agent
-              );
-              return (
-                <div key={`event-screen-recruit-${agent.id}`} className=" rounded p-2">
-                  <input
-                    type="radio"
-                    id="recruit-commander"
-                    name="recruit-commander"
+        <FormControl name="recruit-commander" onChange={onCommanderSelect}>
+          <RadioGroup className="flex flex-wrap">
+            {getAgents(gameManager, gameData.player.organizationId).map(
+              (agent) => {
+                const subordinates = getAgentSubordinates(gameManager, agent);
+                return (
+                  <FormControlLabel
                     value={agent.id}
+                    control={<Radio />}
+                    label={`${agent.name} (${subordinates.length}/${agent.leadership})`}
                     disabled={subordinates.length === agent.leadership}
                   />
-                  <label htmlFor="recruit-commander">
-                    {agent.name} ({subordinates.length}/{agent.leadership})
-                  </label>
-                </div>
-              );
-            })}
-          </div>
-        </form>
+                );
+              }
+            )}
+          </RadioGroup>
+        </FormControl>
       </section>
-      <section className="w-32 flex justify-between">
-        <button
+      <Box className="w-32 flex justify-between">
+        <Button
           className="btn btn-confirm"
           disabled={department === null || commander === null}
           onClick={() => {
@@ -115,8 +125,8 @@ const EventScreenRecruit = ({ gameManager, currentGameEvent, resolveEvent }) => 
           }}
         >
           Accept
-        </button>
-        <button
+        </Button>
+        <Button
           className="btn btn-cancel disabled:bg-stone-400"
           onClick={() => {
             resolveEvent({
@@ -126,9 +136,9 @@ const EventScreenRecruit = ({ gameManager, currentGameEvent, resolveEvent }) => 
         >
           {" "}
           Deny
-        </button>
-      </section>
-    </section>
+        </Button>
+      </Box>
+    </Box>
   );
 };
 

@@ -1,18 +1,31 @@
 import { getAgents, getControlledZones } from "empire-of-evil/src/organization";
 import { Plot, PlotManager } from "empire-of-evil/src/plots";
 import { useState } from "react";
+import {useSelector} from 'react-redux'
 import { toDataArray } from "../utilities/dataHelpers";
 import { GameManager } from "empire-of-evil";
-
+import {
+  Box,
+  Button,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  Typography,
+  Radio,
+  RadioGroup,
+  Chip,
+  Stack
+} from "@mui/material";
 /**
- * 
- * @param {Object} props 
+ *
+ * @param {Object} props
  * @param {GameManager} props.gameManager
  * @param {PlotManager} props.plotManager
- * @returns 
+ * @returns
  */
 const AttackZonePlot = ({ gameManager, cb }) => {
-  const {gameData, plotManager} = gameManager;
+  const people = useSelector(state => state.people);
+  const { gameData, plotManager } = gameManager;
   const [nation, setNation] = useState(null);
   const [zone, setZone] = useState(null);
   const nations = toDataArray(gameData.nations).filter(
@@ -24,7 +37,7 @@ const AttackZonePlot = ({ gameManager, cb }) => {
     const plotParams = {
       zone: {
         id: zone.id,
-        organizationId: zone.organizationId
+        organizationId: zone.organizationId,
       },
       participants: attackers,
     };
@@ -33,132 +46,108 @@ const AttackZonePlot = ({ gameManager, cb }) => {
   };
 
   /**
-   * 
-   * @param {Event} e 
-   * @param {import("empire-of-evil/src/typedef").Person} agent 
+   *
+   * @param {Event} e
+   * @param {import("empire-of-evil/src/typedef").Person} agent
    */
   const onUpdateAttackers = (e, agent) => {
-    if (e.currentTarget.checked) {
+    
       if (!attackers.includes(agent.id)) {
         const updatedAttackers = JSON.parse(JSON.stringify(attackers));
         updatedAttackers.push(agent.id);
         setAttackers(updatedAttackers);
-      }
-    } else {
-      if (attackers.includes(agent.id)) {
+      } else {
         const updatedAttackers = JSON.parse(JSON.stringify(attackers));
         setAttackers(
-          updatedAttackers.filter((person) => person.id !== agent.id)
+          updatedAttackers.filter((person) => person !== agent.id)
         );
       }
-    }
+    
   };
   return (
-    <div className="overflow-y-auto">
-      <p className="text-xl font-bold">Attack Zone</p>
-      <form className="rounded p-2">
-        <div>
-          <header>
-            <p className="text-lg border-b mb-4">Select a Nation</p>
-          </header>
-          <div className="flex flex-wrap">
-            {nations.map((n) => {
-              return (
-                <div key={`ns-${n.id}`} className="shadow-md rounded p-2">
-                  <input
-                    type={"radio"}
-                    name="nation-select"
-                    id={`nation-select-${n.id}`}
-                    onClick={() => {
-                      setNation(n);
-                    }}
-                  />
-                  <label htmlFor={`nation-select-${n.id}`}>{n.name}</label>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+    <Box className="overflow-y-auto">
+      <Typography variant="h4">Attack Zone</Typography>
+        <Box>
+          <Typography>Select a Nation</Typography>
+        </Box>
+        <Divider />
+        <RadioGroup className="flex flex-wrap">
+          {nations.map((n) => {
+            return (
+              <FormControlLabel
+                name="nation-select"
+                control={<Radio />}
+                label={n.name}
+                onClick={() => setNation(n)}
+              />
+            );
+          })}
+        </RadioGroup>
 
         {nation && (
-          <div>
-            <header>
-              <p className="text-lg border-b mb-4">
+          <>
+            <Box>
+              <Typography>
                 Select the zone for this mission
-              </p>
-            </header>
-            <div className="flex flex-wrap">
-              {getControlledZones(
-                gameManager,
-                nation.organizationId
-              ).map((zone) => (
-                <div key={`zs-${zone.id}`} className="shadow-md rounded p-2 w-fit">
-                  <input
-                    type={"radio"}
+              </Typography>
+            </Box>
+            <Divider />
+            <RadioGroup row>
+              {getControlledZones(gameManager, nation.organizationId).map(
+                (zone) => (
+                  <FormControlLabel
+                    value={zone}
                     name="zone-select"
-                    id={`zone-select-${zone.id}`}
-                    onClick={(e) => {
-                      setZone(zone);
-                    }}
+                    control={<Radio />}
+                    label={zone.name}
+                    onClick={() => setZone(zone)}
                   />
-                  <label htmlFor={`zone-select-${zone.id}`}>{zone.name}</label>
-                </div>
-              ))}
-            </div>
-          </div>
+                )
+              )}
+            </RadioGroup>
+          </>
         )}
 
         {zone && (
-          <div className="mb-4">
-            <header>
-              <p className="text-lg border-b mb-4">
+          <Box>
+            <Box component='header'>
+              <Typography>
                 Select the Agents attending this mission
-              </p>
-            </header>
-            <div className="flex flex-wrap">
-              {getAgents(
-                gameManager,
-                gameData.player.organizationId
-              )
+              </Typography>
+              <Typography variant='caption'>
+                *Agents attending this mission may suffer loss of life.
+              </Typography>
+            </Box>
+            <Divider />
+            <Stack direction='row' spacing={1} padding={1}>
+              {getAgents(gameManager, gameData.player.organizationId)
                 .filter(
                   (agent) =>
                     agent.agent.department === 0 || agent.agent.department === 3
                 )
                 .map((agent) => (
-                  <div key={`as-${agent.id}`} className="shadow-md rounded p-2">
-                    <input
-                      className="mr-2"
-                      type={"checkbox"}
-                      id={`agent-select-${agent.id}`}
-                      onChange={(e) => {
-                        onUpdateAttackers(e, agent);
-                      }}
-                    />
-                    <label htmlFor={`agent-select-${agent.id}`}>
-                      {agent.name}
-                    </label>
-                  </div>
+                  <Chip label={agent.name} onClick={(e) => {
+                    onUpdateAttackers(e, agent);
+                  }} />
                 ))}
-            </div>
-            <div>
-              <p className="text-lg border-b mb-4">Selected Agents</p>
-              <div className="flex flex-wrap">
+            </Stack>
+            <Divider />
+            <Box>
+              <Typography>Selected Agents</Typography>
+             
+             
+              <Stack direction={'row'} spacing={1}>
                 {attackers.map((agentId) => (
-                  <div key={`attackers-${agentId}`} className="shadow-md rounded p-2">
-                    <p>{gameData.people[agentId].name}</p>
-                  </div>
+                  <Chip label={people[agentId].name}></Chip>
                 ))}
-              </div>
-            </div>
-            <footer>
-              <p className="text-xs">
-                *Agents attending this mission may suffer loss of life.
-              </p>
-            </footer>
-          </div>
+              </Stack>
+            </Box>
+            <Box component='footer'>
+             
+            </Box>
+          </Box>
         )}
-        <button
-          className="p-2 shadow-md rounded"
+        <Button
           onClick={(e) => {
             e.preventDefault();
             preparePlot();
@@ -166,9 +155,16 @@ const AttackZonePlot = ({ gameManager, cb }) => {
           }}
         >
           Done
-        </button>
-      </form>
-    </div>
+        </Button>
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            cb();
+          }}
+        >
+          Cancel
+        </Button>
+    </Box>
   );
 };
 

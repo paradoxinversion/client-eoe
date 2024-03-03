@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardContent, Typography } from "@mui/material";
+import { Box, Button, Divider, CardContent, Typography } from "@mui/material";
 
 /**
  * @param {object} props
@@ -9,14 +9,14 @@ import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 const EventScreenProceed = ({ resolveEvent }) => {
   return (
     <Box>
-      <Box>
-        <Button
-          buttonText="Okay"
-          onClick={() => {
-            resolveEvent();
-          }}
-        >Okay</Button>
-      </Box>
+      <Button
+        buttonText="Okay"
+        onClick={() => {
+          resolveEvent();
+        }}
+      >
+        Okay
+      </Button>
     </Box>
   );
 };

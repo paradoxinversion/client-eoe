@@ -4,7 +4,7 @@ import { useState } from "react";
 import { toDataArray } from "../utilities/dataHelpers";
 import MetricCard from "../elements/MetricCard/MetricCard";
 import DataGrid from 'react-data-grid';
-
+import {Box, Button, Toolbar, Typography} from '@mui/material';
 const columns = [
   { key: 'lab', name: 'Lab' },
   { key: 'maxScientists', name: 'Max Scientists' },
@@ -25,55 +25,53 @@ const ScienceScreen = ({ gameManager, updateGameData }) => {
     maxScientists: lab.maxPersonnel
   }))
   return (
-    <section>
-      <div
-        id="top-bar"
-        className="bg-stone-900 w-full text-stone-300 flex justify-end items-center h-10"
-      />
-      <section className="p-2">
+    <Box copmponent='main'> 
+      <Toolbar />
 
-        <header className="text-3xl font-bold mb-2">
-          <p>Science</p>
-        </header>
-        <div>
-          <section>
-            <header className="text-2xl">
-              <p>Labs</p>
-            </header>
-            <div className="grid grid-cols-1 w-fit">
+      <Box component='section' >
+
+        <Box component='header'>
+          <Typography>Science</Typography>
+        </Box>
+        <Box>
+          <Box component={'section'}>
+            <Box component='header'>
+              <Typography>Labs</Typography>
+            </Box>
+            <Box>
               <MetricCard title="Total Labs">
                 {labs.length}
               </MetricCard>
-            </div>
+            </Box>
             <DataGrid columns={columns} rows={rows} />
-          </section>
+          </Box>
 
           {selectedLab && (
-            <section>
-              <header>
-                <p>{selectedLab.name}</p>
-              </header>
-              <p>Personnel</p>
+            <Box component='section'>
+              <Box component='header' >
+                <Typography>{selectedLab.name}</Typography>
+              </Box>
+              <Typography>Personnel</Typography>
               {selectedLab.personnel.map((labPersonnel) => {
                 return (
-                  <div>
-                    <p>{gameData.people[labPersonnel].name}</p>
-                  </div>
+                  <Box>
+                    <Typography>{gameData.people[labPersonnel].name}</Typography>
+                  </Box>
                 );
               })}
-              <button
+              <Button
                 onClick={() => {
                   setAddingPersonnel(true);
                 }}
               >
                 Add Personnel
-              </button>
-            </section>
+              </Button>
+            </Box>
           )}
-        </div>
-      </section>
+        </Box>
+      </Box>
       {addingPersonnel && (
-        <div>
+        <Box>
           {_getAgents(
             gameManager,
             {
@@ -89,7 +87,7 @@ const ScienceScreen = ({ gameManager, updateGameData }) => {
           )
             .map((agent) => {
               return (
-                <button
+                <Button
                   onClick={() => {
                     const updatedGameData = addPersonnel(agent, selectedLab);
 
@@ -98,12 +96,12 @@ const ScienceScreen = ({ gameManager, updateGameData }) => {
                   }}
                 >
                   {agent.name}
-                </button>
+                </Button>
               );
             })}
-        </div>
+        </Box>
       )}
-    </section>
+    </Box>
   );
 };
 

@@ -1,28 +1,31 @@
 import { getActivityParticipants } from "empire-of-evil/src/plots";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import AgentSelector from "../elements/AgentSelector/AgentSelector";
 import AttackZonePlot from "../elements/AttackZonePlot";
 import Modal from "../elements/Modal";
 import ReconPlot from "../elements/ReconPlot";
 import { dataGridButton } from "../datagridRenderers/dataGridButton";
-import DataGrid from 'react-data-grid';
+import { Box, Button, Grid, Toolbar, Divider, Dialog, DialogContent } from "@mui/material";
+import DataGrid from "react-data-grid";
+import {useDispatch, useSelector } from "react-redux"
+import { selectEntity } from "../features/selectionSlice";
 
 const eoe = require("empire-of-evil");
 
 const plotsWidgets = {
   "attack-zone": AttackZonePlot,
-  "recon-zone": ReconPlot
+  "recon-zone": ReconPlot,
 };
 
 const queuedPlotsColumns = [
-  { key: 'plot', name: 'Plot' },
-  { key: 'agents', name: 'Agents' },
-  { key: 'cancel', name: 'Cancel', renderCell: dataGridButton}
+  { key: "plot", name: "Plot" },
+  { key: "agents", name: "Agents" },
+  { key: "cancel", name: "Cancel", renderCell: dataGridButton },
 ];
 
 const activitiesColumns = [
-  { key: 'agent', name: 'Agent' },
-  { key: 'activity', name: 'Activity' },
+  { key: "agent", name: "Agent" },
+  { key: "activity", name: "Activity" },
 ];
 
 /**
@@ -32,10 +35,17 @@ const activitiesColumns = [
  * @returns
  */
 const PlotsScreen = ({ gameManager }) => {
-  const {gameData, activityManager, plotManager} = gameManager;
+  const dispatch = useDispatch();
+  const { gameData, activityManager, plotManager } = gameManager;
   const [currentActivity, setCurrentActivity] = useState(null);
-  const [currentPlot, setCurrentPlot] = useState(null);
+  const currentPlot = useSelector(state => state.selections.plot)
+  // const [open] = useState(currentPlot);
+  const [open, setOpen] = useState(false);
   const onClickActivity = (activityName) => {
+    dispatch(selectEntity({
+      type: 'activity',
+      selection: activityName
+    }))
     setCurrentActivity(activityName);
   };
 
@@ -48,162 +58,197 @@ const PlotsScreen = ({ gameManager }) => {
     if (add) {
       currentActivity.addAgent(gameManager, gameData.people[participantId].id);
     } else {
-      currentActivity.removeAgent(gameManager, gameData.people[participantId].id);
+      currentActivity.removeAgent(
+        gameManager,
+        gameData.people[participantId].id
+      );
     }
   };
   const plotRows = plotManager.plotQueue.map((plot, index) => ({
     plot: plot.name,
-    agents: plot?.plotParams?.participants?.length
+    agents: plot?.plotParams?.participants?.length,
   }));
 
-  const activityRows = getActivityParticipants(gameManager).map((participant, index) => ({
-    agent: participant.participant.name,
-    activity: participant.activity
-  }))
+  const activityRows = getActivityParticipants(gameManager).map(
+    (participant, index) => ({
+      agent: participant.participant.name,
+      activity: participant.activity,
+    })
+  );
   const PlotWidget = currentPlot && plotsWidgets[currentPlot.type];
+
+  const plotRefElement = useRef(null);
+  useEffect(() => {
+    if (open) {
+      const { current: de } = plotRefElement;
+      if (de !== null) {
+        de.focus();
+      }
+    }
+  }, [open]);
   return (
-    <section>
-      {currentPlot && (
-        <Modal>
-          <PlotWidget
-            gameData={gameData}
-            gameManager={gameManager}
-            plotManager={plotManager}
-            cb={() => {
-              setCurrentPlot(null);
-            }}
-          />
-        </Modal>
-      )}
+    <Box component='section'>
+      <Toolbar />
+        <Dialog open={open}>
+          <DialogContent open={false} >
+            <PlotWidget
+              gameData={gameData}
+              gameManager={gameManager}
+              plotManager={plotManager}
+              cb={() => {
+                dispatch(selectEntity({
+                  type: 'plot',
+                  selection: null
+                }))
+              }}
+            />
+          </DialogContent>
+        </Dialog>
       {currentActivity && (
         <Modal>
-          <div>
-            <header>
+          <Box>
+            <Box component='header'>
               <p className="text-xl font-bold">
                 {currentActivity.name}: Participants
               </p>
-            </header>
+            </Box>
             <AgentSelector
-              agentsArray={eoe.organizations._getAgents(
-                gameManager,
-                {
-                  organizationId: gameData.player.organizationId,
-                  exclude: {
-                    unavailable: true
-                  }
-                }
-              )}
+              agentsArray={eoe.organizations._getAgents(gameManager, {
+                organizationId: gameData.player.organizationId,
+                exclude: {
+                  unavailable: true,
+                },
+              })}
               cb={onUpdateActivityParticipant}
               participantsArray={currentActivity.agents}
             />
-            <button className="btn btn-primary" onClick={()=>{setCurrentActivity(null)}}>Close</button>
-          </div>
+            <Button
+              className="btn btn-primary"
+              onClick={() => {
+                dispatch(selectEntity({
+                  type: 'activity',
+                  selection: null
+                }))
+                setCurrentActivity(null);
+              }}
+            >
+              Close
+            </Button>
+          </Box>
         </Modal>
       )}
-      <div
-        id="top-bar"
-        className="bg-stone-900 w-full text-stone-300 flex justify-end items-center h-10"
-      />
-      <div className="p-2">
-        <header className="mb-4">
+      <Box className="p-2">
+        <Box component='header' className="mb-4">
           <p className="text-3xl font-bold">EVIL Plots & Activities</p>
-        </header>
+        </Box>
 
-        <section>
-          <section>
-            <div>
-              <header>
+        <Box component='section'>
+          <Box >
+            <Box>
+              <Box component='header'>
                 <p className="text-2xl font-bold">Plots</p>
-              </header>
-              <div>
-                <header>
-                  <p className="text-xl font-bold border-b border-stone-700">
+              </Box>
+              <Box>
+                <Box component='header'>
+                  <p className="text-xl font-bold">
                     Available Plots
                   </p>
-                </header>
+                </Box>
+                <Divider />
 
-                <div className="grid grid-cols-12 my-2">
+                <Grid container className="grid grid-cols-12 my-2">
                   {plotManager.plots.map((plot) => (
-                    <button
-                      key={plot.name}
-                      className="btn btn-primary border rounded"
-                      onClick={() => {
-                        setCurrentPlot(plot);
-                      }}
-                    >
-                      {plot.name}
-                    </button>
+                    <Grid item>
+                      <Button
+                        key={plot.name}
+                        className="btn btn-primary border rounded"
+                        onClick={() => {
+                          dispatch(selectEntity({
+                            type: 'plot',
+                            selection: {
+                              name: plot.name,
+                              type: plot.type,
+                            }
+                          }))
+                        }}
+                      >
+                        {plot.name}
+                      </Button>
+                    </Grid>
                   ))}
-                </div>
-              </div>
+                </Grid>
+              </Box>
               {currentPlot && (
                 <PlotWidget
                   gameData={gameData}
                   gameManager={gameManager}
                   plotManager={plotManager}
                   cb={() => {
-                    setCurrentPlot(null);
+                    dispatch(selectEntity({
+                      type: 'plot',
+                      selection: null
+                    }))
                   }}
                 />
               )}
-            </div>
-          </section>
+            </Box>
+          </Box>
 
-          <section>
-            <div className="mb-4">
-              <div>
-                <header className="mb-4">
+          <Box component='section'>
+            <Box className="mb-4">
+              <Box>
+                <Box component='header' className="mb-4">
                   <p className="text-lg text-stone-700 font-bold border-b border-stone-700">
                     Queued Plots
                   </p>
-                </header>
+                </Box>
                 <DataGrid rows={plotRows} columns={queuedPlotsColumns} />
-              </div>
-            </div>
-          </section>
-          <div className="">
-            <header>
+              </Box>
+            </Box>
+          </Box>
+          <Box className="">
+            <Box component='header'>
               <p className="text-2xl font-bold">Activities</p>
-            </header>
-            <div>
-              <header>
+            </Box>
+            <Box>
+              <Box component='header'>
                 <p className="text-xl font-bold border-b">
                   Available Activities
                 </p>
-              </header>
-              <section>
-                <div className="grid grid-cols-12 my-2">
+              </Box>
+              <Box>
+                <Grid container className="grid grid-cols-12 my-2">
                   {activityManager.activities.map((activity) => (
-                    <button
-                      key={`${activity.name}`}
-                      className="btn btn-primary rounded"
-                      onClick={() => {
-                        onClickActivity(activity);
-                      }}
-                    >
-                      {activity.name}
-                    </button>
+                    <Grid item>
+                      <Button
+                        key={`${activity.name}`}
+                        onClick={() => {
+                          onClickActivity(activity);
+                        }}
+                      >
+                        {activity.name}
+                      </Button>
+                    </Grid>
                   ))}
-                </div>
-              </section>
-            </div>
-            
-          </div>
-          <section>
-            <div className="mb-4">
-              <div>
-                <header className="mb-4">
+                </Grid>
+              </Box>
+            </Box>
+          </Box>
+          <Box>
+            <Box className="mb-4">
+              <Box>
+                <Box component="header" className="mb-4">
                   <p className="text-lg text-stone-700 font-bold border-b border-stone-700">
                     Activity Participants
                   </p>
-                </header>
+                </Box>
                 <DataGrid rows={activityRows} columns={activitiesColumns} />
-              </div>
-            </div>
-          </section>
-        </section>
-      </div>
-    </section>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

@@ -4,6 +4,7 @@ import { GameManager } from "empire-of-evil";
 import 'react-data-grid/lib/styles.css';
 import DataGrid from 'react-data-grid';
 import { Box, Card, CardContent, Typography } from "@mui/material";
+import { dataGridButton } from "../datagridRenderers/dataGridButton";
 
 const columns = [
   { key: 'name', name: 'Name' },
@@ -11,7 +12,15 @@ const columns = [
   { key: 'department', name: 'Department' },
   { key: 'leadership', name: 'Leadership' },
   { key: 'location', name: 'Location' },
+  { key: 'select', renderCell: dataGridButton, name: 'Select' },
 ];
+
+const departments = [
+  'Henchman',
+  'Administrator',
+  'Scientist',
+  'Overlord'
+]
 const PersonPanel = ({ gameManager, title, people, cb }) => {
   const {gameData} = gameManager;
 
@@ -19,9 +28,11 @@ const PersonPanel = ({ gameManager, title, people, cb }) => {
     return {
       name: person.name,
       health: `${person.currentHealth}/${person.health}`,
-      department: person.agent.department,
+      department: departments[person.agent?.department] || 'Citizen',
       leadership: `${getAgentSubordinates(gameManager, person).length}/${person.leadership}`,
-      location: gameData?.zones[person.homeZoneId]?.name
+      location: gameData?.zones[person.homeZoneId]?.name,
+      cb: cb,
+      id: person.id
     }
   });
 

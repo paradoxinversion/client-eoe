@@ -16,11 +16,13 @@ import {
   checkGameOverState,
   checkVictoryState,
 } from "empire-of-evil/src/utilities";
-import {Box} from "@mui/material"
+import {Box, CssBaseline, AppBar, Toolbar, Typography} from "@mui/material"
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { setGameManager } from "./features/gameManagerSlice";
 const screens = {
   title: TitleScreen,
   "new-game": NewGameScreen,
@@ -36,10 +38,10 @@ const screens = {
 };
 
 function App({gameManager}) {
-
+  const currentScreen = useSelector(state => state.screen);
   const [gameData, _setGameData] = useState({});
   const [gameScreen, setGameScreen] = useState("title");
-  const CurrentScreen = screens[gameScreen];
+  const CurrentScreen = screens[currentScreen];
 
   /**
    *
@@ -63,12 +65,18 @@ function App({gameManager}) {
     _setGameData(update);
   };
   return (
-    <Box>
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+        <Toolbar>
+          <Typography>Empire of Evil</Typography>
+        </Toolbar>
+      </AppBar>
       <ScreenNavigator
         setScreen={setGameScreen}
         gameManager={gameManager}
       />
-      <Box>
+      <Box sx={{flexGrow: 1}}>
         <CurrentScreen
           gameManager={gameManager}
           setScreen={setGameScreen}
