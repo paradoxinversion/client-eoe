@@ -40,12 +40,16 @@ const eventScreenMap = {
  * @returns
  */
 const EventsScreen = ({ gameManager }) => {
-  const dispatch = useDispatch();
   const { gameData, eventManager: eventQueue } = gameManager;
+
   const [eventScreen, setEventScreen] = useState(
     eventQueue.getCurrentEvent().eventName
   );
   const [open, setOpen] = useState(true);
+
+  const dispatch = useDispatch();
+
+  // Select the component we need for the ecurrent event
   const CurrentEventComponent = eventScreenMap[eventScreen];
 
   const resolveEvent = (resolveArgs) => {
@@ -61,13 +65,8 @@ const EventsScreen = ({ gameManager }) => {
       dispatch(setScreen("game-over"));
     }
     gameManager.updateGameData(updatedGameData);
-    const {
-      governingOrganizations,
-      nations,
-      zones,
-      buildings,
-      people
-    } = gameManager.gameData
+    const { governingOrganizations, nations, zones, buildings, people } =
+      gameManager.gameData;
     dispatch(setGoverningOrganizations(governingOrganizations));
     dispatch(setNations(nations));
     dispatch(setZones(zones));
@@ -100,7 +99,7 @@ const EventsScreen = ({ gameManager }) => {
         <DialogTitle>{ce.eventName}</DialogTitle>
         <Divider />
         <DialogContent>
-          <Box >
+          <Box>
             <Typography>{ce.eventText}</Typography>
           </Box>
 

@@ -8,6 +8,9 @@ import {
   Box,
   Button,
   Divider,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   FormControl,
   FormControlLabel,
   Typography,
@@ -65,8 +68,10 @@ const AttackZonePlot = ({ gameManager, cb }) => {
     
   };
   return (
-    <Box className="overflow-y-auto">
-      <Typography variant="h4">Attack Zone</Typography>
+    <>
+      {/* <Typography variant="h4">Attack Zone</Typography> */}
+      <DialogTitle>Attack Zone</DialogTitle>
+      <DialogContent>
         <Box>
           <Typography>Select a Nation</Typography>
         </Box>
@@ -147,6 +152,8 @@ const AttackZonePlot = ({ gameManager, cb }) => {
             </Box>
           </Box>
         )}
+      </DialogContent>
+      <DialogActions>
         <Button
           onClick={(e) => {
             e.preventDefault();
@@ -164,7 +171,8 @@ const AttackZonePlot = ({ gameManager, cb }) => {
         >
           Cancel
         </Button>
-    </Box>
+      </DialogActions>
+    </>
   );
 };
 

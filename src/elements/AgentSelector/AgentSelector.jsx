@@ -19,12 +19,10 @@ const AgentSelector = ({ agentsArray, cb, participantsArray }) => {
       <FormGroup>
         {agentsArray.map((agent) => (
           <FormControlLabel
-            defaultChecked={participantsArray.includes(agent.id)}
             name={agent.id}
             control={<Checkbox />}
             label={agent.name}
             onChange={handleCheckbox}
-            // checked={participantsArray.includes(agent.id)}
           />
         ))}
       </FormGroup>

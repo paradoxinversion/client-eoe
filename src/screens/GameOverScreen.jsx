@@ -1,8 +1,9 @@
-import { Box, Button, Card, CardContent, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Typography, Toolbar } from "@mui/material";
 
 const GameOverScreen = () => {
   return (
     <Box>
+      <Toolbar />
       <Box>
         <Typography>Game Over</Typography>
       </Box>

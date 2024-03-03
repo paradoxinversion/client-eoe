@@ -5,9 +5,17 @@ import AttackZonePlot from "../elements/AttackZonePlot";
 import Modal from "../elements/Modal";
 import ReconPlot from "../elements/ReconPlot";
 import { dataGridButton } from "../datagridRenderers/dataGridButton";
-import { Box, Button, Grid, Toolbar, Divider, Dialog, DialogContent } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Toolbar,
+  Divider,
+  Dialog,
+  DialogContent,
+} from "@mui/material";
 import DataGrid from "react-data-grid";
-import {useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
 import { selectEntity } from "../features/selectionSlice";
 
 const eoe = require("empire-of-evil");
@@ -38,15 +46,16 @@ const PlotsScreen = ({ gameManager }) => {
   const dispatch = useDispatch();
   const { gameData, activityManager, plotManager } = gameManager;
   const [currentActivity, setCurrentActivity] = useState(null);
-  const currentPlot = useSelector(state => state.selections.plot)
-  // const [open] = useState(currentPlot);
-  const [open, setOpen] = useState(false);
-  const onClickActivity = (activityName) => {
-    dispatch(selectEntity({
-      type: 'activity',
-      selection: activityName
-    }))
-    setCurrentActivity(activityName);
+  const currentPlot = useSelector((state) => state.selections.plot);
+  const [plotWidgetOpen, setPlotWidgetOpen] = useState(false);
+  const onClickActivity = (activity) => {
+    dispatch(
+      selectEntity({
+        type: "activity",
+        selection: { name: activity.name, agents: activity.agents },
+      })
+    );
+    setCurrentActivity(activity);
   };
 
   /**
@@ -77,37 +86,14 @@ const PlotsScreen = ({ gameManager }) => {
   );
   const PlotWidget = currentPlot && plotsWidgets[currentPlot.type];
 
-  const plotRefElement = useRef(null);
-  useEffect(() => {
-    if (open) {
-      const { current: de } = plotRefElement;
-      if (de !== null) {
-        de.focus();
-      }
-    }
-  }, [open]);
   return (
-    <Box component='section'>
+    <Box component="section">
       <Toolbar />
-        <Dialog open={open}>
-          <DialogContent open={false} >
-            <PlotWidget
-              gameData={gameData}
-              gameManager={gameManager}
-              plotManager={plotManager}
-              cb={() => {
-                dispatch(selectEntity({
-                  type: 'plot',
-                  selection: null
-                }))
-              }}
-            />
-          </DialogContent>
-        </Dialog>
+
       {currentActivity && (
         <Modal>
           <Box>
-            <Box component='header'>
+            <Box component="header">
               <p className="text-xl font-bold">
                 {currentActivity.name}: Participants
               </p>
@@ -125,10 +111,12 @@ const PlotsScreen = ({ gameManager }) => {
             <Button
               className="btn btn-primary"
               onClick={() => {
-                dispatch(selectEntity({
-                  type: 'activity',
-                  selection: null
-                }))
+                dispatch(
+                  selectEntity({
+                    type: "activity",
+                    selection: null,
+                  })
+                );
                 setCurrentActivity(null);
               }}
             >
@@ -138,38 +126,39 @@ const PlotsScreen = ({ gameManager }) => {
         </Modal>
       )}
       <Box className="p-2">
-        <Box component='header' className="mb-4">
+        <Box component="header" className="mb-4">
           <p className="text-3xl font-bold">EVIL Plots & Activities</p>
         </Box>
 
-        <Box component='section'>
-          <Box >
+        <Box component="section">
+          <Box>
             <Box>
-              <Box component='header'>
+              <Box component="header">
                 <p className="text-2xl font-bold">Plots</p>
               </Box>
               <Box>
-                <Box component='header'>
-                  <p className="text-xl font-bold">
-                    Available Plots
-                  </p>
+                <Box component="header">
+                  <p className="text-xl font-bold">Available Plots</p>
                 </Box>
                 <Divider />
 
                 <Grid container className="grid grid-cols-12 my-2">
                   {plotManager.plots.map((plot) => (
-                    <Grid item>
+                    <Grid key={plot.name} item>
                       <Button
                         key={plot.name}
                         className="btn btn-primary border rounded"
                         onClick={() => {
-                          dispatch(selectEntity({
-                            type: 'plot',
-                            selection: {
-                              name: plot.name,
-                              type: plot.type,
-                            }
-                          }))
+                          dispatch(
+                            selectEntity({
+                              type: "plot",
+                              selection: {
+                                name: plot.name,
+                                type: plot.type,
+                              },
+                            })
+                          );
+                          setPlotWidgetOpen(true);
                         }}
                       >
                         {plot.name}
@@ -177,27 +166,50 @@ const PlotsScreen = ({ gameManager }) => {
                     </Grid>
                   ))}
                 </Grid>
+                {currentPlot && 
+                
+                  <Dialog open={plotWidgetOpen}>
+                    <DialogContent>
+                      <PlotWidget
+                        gameData={gameData}
+                        gameManager={gameManager}
+                        plotManager={plotManager}
+                        cb={() => {
+                          setPlotWidgetOpen(false);
+                          dispatch(
+                            selectEntity({
+                              type: "plot",
+                              selection: null,
+                            })
+                          );
+                        }}
+                      />
+                    </DialogContent>
+                  </Dialog>
+                }
               </Box>
-              {currentPlot && (
+              {/* {currentPlot && (
                 <PlotWidget
                   gameData={gameData}
                   gameManager={gameManager}
                   plotManager={plotManager}
                   cb={() => {
-                    dispatch(selectEntity({
-                      type: 'plot',
-                      selection: null
-                    }))
+                    dispatch(
+                      selectEntity({
+                        type: "plot",
+                        selection: null,
+                      })
+                    );
                   }}
                 />
-              )}
+              )} */}
             </Box>
           </Box>
 
-          <Box component='section'>
+          <Box component="section">
             <Box className="mb-4">
               <Box>
-                <Box component='header' className="mb-4">
+                <Box component="header" className="mb-4">
                   <p className="text-lg text-stone-700 font-bold border-b border-stone-700">
                     Queued Plots
                   </p>
@@ -207,11 +219,11 @@ const PlotsScreen = ({ gameManager }) => {
             </Box>
           </Box>
           <Box className="">
-            <Box component='header'>
+            <Box component="header">
               <p className="text-2xl font-bold">Activities</p>
             </Box>
             <Box>
-              <Box component='header'>
+              <Box component="header">
                 <p className="text-xl font-bold border-b">
                   Available Activities
                 </p>

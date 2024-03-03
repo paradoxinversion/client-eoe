@@ -17,7 +17,7 @@ function TitleScreen(props) {
   return (
     <Box >
       <Toolbar />
-      <Typography>
+      <Typography variant="h1">
         Empire of EVIL
       </Typography>
       <Typography>An Evil Overlord Simulator by Jedai Saboteur.</Typography>

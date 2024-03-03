@@ -196,7 +196,7 @@ function ScreenNavigator({ gameManager }) {
           </button>
         </>
       ) : (
-        <TitleScreenOptions />
+        <TitleScreenOptions  gameManager={gameManager}/>
       )}
     </Drawer>
   );

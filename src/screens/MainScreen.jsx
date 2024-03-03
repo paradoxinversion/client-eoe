@@ -133,7 +133,7 @@ const MainScreen = ({
               </CardContent>
             </Card>
           </Grid>
-          <Grid item sx>
+          <Grid item>
             <Card className="shadow border rounded border-stone-300 w-48 flex flex-col p-2">
               <CardContent className="text-xs uppercase text-red-500 font-bold tracking-wide">
                 <Typography>Empire Expenses</Typography>
