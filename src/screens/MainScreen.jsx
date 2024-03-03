@@ -27,7 +27,9 @@ import {
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { setScreen } from "../features/screenSlice";
-
+import ZonePanel from "../elements/ZonePanel";
+import DataGrid from 'react-data-grid';
+import BuildingDataGrid from "../dataGrids/buildingDataGrid";
 const eoe = require("empire-of-evil");
 
 /**
@@ -46,6 +48,10 @@ const MainScreen = ({
     gameManager,
     gameManager.gameData.player.empireId
   );
+  const buildings = eoe.buildings.getBuildings(
+    gameData,
+    {organizationId: gameData.player.organizationId}
+  )
   const empireWealth = eoe.zones.getZonesWealth(gameManager, empireZones);
   const infraCost = eoe.buildings.getInfrastructureLoad(
     gameManager,
@@ -71,6 +77,7 @@ const MainScreen = ({
     gameManager,
     gameManager.gameData.player.organizationId
   );
+
   useEffect(() => {
     const gameOver = checkGameOverState(gameManager);
     if (gameOver) {
@@ -194,6 +201,8 @@ const MainScreen = ({
           </Grid>
         </Grid>
       </Box>
+      <ZonePanel gameManager={gameManager} zones={empireZones} title="Empire Zones" />
+      {/* <BuildingDataGrid title={"Empire Buildings"} buildings={buildings} gameManager={gameManager} /> */}
     </Box>
   );
 };

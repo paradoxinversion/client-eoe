@@ -22,8 +22,7 @@
   "scripts": {
     "start": "parcel ./src/index.html",
     "build": "parcel build",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "dev": "parcel build --no-cache"
   },
   "browserslist": {
     "production": [
