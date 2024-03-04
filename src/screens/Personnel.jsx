@@ -12,10 +12,14 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  Card,
+  Grid,
+  Stack,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { selectEntity } from "../features/selectionSlice";
 import DataGrid from "react-data-grid";
+import MetricNumber from "../elements/MetricNumber/MetricNumber";
 
 // import { fireAgent, terminateAgent } from "empire-of-evil/src/organization";
 const eoe = require("empire-of-evil");
@@ -66,23 +70,35 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
       {selectedAgent && (
         <Dialog open={!!selectedAgent}>
           <DialogContent>
+            
             {selectedAgent && (
               <Box>
-                <DataGrid 
-                  columns={[ 
+                <Typography variant="overline">Agent Profile</Typography>
+                <DataGrid
+                  columns={[
                     { key: "attribute", name: "" },
-                    { key: "value", name: "" }
-                  ]} 
-
+                    { key: "value", name: "" },
+                  ]}
                   rows={[
                     { attribute: "Name", value: selectedAgent.name },
-                    { attribute: "Salary", value: selectedAgent.agent?.salary},
-                    { attribute: "Health", value: `${selectedAgent.currentHealth}/${selectedAgent.health}`},
-                    { attribute: "Combat", value: selectedAgent.combat},
-                    { attribute: "Administration", value: selectedAgent.administration},
-                    { attribute: "Intelligence", value: selectedAgent.intelligence},
-                    { attribute: "Leadership", value: selectedAgent.leadership},
-                    
+                    { attribute: "Salary", value: selectedAgent.agent?.salary },
+                    {
+                      attribute: "Health",
+                      value: `${selectedAgent.currentHealth}/${selectedAgent.health}`,
+                    },
+                    { attribute: "Combat", value: selectedAgent.combat },
+                    {
+                      attribute: "Administration",
+                      value: selectedAgent.administration,
+                    },
+                    {
+                      attribute: "Intelligence",
+                      value: selectedAgent.intelligence,
+                    },
+                    {
+                      attribute: "Leadership",
+                      value: selectedAgent.leadership,
+                    },
                   ]}
                 />
                 {selectedAgent.id !== gameData.player.overlordId && (
@@ -93,10 +109,12 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
                         updateGameData(
                           eoe.organizations.fireAgent(selectedAgent)
                         );
-                        dispatch(selectEntity({
-                          type: 'person',
-                          selection: null
-                        }))
+                        dispatch(
+                          selectEntity({
+                            type: "person",
+                            selection: null,
+                          })
+                        );
                       }}
                     />
                     <Button
@@ -105,10 +123,12 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
                         updateGameData(
                           eoe.organizations.terminateAgent(selectedAgent)
                         );
-                        dispatch(selectEntity({
-                          type: 'person',
-                          selection: null
-                        }))
+                        dispatch(
+                          selectEntity({
+                            type: "person",
+                            selection: null,
+                          })
+                        );
                       }}
                     />
                   </Box>
@@ -116,10 +136,12 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
 
                 <Button
                   onClick={() => {
-                    dispatch(selectEntity({
-                      type: 'person',
-                      selection: null
-                    }))
+                    dispatch(
+                      selectEntity({
+                        type: "person",
+                        selection: null,
+                      })
+                    );
                     // setSelectedAgent(null);
                   }}
                 >
@@ -133,41 +155,57 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
 
       <Box id="top-bar" />
       <Box>
-        <Box component="header">
+        <Box component="header" padding="1rem">
           <Typography variant="h3">Empire Personnel</Typography>
         </Box>
-        <Divider />
-        <Button
-          variant="outline"
-          onClick={() => {
-            setSelectedAgent(gameData.people[gameData.player.overlordId]);
-          }}
-        >
-          View EVIL Overlord
-        </Button>
+
         <Divider />
         <Box>
-          <Typography>Payroll</Typography>
-          <Typography>
-            $
-            {eoe.organizations.getPayroll(
-              gameManager,
-              gameData.player.organizationId
-            )}
-          </Typography>
+          <Button
+            variant="outline"
+            onClick={() => {
+              setSelectedAgent(gameData.people[gameData.player.overlordId]);
+            }}
+          >
+            View EVIL Overlord
+          </Button>
         </Box>
         <Divider />
-        <Box>
-          <PersonPanel
-            gameData={gameData}
-            title={`Roster (${currentAgents}/${maxAgents})`}
-            people={eoe.organizations.getAgents(
-              gameManager,
-              gameData.player.organizationId
-            )}
-            cb={onAgentSelected}
-            gameManager={gameManager}
-          />
+        <Box padding="1rem">
+          <Stack direction="row" spacing="1rem" justifyContent={'center'}>
+            <MetricNumber
+              title="Payroll"
+              number={`\$${eoe.organizations.getPayroll(
+                gameManager,
+                gameData.player.organizationId
+              )}`}
+            />
+            <MetricNumber
+              title="Agents"
+              number={`${currentAgents}/${maxAgents}`}
+            />
+            <MetricNumber title="Henchmen" number={9999} />
+            <MetricNumber title="Admins" number={9999} />
+            <MetricNumber title="Scientists" number={9999} />
+            <MetricNumber title="Deceased" number={9999} />
+          </Stack>
+        </Box>
+        <Divider />
+        <Box padding="1rem">
+          <Grid container columns={10}>
+            <Grid item xs={10}>
+              <PersonPanel
+                gameData={gameData}
+                title={`EVIL Employee Roster (${currentAgents}/${maxAgents})`}
+                people={eoe.organizations.getAgents(
+                  gameManager,
+                  gameData.player.organizationId
+                )}
+                cb={onAgentSelected}
+                gameManager={gameManager}
+              />
+            </Grid>
+          </Grid>
         </Box>
       </Box>
     </Box>

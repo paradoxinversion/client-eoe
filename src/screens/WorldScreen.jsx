@@ -15,6 +15,8 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  Paper,
+  Card,
 } from "@mui/material";
 import DataGrid from "react-data-grid";
 import { dataGridButton } from "../datagridRenderers/dataGridButton";
@@ -64,8 +66,8 @@ const WorldScreen = ({ gameManager }) => {
         <DialogTitle>{selectedNation?.name}</DialogTitle>
         <Divider />
         <DialogContent>
-          <section className="ml-4">
-            <section className="mb-4">
+          <Box>
+            <Box >
               <Typography>Nation Size: {selectedNation?.size}</Typography>
               <Typography>
                 Nation Citizens:{" "}
@@ -75,7 +77,7 @@ const WorldScreen = ({ gameManager }) => {
                 }
               </Typography>
               <Typography>Nation Agents: {nationAgents?.length}</Typography>
-            </section>
+            </Box>
             <ZonePanel
               title={`${
                 eoe.zones.getZones(gameManager, selectedNation?.id).length
@@ -84,7 +86,7 @@ const WorldScreen = ({ gameManager }) => {
               gameData={gameData}
               gameManager={gameManager}
             />
-          </section>
+          </Box>
           <Button
             onClick={() => {
               // setSelectedNation(null)
@@ -101,13 +103,19 @@ const WorldScreen = ({ gameManager }) => {
         </DialogContent>
       </Dialog>
       <Box>
-        <Typography variant="h3">World</Typography>
+        <Box component="header" padding="1rem">
+          <Typography variant="h3">World</Typography>
+        </Box>
         <Divider />
-        <Box>
-          <Box component="header" className="text-2xl font-bold mb-2">
-            <Typography variant={"h4"}>Nations</Typography>
+        <Box padding="1rem">
+          <Box component="header">
+            <Typography variant={"overline"}>World Nations</Typography>
           </Box>
-          <DataGrid rows={nationsRows} columns={nationsTableColumns} />
+          <Card>
+            <Paper>
+              <DataGrid rows={nationsRows} columns={nationsTableColumns} />
+            </Paper>
+          </Card>
         </Box>
       </Box>
     </Box>

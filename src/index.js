@@ -22,7 +22,10 @@ const store = setupStore({
 
 const container = document.getElementById("app");
 const root = createRoot(container);
-
+// Enable navigation prompt
+window.onbeforeunload = function() {
+  return true;
+};
 root.render(
   <Provider store={store} >
     <App gameManager={gameManager}/>

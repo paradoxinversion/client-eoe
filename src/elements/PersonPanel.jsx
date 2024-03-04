@@ -38,7 +38,7 @@ const PersonPanel = ({ gameManager, title, people, cb }) => {
 
   return (
     <Box>
-      <Typography>{title}</Typography>
+      <Typography variant="overline">{title}</Typography>
       <Box>
         <DataGrid columns={columns} rows={rows} />
       </Box>

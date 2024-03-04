@@ -13,6 +13,9 @@ import {
   Divider,
   Dialog,
   DialogContent,
+  Typography,
+  Card,
+  Paper,
 } from "@mui/material";
 import DataGrid from "react-data-grid";
 import { useDispatch, useSelector } from "react-redux";
@@ -125,70 +128,73 @@ const PlotsScreen = ({ gameManager }) => {
           </Box>
         </Modal>
       )}
-      <Box className="p-2">
-        <Box component="header" className="mb-4">
-          <p className="text-3xl font-bold">EVIL Plots & Activities</p>
+      <Box >
+        <Box component="header" padding="1rem">
+          <Typography variant="h3">EVIL Plots & Activities</Typography>
         </Box>
-
-        <Box component="section">
-          <Box>
+        <Divider />
+        <Grid padding="1rem" container columns={10} spacing={"1rem"}>
+          <Grid item xs={5}>
             <Box>
-              <Box component="header">
-                <p className="text-2xl font-bold">Plots</p>
-              </Box>
               <Box>
-                <Box component="header">
-                  <p className="text-xl font-bold">Available Plots</p>
+                <Box>
+                  <Box component="header">
+                    <Typography variant="h5">Plots</Typography>
+                  </Box>
+                  <Box>
+                    <Box component="header">
+                      <Typography variant="overline">Available Plots</Typography>
+                    </Box>
+                    <Divider />
+                    <Box padding="1rem">
+                      <Grid container>
+                        {plotManager.plots.map((plot) => (
+                          <Grid key={plot.name} item>
+                            <Button
+                              key={plot.name}
+                              onClick={() => {
+                                dispatch(
+                                  selectEntity({
+                                    type: "plot",
+                                    selection: {
+                                      name: plot.name,
+                                      type: plot.type,
+                                    },
+                                  })
+                                );
+                                setPlotWidgetOpen(true);
+                              }}
+                            >
+                              {plot.name}
+                            </Button>
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </Box>
+                    <Divider />
+                  </Box>
+                  {currentPlot && (
+                    <Dialog open={plotWidgetOpen}>
+                      <DialogContent>
+                        <PlotWidget
+                          gameData={gameData}
+                          gameManager={gameManager}
+                          plotManager={plotManager}
+                          cb={() => {
+                            setPlotWidgetOpen(false);
+                            dispatch(
+                              selectEntity({
+                                type: "plot",
+                                selection: null,
+                              })
+                            );
+                          }}
+                        />
+                      </DialogContent>
+                    </Dialog>
+                  )}
                 </Box>
-                <Divider />
-
-                <Grid container className="grid grid-cols-12 my-2">
-                  {plotManager.plots.map((plot) => (
-                    <Grid key={plot.name} item>
-                      <Button
-                        key={plot.name}
-                        className="btn btn-primary border rounded"
-                        onClick={() => {
-                          dispatch(
-                            selectEntity({
-                              type: "plot",
-                              selection: {
-                                name: plot.name,
-                                type: plot.type,
-                              },
-                            })
-                          );
-                          setPlotWidgetOpen(true);
-                        }}
-                      >
-                        {plot.name}
-                      </Button>
-                    </Grid>
-                  ))}
-                </Grid>
-                {currentPlot && 
-                
-                  <Dialog open={plotWidgetOpen}>
-                    <DialogContent>
-                      <PlotWidget
-                        gameData={gameData}
-                        gameManager={gameManager}
-                        plotManager={plotManager}
-                        cb={() => {
-                          setPlotWidgetOpen(false);
-                          dispatch(
-                            selectEntity({
-                              type: "plot",
-                              selection: null,
-                            })
-                          );
-                        }}
-                      />
-                    </DialogContent>
-                  </Dialog>
-                }
-              </Box>
-              {/* {currentPlot && (
+                {/* {currentPlot && (
                 <PlotWidget
                   gameData={gameData}
                   gameManager={gameManager}
@@ -203,62 +209,68 @@ const PlotsScreen = ({ gameManager }) => {
                   }}
                 />
               )} */}
-            </Box>
-          </Box>
-
-          <Box component="section">
-            <Box className="mb-4">
-              <Box>
-                <Box component="header" className="mb-4">
-                  <p className="text-lg text-stone-700 font-bold border-b border-stone-700">
-                    Queued Plots
-                  </p>
+              </Box>
+              <Box component="section">
+                <Box>
+                  <Box>
+                    <Box component="header">
+                      <Typography variant="overline">Queued Plots</Typography>
+                    </Box>
+                    <DataGrid rows={plotRows} columns={queuedPlotsColumns} />
+                  </Box>
                 </Box>
-                <DataGrid rows={plotRows} columns={queuedPlotsColumns} />
               </Box>
             </Box>
-          </Box>
-          <Box className="">
-            <Box component="header">
-              <p className="text-2xl font-bold">Activities</p>
-            </Box>
-            <Box>
+          </Grid>
+          <Grid item xs={5}>
+            <Box className="">
               <Box component="header">
-                <p className="text-xl font-bold border-b">
-                  Available Activities
-                </p>
+                <Typography variant="h5">Activities</Typography>
               </Box>
               <Box>
-                <Grid container className="grid grid-cols-12 my-2">
-                  {activityManager.activities.map((activity) => (
-                    <Grid item>
-                      <Button
-                        key={`${activity.name}`}
-                        onClick={() => {
-                          onClickActivity(activity);
-                        }}
-                      >
-                        {activity.name}
-                      </Button>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Box>
-            </Box>
-          </Box>
-          <Box>
-            <Box className="mb-4">
-              <Box>
-                <Box component="header" className="mb-4">
-                  <p className="text-lg text-stone-700 font-bold border-b border-stone-700">
-                    Activity Participants
-                  </p>
+                <Box component="header">
+                  <Typography variant="overline">Available Activities</Typography>
                 </Box>
-                <DataGrid rows={activityRows} columns={activitiesColumns} />
+                <Divider />
+                <Box padding="1rem">
+                  <Grid container>
+                    {activityManager.activities.map((activity) => (
+                      <Grid item>
+                        <Button
+                          key={`${activity.name}`}
+                          onClick={() => {
+                            onClickActivity(activity);
+                          }}
+                        >
+                          {activity.name}
+                        </Button>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Box>
               </Box>
             </Box>
-          </Box>
-        </Box>
+            <Divider />
+            <Box>
+              <Box className="mb-4">
+                <Box>
+                    <Box component="header">
+                      <Typography variant="overline">
+                        Activity Participants
+                      </Typography>
+                    </Box>
+
+                    <Paper>
+                      <DataGrid
+                        rows={activityRows}
+                        columns={activitiesColumns}
+                      />
+                    </Paper>
+                </Box>
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
       </Box>
     </Box>
   );

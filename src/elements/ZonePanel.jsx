@@ -2,7 +2,7 @@ import { numberWithErrorMargin } from "empire-of-evil/src/utilities";
 import { getZoneCitizens } from "empire-of-evil/src/zones";
 import { toDataArray } from "../utilities/dataHelpers";
 import { GameManager } from "empire-of-evil";
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Box, Card, CardContent, Paper, Typography } from "@mui/material";
 import DataGrid from 'react-data-grid';
 
 const zonePanelColumns = [
@@ -24,9 +24,12 @@ const ZonePanel = ({ title, zones, gameManager }) => {
   return (
     <Box component={"section"}>
       <Box component={"header"}>
-        <p>{title}</p>
+        <Typography variant='overline'>{title}</Typography>
       </Box>
-      <DataGrid rows={zonePanelRows} columns={zonePanelColumns} />
+      <Paper>
+
+        <DataGrid rows={zonePanelRows} columns={zonePanelColumns} />
+      </Paper>
     </Box>
   );
 };
