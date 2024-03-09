@@ -1,8 +1,8 @@
 import { createRoot } from "react-dom/client";
-import App from "./App.js";
+import App from "./App";
 import React from "react";
 import { gameSetup } from "empire-of-evil"
-import { setupStore } from "./app/store.js";
+import { store } from "./app/store";
 import { Provider} from "react-redux";
 
 if (process.env.NODE_ENV === 'development'){
@@ -13,12 +13,12 @@ if (process.env.NODE_ENV === 'development'){
 
 const gameManager = gameSetup.createGameManager();
 
-const store = setupStore({
-  gameManager:{ 
-    initialized: false,
-    saveData: localStorage.getItem("eoe-save")
-  },
-})
+// const store = setupStore({
+//   gameManager:{ 
+//     initialized: false,
+//     saveData: localStorage.getItem("eoe-save")
+//   },
+// })
 
 const container = document.getElementById("app");
 const root = createRoot(container);
@@ -26,6 +26,7 @@ const root = createRoot(container);
 window.onbeforeunload = function() {
   return true;
 };
+
 root.render(
   <Provider store={store} >
     <App gameManager={gameManager}/>

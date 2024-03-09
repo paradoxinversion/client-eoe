@@ -1,6 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { Activity, Plot } from 'empire-of-evil/src/plots';
+import { Building, GoverningOrganization, Nation, Person, Zone } from 'empire-of-evil/src/types/interfaces/entities';
 
-const INITIAL_SELECTION_STATE = {
+interface SelectionState {
+  governmentOrganization: GoverningOrganization,
+  zone: Zone,
+  nation: Nation,
+  person: Person,
+  building: Building,
+  plot: Plot,
+  activity: Activity
+}
+
+const INITIAL_SELECTION_STATE: SelectionState = {
   governmentOrganization: null,
   zone: null,
   nation: null,
@@ -14,7 +26,7 @@ export const selectionSlice = createSlice({
   name: 'selection',
   initialState: INITIAL_SELECTION_STATE,
   reducers: {
-    clearSelections: (state, action) => {
+    clearSelections: () => {
       return INITIAL_SELECTION_STATE;
     },
     /**

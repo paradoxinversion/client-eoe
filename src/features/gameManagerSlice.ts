@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 export const gameManagerSlice = createSlice({
   name: 'gameManager',
@@ -7,7 +7,7 @@ export const gameManagerSlice = createSlice({
     saveData: null
   },
   reducers: {
-    setInitialized: (state, action) => {
+    setInitialized: (state, action: PayloadAction<boolean>) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new

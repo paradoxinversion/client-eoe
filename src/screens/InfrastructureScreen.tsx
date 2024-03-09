@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import BuildingDataGrid from "../dataGrids/buildingDataGrid";
-import { buildings, zones } from "empire-of-evil";
+import { GameManager, buildings, zones } from "empire-of-evil";
 import MetricNumber from "../elements/MetricNumber/MetricNumber";
 import ZonePanel from "../elements/ZonePanel";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,13 +23,22 @@ import PersonDataGrid from "../dataGrids/personDataGrid";
 import { useState } from "react";
 import { getPeople } from "empire-of-evil/src/actions/people";
 import { addPersonnel, removePersonnel } from "empire-of-evil/src/buildings";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { GameData } from "empire-of-evil/src/GameManager";
+import { setPeople } from "../features/personSlice";
+import { setBuildings } from "../features/buildingSlice";
 
-const InfrastructureScreen = ({ gameManager }) => {
-  const dispatch = useDispatch();
+interface InfrastructureScreenProps {
+  gameManager: GameManager;
+}
+
+const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
+  const dispatch = useAppDispatch();
   const [assignStaffOpen, setAssignStaffOpen] = useState(false);
-  const buildingsData = useSelector((state) => state.buildings);
-  const peopleData = useSelector((state) => state.people);
-  const selectedBuilding = useSelector((state) => state.selections.building);
+  const buildingsData = useAppSelector((state) => state.buildings);
+  // const buildingsData = useSelector((state) => state.buildings);
+  const peopleData = useAppSelector((state) => state.people);
+  const selectedBuilding = useAppSelector((state) => state.selections.building);
   return (
     <Box>
       <Toolbar />
@@ -42,7 +51,7 @@ const InfrastructureScreen = ({ gameManager }) => {
             {selectedBuilding &&
               getPeople(gameManager, {
                 zoneId: selectedBuilding?.zoneId,
-                agentFilter: { agentsOnly: true, department: -1},
+                agentFilter: { agentsOnly: true, department: -1 },
               }).map((person) => {
                 let relatedAttributeStat;
                 let relatedAttributeName = "";
@@ -77,11 +86,19 @@ const InfrastructureScreen = ({ gameManager }) => {
                             person,
                             selectedBuilding
                           );
-                          gameManager.updateGameData(update);
+                          const ugd: Partial<GameData> = {
+                            buildings: {
+                              [update.id]: update,
+                            },
+                          };
+                          gameManager.updateGameData(ugd);
                           
                         } else {
                           const update = addPersonnel(person, selectedBuilding);
+                          
                           gameManager.updateGameData(update);
+                          dispatch(setPeople(update.people));
+                          dispatch(setBuildings(update.buildings));
                         }
                       }}
                       label={`${person.name} (${relatedAttributeName}: ${relatedAttributeStat})`}
@@ -113,7 +130,6 @@ const InfrastructureScreen = ({ gameManager }) => {
         </Box>
         <Divider />
         <Stack
-          id
           padding="1rem"
           direction={"row"}
           spacing={"1rem"}

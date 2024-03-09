@@ -1,10 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 export const screenSlice = createSlice({
   name: 'screen',
   initialState: 'title',
   reducers: {
-    setScreen: (state, action) => {
+    setScreen: (state, action: PayloadAction<string>) => {
       return action.payload;
     },
   }

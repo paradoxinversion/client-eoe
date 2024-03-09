@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
     "useDefineForClassFields": true,
+    "jsxImportSource": "react",
+    "jsx": "react"
   }
 }

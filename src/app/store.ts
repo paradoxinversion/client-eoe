@@ -24,3 +24,15 @@ export function setupStore(preloadedState){
       preloadedState
     })
 };
+
+export const store = setupStore({
+  gameManager:{ 
+    initialized: false,
+    saveData: localStorage.getItem("eoe-save")
+  },
+})
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
+
