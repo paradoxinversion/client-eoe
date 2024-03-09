@@ -12,14 +12,20 @@ const zonePanelColumns = [
   {key: "intel", name: "Intel Confidence"},
 ];
 
-const ZonePanel = ({ title, zones, gameManager }) => {
+const ZonePanel = ({ title, zones, gameManager, withErrorMargin = true } = {}) => {
   const {gameData} = gameManager;
-  const zonePanelRows = zones.map((zone) => ({
+  const zonePanelRows = zones.map((zone) => {
+    const trueCitizensTotal = getZoneCitizens(gameManager, zone.id, false, true).length;
+    const trueCivilliansTotal = getZoneCitizens(gameManager, zone.id, true, true).length;
+    const {id, intelligenceLevel} = zone;
+    return {
+
       zone: zone.name,
-      citizens: `${parseInt(numberWithErrorMargin(getZoneCitizens(gameManager, zone.id, false, true).length, zone.intelligenceLevel))}${zone.intelligenceLevel !== 100 && "?"}`,
-      civillians: `${parseInt(numberWithErrorMargin(getZoneCitizens(gameManager, zone.id, true, true).length, zone.intelligenceLevel))}${zone.intelligenceLevel !== 100 && "?"}`,
+      citizens: withErrorMargin ? `${parseInt(numberWithErrorMargin(trueCitizensTotal, intelligenceLevel))}${intelligenceLevel !== 100 ? "?" : ''}`:trueCitizensTotal,
+      civillians: withErrorMargin ? `${parseInt(numberWithErrorMargin(trueCivilliansTotal, intelligenceLevel))}${intelligenceLevel !== 100 ? "?" : ''}`:trueCivilliansTotal,
       intel: zone.intelligenceLevel,
-  }))
+    }
+  })
 
   return (
     <Box component={"section"}>

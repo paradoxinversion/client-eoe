@@ -70,25 +70,25 @@ const AttackZonePlot = ({ gameManager, cb }) => {
   return (
     <>
       {/* <Typography variant="h4">Attack Zone</Typography> */}
-      <DialogTitle>Attack Zone</DialogTitle>
+      <DialogTitle sx={{width: '500px'}}>Attack Zone</DialogTitle>
       <DialogContent>
         <Box>
           <Typography>Select a Nation</Typography>
         </Box>
         <Divider />
-        <RadioGroup className="flex flex-wrap">
+        <Stack direction='row' spacing={1} padding={1}>
           {nations.map((n) => {
-            return (
-              <FormControlLabel
-                name="nation-select"
-                control={<Radio />}
-                label={n.name}
-                onClick={() => setNation(n)}
-              />
-            );
-          })}
-        </RadioGroup>
-
+              return (
+                <Chip
+                  name="nation-select"
+                  control={<Radio />}
+                  label={n.name}
+                  onClick={() => setNation(n)}
+                  variant={nation?.name === n.name ? 'outlined' : 'filled'}
+                />
+              );
+            })}
+        </Stack>
         {nation && (
           <>
             <Box>
@@ -97,19 +97,20 @@ const AttackZonePlot = ({ gameManager, cb }) => {
               </Typography>
             </Box>
             <Divider />
-            <RadioGroup row>
+            <Stack direction='row' spacing={1} padding={1}>
               {getControlledZones(gameManager, nation.organizationId).map(
-                (zone) => (
-                  <FormControlLabel
-                    value={zone}
+                (selectdZone) => (
+                  <Chip
+                    value={selectdZone}
                     name="zone-select"
                     control={<Radio />}
-                    label={zone.name}
-                    onClick={() => setZone(zone)}
+                    label={selectdZone.name}
+                    onClick={() => setZone(selectdZone)}
+                    variant={zone?.name === selectdZone.name ? 'outlined' : 'filled'}
                   />
                 )
               )}
-            </RadioGroup>
+            </Stack>
           </>
         )}
 
@@ -133,7 +134,8 @@ const AttackZonePlot = ({ gameManager, cb }) => {
                 .map((agent) => (
                   <Chip label={agent.name} onClick={(e) => {
                     onUpdateAttackers(e, agent);
-                  }} />
+                  }}
+                  variant={attackers.includes(agent.id) ? 'outlined' : 'filled'} />
                 ))}
             </Stack>
             <Divider />

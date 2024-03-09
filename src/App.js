@@ -23,6 +23,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGameManager } from "./features/gameManagerSlice";
+import InfrastructureScreen from "./screens/InfrastructureScreen";
 const screens = {
   title: TitleScreen,
   "new-game": NewGameScreen,
@@ -35,6 +36,7 @@ const screens = {
   events: EventsScreen,
   "game-over": GameOverScreen,
   victory: VictoryScreen,
+  infrastructure: InfrastructureScreen
 };
 
 function App({gameManager}) {
@@ -73,7 +75,6 @@ function App({gameManager}) {
         </Toolbar>
       </AppBar>
       <ScreenNavigator
-        setScreen={setGameScreen}
         gameManager={gameManager}
       />
       <Box sx={{flexGrow: 1}}>

@@ -92,7 +92,24 @@ const PlotsScreen = ({ gameManager }) => {
   return (
     <Box component="section">
       <Toolbar />
-
+      {currentPlot && (
+        <Dialog open={plotWidgetOpen}>
+          <PlotWidget
+            gameData={gameData}
+            gameManager={gameManager}
+            plotManager={plotManager}
+            cb={() => {
+              setPlotWidgetOpen(false);
+              dispatch(
+                selectEntity({
+                  type: "plot",
+                  selection: null,
+                })
+              );
+            }}
+          />
+        </Dialog>
+      )}
       {currentActivity && (
         <Modal>
           <Box>
@@ -128,7 +145,7 @@ const PlotsScreen = ({ gameManager }) => {
           </Box>
         </Modal>
       )}
-      <Box >
+      <Box>
         <Box component="header" padding="1rem">
           <Typography variant="h3">EVIL Plots & Activities</Typography>
         </Box>
@@ -143,7 +160,9 @@ const PlotsScreen = ({ gameManager }) => {
                   </Box>
                   <Box>
                     <Box component="header">
-                      <Typography variant="overline">Available Plots</Typography>
+                      <Typography variant="overline">
+                        Available Plots
+                      </Typography>
                     </Box>
                     <Divider />
                     <Box padding="1rem">
@@ -173,26 +192,6 @@ const PlotsScreen = ({ gameManager }) => {
                     </Box>
                     <Divider />
                   </Box>
-                  {currentPlot && (
-                    <Dialog open={plotWidgetOpen}>
-                      <DialogContent>
-                        <PlotWidget
-                          gameData={gameData}
-                          gameManager={gameManager}
-                          plotManager={plotManager}
-                          cb={() => {
-                            setPlotWidgetOpen(false);
-                            dispatch(
-                              selectEntity({
-                                type: "plot",
-                                selection: null,
-                              })
-                            );
-                          }}
-                        />
-                      </DialogContent>
-                    </Dialog>
-                  )}
                 </Box>
                 {/* {currentPlot && (
                 <PlotWidget
@@ -229,7 +228,9 @@ const PlotsScreen = ({ gameManager }) => {
               </Box>
               <Box>
                 <Box component="header">
-                  <Typography variant="overline">Available Activities</Typography>
+                  <Typography variant="overline">
+                    Available Activities
+                  </Typography>
                 </Box>
                 <Divider />
                 <Box padding="1rem">
@@ -254,18 +255,15 @@ const PlotsScreen = ({ gameManager }) => {
             <Box>
               <Box className="mb-4">
                 <Box>
-                    <Box component="header">
-                      <Typography variant="overline">
-                        Activity Participants
-                      </Typography>
-                    </Box>
+                  <Box component="header">
+                    <Typography variant="overline">
+                      Activity Participants
+                    </Typography>
+                  </Box>
 
-                    <Paper>
-                      <DataGrid
-                        rows={activityRows}
-                        columns={activitiesColumns}
-                      />
-                    </Paper>
+                  <Paper>
+                    <DataGrid rows={activityRows} columns={activitiesColumns} />
+                  </Paper>
                 </Box>
               </Box>
             </Box>

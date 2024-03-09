@@ -1,8 +1,5 @@
-import { numberWithErrorMargin } from "empire-of-evil/src/utilities";
-import { getZoneCitizens } from "empire-of-evil/src/zones";
-import { toDataArray } from "../utilities/dataHelpers";
-import { GameManager } from "empire-of-evil";
-import { Box, Card, CardContent, Paper, Typography } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
+import { Check as CheckIcon, Close as CloseIcon } from "@mui/icons-material"
 import DataGrid from "react-data-grid";
 
 const personDataGridColumns = [
@@ -24,7 +21,7 @@ const PersonDataGrid = ({ title, people, gameManager }) => {
       name,
       loyalty,
       intelLevel: intelligenceLevel,
-      agent: !!agent ? "Y" : "N",
+      agent: !!agent ? <CheckIcon /> : <CloseIcon />,
       select: () => {},
     };
   });

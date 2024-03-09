@@ -20,9 +20,11 @@ import {
   TravelExplore as TravelExploreIcon,
   TipsAndUpdates as TipsAndUpdatesIcon,
   Home as HomeIcon,
+  LocationCity as LocationCityIcon
 } from "@mui/icons-material";
 import TitleScreenOptions from "./ScreenNavigator/TitleScreenOptions";
 import { useState } from "react";
+import { clearSelections, selectEntity } from "../features/selectionSlice";
 
 const screens = [
   {
@@ -75,6 +77,11 @@ const screens = [
     title: "Plots",
     icon: <TipsAndUpdatesIcon />,
   },
+  {
+    screen: "infrastructure",
+    title: "Infrastructure",
+    icon: <LocationCityIcon />,
+  },
 ];
 
 export const screenNavigatorWidth = 150;
@@ -109,6 +116,7 @@ function ScreenNavigator({ gameManager }) {
                 startIcon={screen.icon && screen.icon}
                 className="flex items-center tracking-wider text-sm p-2"
                 onClick={() => {
+                  dispatch(clearSelections())
                   dispatch(setScreen(screen.screen));
                 }}
               >
@@ -119,7 +127,6 @@ function ScreenNavigator({ gameManager }) {
           <Button
             startIcon={<SaveIcon />}
             onClick={() => {
-              // saveGame(gameManager, activityManager, plotManager);
               setSaveDialogOpen(true);
             }}
           >
@@ -127,7 +134,7 @@ function ScreenNavigator({ gameManager }) {
           </Button>
           <Dialog open={saveDialogOpen}>
             <DialogTitle>Save Your Data?</DialogTitle>
-            <DialogContent>
+            <DialogContent sx={{width: '300px'}}>
               <DialogContentText>
                 Save your data? It will be saved to your hard drive.
               </DialogContentText>

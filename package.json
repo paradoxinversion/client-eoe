@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "parcel ./src/index.html",
-    "build": "parcel build",
+    "build": "parcel build ./src/index.html",
     "dev": "parcel build --no-cache"
   },
   "browserslist": {

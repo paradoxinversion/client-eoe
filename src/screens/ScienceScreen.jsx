@@ -13,11 +13,22 @@ import {
   Toolbar,
   Typography,
   Grid,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Chip,
 } from "@mui/material";
+import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import MetricNumber from "../elements/MetricNumber/MetricNumber";
+import { dataGridButton } from "../datagridRenderers/dataGridButton";
+import PersonDataGrid from "../dataGrids/personDataGrid";
+import { setPeople } from "../features/personSlice";
+import { setBuildings } from "../features/buildingSlice";
+import { useDispatch } from "react-redux";
 const columns = [
   { key: "lab", name: "Lab" },
   { key: "maxScientists", name: "Max Scientists" },
+  { key: "selectLab", name: "View Laboratory", renderCell: dataGridButton },
 ];
 /**
  *
@@ -26,13 +37,17 @@ const columns = [
  * @returns
  */
 const ScienceScreen = ({ gameManager, updateGameData }) => {
+  const dispatch = useDispatch();
+  const [personnelDialogOpen, setPersonnelDialogOpen] = useState(false);
   const { gameData } = gameManager;
   const [selectedLab, setSelectedLab] = useState(null);
-  const [addingPersonnel, setAddingPersonnel] = useState(false);
   const labs = getOrgLabs(gameManager, gameData.player.organizationId);
   const rows = labs.map((lab) => ({
     lab: lab.name,
     maxScientists: lab.maxPersonnel,
+    cb: () => {
+      setSelectedLab(lab);
+    },
   }));
   return (
     <Box copmponent="main">
@@ -52,69 +67,92 @@ const ScienceScreen = ({ gameManager, updateGameData }) => {
         </Box>
 
         <Divider />
-        <Grid container padding="1rem" columns={10}>
-          <Grid item xs={10}>
-            <Typography variant="overline">EVIL Laboratories</Typography>
-            <Paper>
-              <DataGrid columns={columns} rows={rows} />
-            </Paper>
-          </Grid>
-        </Grid>
-
-        <Box padding="1rem">
-          {selectedLab && (
-            <Box component="section">
-              <Box component="header">
-                <Typography>{selectedLab.name}</Typography>
-              </Box>
-              <Typography>Personnel</Typography>
-              {selectedLab.personnel.map((labPersonnel) => {
-                return (
-                  <Box>
-                    <Typography>
-                      {gameData.people[labPersonnel].name}
-                    </Typography>
-                  </Box>
-                );
-              })}
+        {selectedLab ? (
+          <Box component="section">
+            <Box padding={"1rem"} component="header">
+              <Typography variant="h5">{selectedLab.name}</Typography>
+            </Box>
+            <Divider />
+            <Stack direction="row" spacing={1} padding={1}>
+              <Button
+                startIcon={<ArrowBackIcon />}
+                onClick={() => {
+                  setSelectedLab(null);
+                }}
+              >
+                Back
+              </Button>
               <Button
                 onClick={() => {
-                  setAddingPersonnel(true);
+                  setPersonnelDialogOpen(true);
                 }}
               >
                 Add Personnel
               </Button>
+            </Stack>
+            <Divider />
+            <Box padding={"1rem"}>
+              <PersonDataGrid
+                gameManager={gameManager}
+                people={selectedLab.personnel.map(
+                  (personId) => gameManager.gameData.people[personId]
+                )}
+                title="Personnel"
+              />
             </Box>
-          )}
-        </Box>
+            {selectedLab.personnel.map((labPersonnel) => {
+              return (
+                <Box>
+                  <Typography>{gameData.people[labPersonnel].name}</Typography>
+                </Box>
+              );
+            })}
+          </Box>
+        ) : (
+          <Grid container padding="1rem" columns={10}>
+            <Grid item xs={10}>
+              <Typography variant="overline">EVIL Laboratories</Typography>
+              <Paper>
+                <DataGrid columns={columns} rows={rows} />
+              </Paper>
+            </Grid>
+          </Grid>
+        )}
       </Box>
-      {addingPersonnel && (
-        <Box>
-          {_getAgents(gameManager, {
-            organizationId: gameData.player.organizationId,
-            filter: {
-              zoneId: selectedLab.zoneId,
-              department: 2,
-            },
-            exclude: {
-              personnel: true,
-            },
-          }).map((agent) => {
-            return (
-              <Button
-                onClick={() => {
-                  const updatedGameData = addPersonnel(agent, selectedLab);
-
-                  updateGameData(updatedGameData);
-                  setAddingPersonnel(false);
-                }}
-              >
-                {agent.name}
-              </Button>
-            );
-          })}
-        </Box>
-      )}
+      <Dialog open={personnelDialogOpen}>
+        <DialogTitle>Add Personnel</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Select the Agent(s) you would like to work in this Laboratory.
+          </Typography>
+          <Stack direction="row" spacing={1} padding={1}>
+            {_getAgents(gameManager, {
+              organizationId: gameData.player.organizationId,
+              filter: {
+                zoneId: selectedLab?.zoneId,
+                // department: 2,
+              },
+              exclude: {
+                personnel: true,
+              },
+            }).map((agent) => {
+              return (
+                <Chip
+                  label={agent.name}
+                  onClick={() => {
+                    const updatedGameData = addPersonnel(agent, selectedLab);
+                    gameManager.updateGameData(updatedGameData);
+                    // updateGameData(updatedGameData);
+                    dispatch(setPeople(gameManager.gameData.people));
+                    dispatch(setBuildings(gameManager.gameData.buildings))
+                    setPersonnelDialogOpen(false);
+                  }}
+                />
+              );
+            })}
+          </Stack>
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };

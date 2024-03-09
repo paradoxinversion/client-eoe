@@ -1,31 +1,36 @@
-import { numberWithErrorMargin } from "empire-of-evil/src/utilities";
-import { getZoneCitizens } from "empire-of-evil/src/zones";
-import { toDataArray } from "../utilities/dataHelpers";
-import { GameManager } from "empire-of-evil";
-import { Box, Card, CardContent, Typography, Paper } from "@mui/material";
+import { Box, Typography, Paper } from "@mui/material";
 import DataGrid from 'react-data-grid';
+import { dataGridButton } from "../datagridRenderers/dataGridButton";
 
 const buildingDataGridColumns = [
-  {key: "zone", name: "Zone"},
   {key: "name", name: "Name"},
-  {key: "upkeep", name: "Upkeep"},
   {key: "type", name: "Type"},
-  {key: "maxPersonnel", name: "Max Personnel"},
-  {key: "select", name: ''}
+  {key: "zone", name: "Zone"},
+  {key: "upkeep", name: "Upkeep/mo"},
+  {key: "personnel", name: "Personnel"},
+  {key: "housingCapacity", name: "Housing"},
+  {key: "wealthBonus", name: "Wealth"},
+  {key: "cb", name: 'Select', renderCell: dataGridButton}
 ];
 
-const BuildingDataGrid = ({ title, buildings, gameManager }) => {
+const BuildingDataGrid = ({ title, buildings, gameManager, gridHeight, cb }) => {
   const {gameData} = gameManager;
   const buildingDataGridRows = buildings.map((building) => {
     const {name: zoneName} = gameData.zones[building.zoneId];
-    const { name, upkeepCost, type, maxPersonnel } = building;
+    const { id,name, upkeepCost, type, maxPersonnel, personnel, housingCapacity, wealthBonus } = building;
     return {
+      id,
       zone: zoneName,
       name,
-      upkeep: upkeepCost,
+      upkeep: `$${upkeepCost}`,
       type,
-      maxPersonnel,
-      select: () => {}
+      personnel: `${personnel.length}/${maxPersonnel}`,
+      housingCapacity,
+      wealthBonus,
+      cb: (b) => {
+        console.log('foo')
+        cb && cb(b);
+      }
 
   }})
 
@@ -35,7 +40,7 @@ const BuildingDataGrid = ({ title, buildings, gameManager }) => {
         <Typography variant="overline">{title}</Typography>
       </Box>
       <Paper>
-        <DataGrid rows={buildingDataGridRows} columns={buildingDataGridColumns} />
+        <DataGrid style={{height: gridHeight}} rows={buildingDataGridRows} columns={buildingDataGridColumns} />
       </Paper>
     </Box>
   );

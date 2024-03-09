@@ -2,6 +2,16 @@ import { getAgents, getControlledZones } from "empire-of-evil/src/organization";
 import { Plot } from "empire-of-evil/src/plots";
 import { useState } from "react";
 import { toDataArray } from "../utilities/dataHelpers";
+import {
+  Box,
+  Button,
+  CardContent,
+  Chip,
+  DialogActions,
+  DialogTitle,
+  Stack,
+  Typography,
+} from "@mui/material";
 
 /**
  *
@@ -9,7 +19,7 @@ import { toDataArray } from "../utilities/dataHelpers";
  * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
  */
 const ReconPlot = ({ gameManager, cb }) => {
-  const {gameData, plotManager} = gameManager
+  const { gameData, plotManager } = gameManager;
   const [nation, setNation] = useState(null);
   const [zone, setZone] = useState(null);
   const [participants, setParticipants] = useState([]);
@@ -25,126 +35,122 @@ const ReconPlot = ({ gameManager, cb }) => {
     plotManager.addPlot(plot);
   };
   const onUpdateParticipants = (e, agent) => {
-    if (e.currentTarget.checked) {
-      if (!participants.includes(agent.id)) {
-        const updatedParticipants = [...participants]
-        updatedParticipants.push(agent.id);
-        setParticipants(updatedParticipants);
-      }
+    if (!participants.includes(agent.id)) {
+      const updatedParticipants = [...participants];
+      updatedParticipants.push(agent.id);
+      setParticipants(updatedParticipants);
     } else {
       if (participants.includes(agent.id)) {
         const updatedParticipants = [...participants];
         setParticipants(
-          updatedParticipants.filter((person) => person.id !== agent.id)
+          updatedParticipants.filter((person) => person !== agent.id)
         );
       }
     }
+
   };
   return (
-    <div>
-      <p className="text-xl font-bold">Execute Reconnaisance Operation</p>
-      <p>Send agents for covert intelligence-gathering in a foreign zone.</p>
-      <form>
+    <>
+      <DialogTitle>Execute Reconnaisance Operation</DialogTitle>
+      <CardContent sx={{height: "500px"}}>
+        <Typography>
+          Send agents for covert intelligence-gathering in a foreign zone.
+        </Typography>
         <div>
-          <header>
-            <p className="text-lg border-b mb-4">Select a Nation</p>
-          </header>
-          <div className="flex flex-wrap">
+          <Box>
+            <Typography>Select a Nation</Typography>
+          </Box>
+          <Stack direction="row" spacing={1} padding={1}>
             {nations.map((n) => {
               return (
-                <div key={`ns-${n.id}`} className="shadow-md rounded p-2">
-                  <input
-                    type={"radio"}
-                    name="nation-select"
-                    id={`nation-select-${n.id}`}
-                    onClick={() => {
-                      setNation(n);
-                    }}
-                  />
-                  <label htmlFor={`nation-select-${n.id}`}>{n.name}</label>
-                </div>
+                <Chip
+                  label={n.name}
+                  type={"radio"}
+                  name="nation-select"
+                  id={`nation-select-${n.id}`}
+                  variant={nation?.id === n.id ? "outlined" : "filled"}
+                  onClick={() => {
+                    setNation(n);
+                  }}
+                />
               );
             })}
-          </div>
+          </Stack>
           {nation && (
             <div>
-            <header>
-              <p className="text-lg border-b mb-4">
-                Select the zone for this mission
-              </p>
-            </header>
-            <div className="flex flex-wrap">
-              {getControlledZones(
-                gameManager,
-                nation.organizationId
-              ).map((zone) => (
-                <div key={`zs-${zone.id}`} className="shadow-md rounded p-2 w-fit">
-                  <input
-                    type={"radio"}
-                    name="zone-select"
-                    id={`zone-select-${zone.id}`}
-                    onClick={(e) => {
-                      setZone(zone);
-                    }}
-                  />
-                  <label htmlFor={`zone-select-${zone.id}`}>{zone.name}</label>
-                </div>
-              ))}
-            </div>
-          </div>
-          )}
-          {zone && (
-          <div className="mb-4">
-            <header>
-              <p className="text-lg border-b mb-4">
-                Select the Agents attending this mission. 
-              </p>
-            </header>
-            <div className="flex flex-wrap">
-              {getAgents(
-                gameManager,
-                gameData.player.organizationId
-              )
-                .filter(
-                  (agent) =>
-                    agent.agent.department === 0 || agent.agent.department === 3
-                )
-                .map((agent) => (
-                  <div key={`as-${agent.id}`} className="shadow-md rounded p-2">
-                    <input
-                      className="mr-2"
-                      type={"checkbox"}
-                      id={`agent-select-${agent.id}`}
-                      onChange={(e) => {
-                        onUpdateParticipants(e, agent);
+              <Box component={"header"}>
+                <Typography>Select the zone for this mission</Typography>
+              </Box>
+              <Stack direction="row" spacing={1} padding={1}>
+                {getControlledZones(gameManager, nation.organizationId).map(
+                  (selectedZone) => (
+                    <Chip
+                      label={selectedZone.name}
+                      name="zone-select"
+                      id={`zone-select-${selectedZone.id}`}
+                      variant={
+                        zone?.id === selectedZone.id ? "outlined" : "filled"
+                      }
+                      onClick={(e) => {
+                        setZone(selectedZone);
                       }}
                     />
-                    <label htmlFor={`agent-select-${agent.id}`}>
-                      {agent.name}
-                    </label>
-                  </div>
-                ))}
+                  )
+                )}
+              </Stack>
             </div>
-            <div>
-              <p className="text-lg border-b mb-4">Selected Agents</p>
-              <div className="flex flex-wrap">
-                {participants.map((agent) => (
-                  <div key={`attackers-${agent}`} className="shadow-md rounded p-2">
-                    <p>{gameData.people[agent].name}</p>
-                  </div>
-                ))}
+          )}
+          {zone && (
+            <div className="mb-4">
+              <header>
+                <p className="text-lg border-b mb-4">
+                  Select the Agents attending this mission.
+                </p>
+              </header>
+              <Stack direction="row" spacing={1} padding={1}>
+                {getAgents(gameManager, gameData.player.organizationId)
+                  .filter(
+                    (agent) =>
+                      agent.agent.department === 0 ||
+                      agent.agent.department === 3
+                  )
+                  .map((selectedAgent) => (
+                    <Chip
+                      label={selectedAgent.name}
+                      type={"checkbox"}
+                      id={`agent-select-${selectedAgent.id}`}
+                      variant={
+                        participants.includes(selectedAgent.id) ? 'outlined' : 'filled'
+                      }
+                      onClick={(e) => {
+                        onUpdateParticipants(e, selectedAgent);
+                      }}
+                    />
+                  ))}
+              </Stack>
+              <div>
+                <p className="text-lg border-b mb-4">Selected Agents</p>
+                <Stack direction="row" spacing={1} padding={1}>
+                  {participants.map((agent) => (
+                    <Chip
+                      label={gameData.people[agent].name}
+                      key={`attackers-${agent}`}
+                      className="shadow-md rounded p-2"
+                    />
+                  ))}
+                </Stack>
               </div>
+              <footer>
+                <p className="text-xs">
+                  *Agents attending this mission may suffer loss of life.
+                </p>
+              </footer>
             </div>
-            <footer>
-              <p className="text-xs">
-                *Agents attending this mission may suffer loss of life.
-              </p>
-            </footer>
-          </div>
-        )}
+          )}
         </div>
-        <button
-          className="p-2 shadow-md rounded"
+      </CardContent>
+      <DialogActions>
+        <Button
           disable={!nation || !zone}
           onClick={(e) => {
             e.preventDefault();
@@ -153,9 +159,19 @@ const ReconPlot = ({ gameManager, cb }) => {
           }}
         >
           Done
-        </button>
-      </form>
-    </div>
+        </Button>
+        <Button
+          disable={!nation || !zone}
+          onClick={(e) => {
+            e.preventDefault();
+            cb();
+          }}
+        >
+          Cancel
+        </Button>
+
+      </DialogActions>
+    </>
   );
 };
 
