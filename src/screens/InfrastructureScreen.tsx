@@ -17,7 +17,6 @@ import BuildingDataGrid from "../dataGrids/buildingDataGrid";
 import { GameManager, buildings, zones } from "empire-of-evil";
 import MetricNumber from "../elements/MetricNumber/MetricNumber";
 import ZonePanel from "../elements/ZonePanel";
-import { useDispatch, useSelector } from "react-redux";
 import { clearSelections, selectEntity } from "../features/selectionSlice";
 import PersonDataGrid from "../dataGrids/personDataGrid";
 import { useState } from "react";
@@ -27,6 +26,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { GameData } from "empire-of-evil/src/GameManager";
 import { setPeople } from "../features/personSlice";
 import { setBuildings } from "../features/buildingSlice";
+import PersonnelDataGrid from "../dataGrids/personnelDataGrid";
 
 interface InfrastructureScreenProps {
   gameManager: GameManager;
@@ -36,7 +36,6 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
   const dispatch = useAppDispatch();
   const [assignStaffOpen, setAssignStaffOpen] = useState(false);
   const buildingsData = useAppSelector((state) => state.buildings);
-  // const buildingsData = useSelector((state) => state.buildings);
   const peopleData = useAppSelector((state) => state.people);
   const selectedBuilding = useAppSelector((state) => state.selections.building);
   return (
@@ -86,19 +85,22 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
                             person,
                             selectedBuilding
                           );
-                          const ugd: Partial<GameData> = {
-                            buildings: {
-                              [update.id]: update,
-                            },
-                          };
-                          gameManager.updateGameData(ugd);
-                          
+
+                          gameManager.updateGameData(update);
                         } else {
                           const update = addPersonnel(person, selectedBuilding);
-                          
+
                           gameManager.updateGameData(update);
                           dispatch(setPeople(update.people));
                           dispatch(setBuildings(update.buildings));
+                          dispatch(
+                            selectEntity({
+                              type: "building",
+                              selection: update.buildings[selectedBuilding.id],
+                            })
+                          );
+
+                          setAssignStaffOpen(false);
                         }
                       }}
                       label={`${person.name} (${relatedAttributeName}: ${relatedAttributeStat})`}
@@ -155,6 +157,10 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
               back
             </Button>
             <Button
+              disabled={
+                selectedBuilding?.personnel.length ===
+                selectedBuilding?.maxPersonnel
+              }
               onClick={() => {
                 setAssignStaffOpen(true);
               }}
@@ -170,8 +176,17 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
                   Upkeep Cost: ${selectedBuilding.upkeepCost}
                 </Typography>
               </Stack>
-              <PersonDataGrid
-                people={selectedBuilding.personnel.map((id) => peopleData[id])}
+              <PersonnelDataGrid
+                fireFn={(person)=>{
+                  const update = removePersonnel(
+                    person,
+                    selectedBuilding
+                  );
+
+                  gameManager.updateGameData(update);
+                }}
+                title="Personnel"
+                personnel={selectedBuilding.personnel.map((id) => peopleData[id])}
                 gameManager={gameManager}
               />
             </Box>
@@ -190,7 +205,6 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
                   gameManager.gameData.player.empireId
                 )}
                 title={"Zones"}
-                // withErrorMargin={false}
               />
             </Box>
             <Box id="buildings" padding="1rem">
@@ -206,7 +220,6 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
                 })}
                 title={"Laboraties"}
                 cb={(entity) => {
-                  console.log("Select", entity);
                   dispatch(
                     selectEntity({
                       type: "building",
