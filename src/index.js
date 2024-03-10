@@ -23,9 +23,9 @@ const gameManager = gameSetup.createGameManager();
 const container = document.getElementById("app");
 const root = createRoot(container);
 // Enable navigation prompt
-window.onbeforeunload = function() {
-  return true;
-};
+// window.onbeforeunload = function() {
+//   return true;
+// };
 
 root.render(
   <Provider store={store} >

@@ -5,13 +5,13 @@ export function dataGridButton(cellData) {
   const row = cellData.row;
 
   const fn = row[key];
+  console.log(fn)
   return (
     <Button
       onClick={() => {
         // console.log(key);
-        // console.log(cellData)
+        
         fn && fn(row);
-        // row.cb && row.cb(row);
       }}
     >
       {cellData.column.name}

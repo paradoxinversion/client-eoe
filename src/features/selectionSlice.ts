@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Activity, Plot } from 'empire-of-evil/src/plots';
 import { Building, GoverningOrganization, Nation, Person, Zone } from 'empire-of-evil/src/types/interfaces/entities';
 
@@ -32,7 +32,7 @@ export const selectionSlice = createSlice({
     /**
      * Requires a type and selection
      */
-    selectEntity: (state, action) => {
+    selectEntity: (state, action: PayloadAction<{type: string, selection: Object}>) => {
       return {
         ...state,
         [action.payload.type]: action.payload.selection

@@ -184,6 +184,12 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
                   );
 
                   gameManager.updateGameData(update);
+                  dispatch(setBuildings(update.buildings));
+                  dispatch(setPeople(update.people));
+                  dispatch(selectEntity({
+                    type: 'building',
+                    selection: update.buildings[selectedBuilding.id]
+                  }))
                 }}
                 title="Personnel"
                 personnel={selectedBuilding.personnel.map((id) => peopleData[id])}

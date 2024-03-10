@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectEntity } from "../features/selectionSlice";
 import DataGrid from "react-data-grid";
 import MetricNumber from "../elements/MetricNumber/MetricNumber";
+import PersonDataGrid from "../dataGrids/personDataGrid";
 
 // import { fireAgent, terminateAgent } from "empire-of-evil/src/organization";
 const eoe = require("empire-of-evil");
@@ -35,24 +36,7 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
   const selectedAgent = useSelector((state) => state.selections.person);
   const people = useSelector((state) => state.people);
   const { gameData } = gameManager;
-  /**
-   * @type {Person} selectedAgent
-   */
-  // const [open, setOpen] = useState(agent);
 
-  /**
-   *
-   * @param {import("empire-of-evil/src/typedef").Person} agent
-   */
-  const onAgentSelected = (agent) => {
-    dispatch(
-      selectEntity({
-        type: "person",
-        selection: people[agent.id],
-      })
-    );
-    // setSelectedAgent(agent);
-  };
 
   const currentAgents = eoe.organizations.getAgents(
     gameManager,
@@ -67,7 +51,7 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
   return (
     <Box>
       <Toolbar />
-      {selectedAgent && (
+      {/* {selectedAgent && (
         <Dialog open={!!selectedAgent}>
           <DialogContent>
             
@@ -151,8 +135,8 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
             )}
           </DialogContent>
         </Dialog>
-      )}
-
+      )} */}
+   
       <Box id="top-bar" />
       <Box>
         <Box component="header" padding="1rem">
@@ -194,14 +178,14 @@ const PersonnelScreen = ({ gameManager, updateGameData }) => {
         <Box padding="1rem">
           <Grid container columns={10}>
             <Grid item xs={10}>
-              <PersonPanel
+              <PersonDataGrid
                 gameData={gameData}
                 title={`EVIL Employee Roster (${currentAgents}/${maxAgents})`}
                 people={eoe.organizations.getAgents(
                   gameManager,
                   gameData.player.organizationId
                 )}
-                cb={onAgentSelected}
+                // cb={()=>{console.log("x")}}
                 gameManager={gameManager}
               />
             </Grid>

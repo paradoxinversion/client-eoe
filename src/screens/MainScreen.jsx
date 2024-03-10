@@ -12,33 +12,19 @@ import {
   Box,
   Grid,
   Card,
-  CardContent,
-  CardHeader,
   Toolbar,
   Typography,
   Divider,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
   Stack,
   Paper,
 } from "@mui/material";
 import {
-  AttachMoney,
-  LocationCity,
-  Science,
-  Payment as PaymentIcon,
-  Wallet as WalletIcon,
-  Domain as DomainIcon,
   OpenWith as OpenWithIcon,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { setScreen } from "../features/screenSlice";
 import ZonePanel from "../elements/ZonePanel";
-import DataGrid from "react-data-grid";
 import BuildingDataGrid from "../dataGrids/buildingDataGrid";
-// const eoe = require("empire-of-evil");
 import * as eoe from "empire-of-evil";
 import PersonDataGrid from "../dataGrids/personDataGrid";
 
@@ -143,7 +129,7 @@ const MainScreen = ({
                 gameData.governingOrganizations[gameData.player.organizationId]
                   .wealth
               }
-                  (+${empireWealth + wealthBonuses})`}
+                  (+${parseInt(empireWealth + wealthBonuses)})`}
             />
             <MetricNumber title="Expenses" number={payroll + buildingUpkeep} />
             <MetricNumber
