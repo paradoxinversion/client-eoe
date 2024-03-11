@@ -4,43 +4,41 @@ import DataGrid from "react-data-grid";
 import { dataGridButton } from "../datagridRenderers/dataGridButton";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { selectEntity } from "../features/selectionSlice";
-import { Person } from "empire-of-evil/src/types/interfaces/entities";
+import { Person, Zone } from "empire-of-evil/src/types/interfaces/entities";
 import { GameManager } from "empire-of-evil";
 import 'react-data-grid/lib/styles.css';
-const personDataGridColumns = [
+
+const zoneDataGridColumns = [
   { key: "name", name: "Name" },
-  { key: "zone", name: "Zone" },
-  { key: "loyalty", name: "Loyalty" },
-  { key: "intelLevel", name: "Intelligence" },
-  { key: "agent", name: "Agent?" },
+  { key: "size", name: "Size" },
+  { key: "wealth", name: "Wealth" },
+  { key: "intelLevel", name: "Intel Level" },
   { key: "select", name: "Select", renderCell: dataGridButton },
 ];
 
-interface PersonDataGridProps {
+interface ZoneDataGridProps {
   title: string;
-  people: Person[];
+  zones: Zone[];
   gameManager: GameManager;
 }
 
-const PersonDataGrid = ({ title, people, gameManager }: PersonDataGridProps) => {
+const ZoneDataGrid = ({ title, zones, gameManager }: ZoneDataGridProps) => {
   const peopleStore = useAppSelector(state => state.people);
   const dispatch = useAppDispatch();
-  const { gameData } = gameManager;
-  const personDataGridRows = people.map((person) => {
-    const { name: zoneName } = gameData.zones[person.homeZoneId];
-    const { id, name, loyalty, intelligenceLevel, agent } = person;
+  const zoneStore = useAppSelector(state => state.zones)
+  const agentDataGridRows = zones.map((zone) => {
+    const { id, name, intelligenceLevel, wealth, size } = zoneStore[zone.id];
+    // const { id, name, loyalty, intelligenceLevel, agent } = person;
     return {
       id,
-      zone: zoneName,
       name,
-      loyalty,
       intelLevel: intelligenceLevel,
-      agent: !!agent ? <CheckIcon /> : <CloseIcon />,
+      wealth,
+      size,
       select: (row) => {
-        // selectFn && selectFn(peopleStore[row.id]);
         dispatch(selectEntity({
-          type: "person",
-          selection: peopleStore[row.id]
+          type: "zone",
+          selection: zoneStore[row.id]
         }))
       },
     };
@@ -53,10 +51,10 @@ const PersonDataGrid = ({ title, people, gameManager }: PersonDataGridProps) => 
       </Box>
       <Paper>
 
-        <DataGrid rows={personDataGridRows} columns={personDataGridColumns} />
+        <DataGrid rows={agentDataGridRows} columns={zoneDataGridColumns} />
       </Paper>
     </Box>
   );
 };
 
-export default PersonDataGrid;
+export default ZoneDataGrid;

@@ -21,7 +21,7 @@ import { clearSelections, selectEntity } from "../features/selectionSlice";
 import PersonDataGrid from "../dataGrids/personDataGrid";
 import { useState } from "react";
 import { getPeople } from "empire-of-evil/src/actions/people";
-import { addPersonnel, removePersonnel } from "empire-of-evil/src/buildings";
+import { addPersonnel, getResourceOutput, removePersonnel } from "empire-of-evil/src/buildings";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { GameData } from "empire-of-evil/src/GameManager";
 import { setPeople } from "../features/personSlice";
@@ -50,7 +50,7 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
             {selectedBuilding &&
               getPeople(gameManager, {
                 zoneId: selectedBuilding?.zoneId,
-                agentFilter: { agentsOnly: true, department: -1 },
+                agentFilter: { agentsOnly: true, department: selectedBuilding.type === "bank" ? 1 : selectedBuilding.type === "laboratory" ? 2 : -1 },
               }).map((person) => {
                 let relatedAttributeStat;
                 let relatedAttributeName = "";
@@ -176,6 +176,7 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
                   Upkeep Cost: ${selectedBuilding.upkeepCost}
                 </Typography>
               </Stack>
+              <Typography>Science Output: {getResourceOutput(gameManager, selectedBuilding).science}</Typography>
               <PersonnelDataGrid
                 fireFn={(person)=>{
                   const update = removePersonnel(

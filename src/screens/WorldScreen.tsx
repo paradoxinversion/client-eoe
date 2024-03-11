@@ -22,6 +22,10 @@ import DataGrid from "react-data-grid";
 import { dataGridButton } from "../datagridRenderers/dataGridButton";
 import { useDispatch, useSelector } from "react-redux";
 import { selectEntity } from "../features/selectionSlice";
+import MetricNumber from "../elements/MetricNumber/MetricNumber";
+import { getZones } from "empire-of-evil/src/actions/zones";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import ZoneDataGrid from "../dataGrids/zoneDataGrid";
 const eoe = require("empire-of-evil");
 
 const nationsTableColumns = [
@@ -32,9 +36,9 @@ const nationsTableColumns = [
   { key: "viewNation", name: "View Nation", renderCell: dataGridButton },
 ];
 const WorldScreen = ({ gameManager }) => {
-  const dispatch = useDispatch();
-  const [open, setOpen] = useState(true);
-  const selectedNation = useSelector((state) => state.selections.nation);
+  const dispatch = useAppDispatch();
+  const [nationDialogOpen, setNationDialogOpen] = useState(true);
+  const selectedNation = useAppSelector((state) => state.selections.nation);
   const { gameData } = gameManager;
   // const [selectedNation, setSelectedNation] = useState(null);
 
@@ -44,13 +48,13 @@ const WorldScreen = ({ gameManager }) => {
     selectedNation && getAgents(gameManager, selectedNation.organizationId);
 
   const nationsRows = nationsArray
-    .filter((nation) => nation.id !== gameData.player.empireId)
+    // .filter((nation) => nation.id !== gameData.player.empireId)
     .map((nation) => ({
       nation: nation.name,
       population: getNationCitizens(gameManager, nation.id).length,
       agents: getAgents(gameManager, nation.organizationId).length,
       zones: nation.size,
-      cb: () => {
+      viewNation: () => {
         dispatch(
           selectEntity({
             type: "nation",
@@ -62,7 +66,51 @@ const WorldScreen = ({ gameManager }) => {
   return (
     <Box component="main">
       <Toolbar />
-      <Dialog open={!!selectedNation}>
+      <Box component="header" padding="1rem">
+        <Typography variant="h3">World</Typography>
+      </Box>
+      <Divider />
+      {selectedNation ? (
+        <Box>
+          <Box padding="1rem">
+            <MetricNumber
+              number={
+                getZones(gameManager, {
+                  organizationId: selectedNation.organizationId,
+                }).length
+              }
+              title="Zones"
+            />
+          </Box>
+          <Divider />
+          <Box padding="1rem">
+            <Typography>{selectedNation.name}</Typography>
+          </Box>
+          <Box padding="1rem">
+            <ZoneDataGrid
+              gameManager={gameManager}
+              zones={getZones(gameManager, {
+                organizationId: selectedNation.organizationId,
+              })}
+              title=""
+            />
+          </Box>
+        </Box>
+      ) : (
+        <Box>
+          <Box padding="1rem">
+            <Box component="header">
+              <Typography variant={"overline"}>World Nations</Typography>
+            </Box>
+            <Card>
+              <Paper>
+                <DataGrid rows={nationsRows} columns={nationsTableColumns} />
+              </Paper>
+            </Card>
+          </Box>
+        </Box>
+      )}
+      {/* <Dialog open={nationDialogOpen}>
         <DialogTitle>{selectedNation?.name}</DialogTitle>
         <Divider />
         <DialogContent>
@@ -89,7 +137,6 @@ const WorldScreen = ({ gameManager }) => {
           </Box>
           <Button
             onClick={() => {
-              // setSelectedNation(null)
               dispatch(
                 selectEntity({
                   type: "nation",
@@ -101,23 +148,7 @@ const WorldScreen = ({ gameManager }) => {
             Close
           </Button>
         </DialogContent>
-      </Dialog>
-      <Box>
-        <Box component="header" padding="1rem">
-          <Typography variant="h3">World</Typography>
-        </Box>
-        <Divider />
-        <Box padding="1rem">
-          <Box component="header">
-            <Typography variant={"overline"}>World Nations</Typography>
-          </Box>
-          <Card>
-            <Paper>
-              <DataGrid rows={nationsRows} columns={nationsTableColumns} />
-            </Paper>
-          </Card>
-        </Box>
-      </Box>
+      </Dialog> */}
     </Box>
   );
 };

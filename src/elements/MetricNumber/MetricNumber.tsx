@@ -1,6 +1,9 @@
 import { Typography, Card } from "@mui/material";
-
-const MetricNumber = ({ number, title }) => {
+interface MetricNumberProps {
+  number: number|string;
+  title: string;
+}
+const MetricNumber = ({ number, title }: MetricNumberProps) => {
   return (
     <Card sx={{ width: "fit-content", padding: "1rem" }}>
       <Typography variant="body2" align="center">

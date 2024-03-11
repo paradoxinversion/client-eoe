@@ -2,6 +2,7 @@
   "name": "empire-of-evil-client",
   "version": "0.1.0",
   "private": true,
+  "source": "./src/index.html",
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
@@ -22,7 +23,7 @@
   "scripts": {
     "start": "parcel ./src/index.html",
     "build": "parcel build ./src/index.html",
-    "dev": "parcel build --no-cache"
+    "dev": "parcel ./src/index.html --no-cache"
   },
   "browserslist": {
     "production": [

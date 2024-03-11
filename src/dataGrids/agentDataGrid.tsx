@@ -7,27 +7,30 @@ import { selectEntity } from "../features/selectionSlice";
 import { Person } from "empire-of-evil/src/types/interfaces/entities";
 import { GameManager } from "empire-of-evil";
 import 'react-data-grid/lib/styles.css';
-const personDataGridColumns = [
+
+const agentDataGridColumns = [
   { key: "name", name: "Name" },
+  { key: "health", name: "Health" },
+  { key: "intelligence", name: "Intelligence" },
+  { key: "combat", name: "Combat" },
+  { key: "administration", name: "Administration" },
   { key: "zone", name: "Zone" },
   { key: "loyalty", name: "Loyalty" },
-  { key: "intelLevel", name: "Intelligence" },
-  { key: "agent", name: "Agent?" },
   { key: "select", name: "Select", renderCell: dataGridButton },
 ];
 
-interface PersonDataGridProps {
+interface AgentDataGridProps {
   title: string;
-  people: Person[];
+  agents: Person[];
   gameManager: GameManager;
 }
 
-const PersonDataGrid = ({ title, people, gameManager }: PersonDataGridProps) => {
+const AgentDataGrid = ({ title, agents, gameManager }: AgentDataGridProps) => {
   const peopleStore = useAppSelector(state => state.people);
   const dispatch = useAppDispatch();
-  const { gameData } = gameManager;
-  const personDataGridRows = people.map((person) => {
-    const { name: zoneName } = gameData.zones[person.homeZoneId];
+  const zoneStore = useAppSelector(state => state.zones)
+  const agentDataGridRows = agents.map((person) => {
+    const { name: zoneName } = zoneStore[person.homeZoneId];
     const { id, name, loyalty, intelligenceLevel, agent } = person;
     return {
       id,
@@ -37,7 +40,6 @@ const PersonDataGrid = ({ title, people, gameManager }: PersonDataGridProps) => 
       intelLevel: intelligenceLevel,
       agent: !!agent ? <CheckIcon /> : <CloseIcon />,
       select: (row) => {
-        // selectFn && selectFn(peopleStore[row.id]);
         dispatch(selectEntity({
           type: "person",
           selection: peopleStore[row.id]
@@ -53,10 +55,10 @@ const PersonDataGrid = ({ title, people, gameManager }: PersonDataGridProps) => 
       </Box>
       <Paper>
 
-        <DataGrid rows={personDataGridRows} columns={personDataGridColumns} />
+        <DataGrid rows={agentDataGridRows} columns={agentDataGridColumns} />
       </Paper>
     </Box>
   );
 };
 
-export default PersonDataGrid;
+export default AgentDataGrid;

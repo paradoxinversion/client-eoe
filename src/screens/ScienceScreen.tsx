@@ -17,6 +17,7 @@ import {
   DialogContent,
   DialogTitle,
   Chip,
+  DialogActions,
 } from "@mui/material";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import MetricNumber from "../elements/MetricNumber/MetricNumber";
@@ -25,32 +26,35 @@ import PersonDataGrid from "../dataGrids/personDataGrid";
 import { setPeople } from "../features/personSlice";
 import { setBuildings } from "../features/buildingSlice";
 import { useDispatch } from "react-redux";
+import { getPeople } from "empire-of-evil/src/actions/people";
+import { GameManager } from "empire-of-evil";
+import { useAppDispatch } from "../app/hooks";
+import { Building } from "empire-of-evil/src/types/interfaces/entities";
 const columns = [
   { key: "lab", name: "Lab" },
   { key: "maxScientists", name: "Max Scientists" },
   { key: "selectLab", name: "View Laboratory", renderCell: dataGridButton },
 ];
-/**
- *
- * @param {Object} props
- * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
- * @returns
- */
-const ScienceScreen = ({ gameManager, updateGameData }) => {
-  const dispatch = useDispatch();
+interface ScienceScreenProps {
+  gameManager: GameManager;
+
+}
+
+const ScienceScreen = ({ gameManager }: ScienceScreenProps) => {
+  const dispatch = useAppDispatch();
   const [personnelDialogOpen, setPersonnelDialogOpen] = useState(false);
   const { gameData } = gameManager;
-  const [selectedLab, setSelectedLab] = useState(null);
+  const [selectedLab, setSelectedLab] = useState<Building>(null);
   const labs = getOrgLabs(gameManager, gameData.player.organizationId);
   const rows = labs.map((lab) => ({
     lab: lab.name,
     maxScientists: lab.maxPersonnel,
-    cb: () => {
+    selectLab: () => {
       setSelectedLab(lab);
     },
   }));
   return (
-    <Box copmponent="main">
+    <Box component="main">
       <Toolbar />
       <Box component="section">
         <Box component="header" padding="1rem">
@@ -126,15 +130,15 @@ const ScienceScreen = ({ gameManager, updateGameData }) => {
             Select the Agent(s) you would like to work in this Laboratory.
           </Typography>
           <Stack direction="row" spacing={1} padding={1}>
-            {_getAgents(gameManager, {
-              organizationId: gameData.player.organizationId,
-              filter: {
-                zoneId: selectedLab?.zoneId,
-                // department: 2,
-              },
-              exclude: {
-                personnel: true,
-              },
+            {getPeople(gameManager, {
+              // organizationId: gameData.player.organizationId,
+              nationId: gameData.player.empireId,
+              excludePersonnel: true,
+              // zoneId: selectedLab?.zoneId,
+              agentFilter: {
+                department: 2,
+                agentsOnly: true
+              }
             }).map((agent) => {
               return (
                 <Chip
@@ -152,6 +156,9 @@ const ScienceScreen = ({ gameManager, updateGameData }) => {
             })}
           </Stack>
         </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>{setPersonnelDialogOpen(false)}}>Done</Button>
+        </DialogActions>
       </Dialog>
     </Box>
   );
