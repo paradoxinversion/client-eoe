@@ -1,5 +1,5 @@
 import { Box, Paper, Typography } from "@mui/material";
-import { Check as CheckIcon, Close as CloseIcon } from "@mui/icons-material"
+import { Check as CheckIcon, Close as CloseIcon } from "@mui/icons-material";
 import DataGrid from "react-data-grid";
 import { Person } from "empire-of-evil/src/types/interfaces/entities";
 import { GameManager } from "empire-of-evil/src/GameManager";
@@ -22,12 +22,22 @@ interface PersonnelDataGridProps {
   fireFn: Function;
 }
 
-const PersonnelDataGrid = ({ title, personnel, gameManager, fireFn }: PersonnelDataGridProps) => {
-  const people = useAppSelector(state => state.people);
+const PersonnelDataGrid = ({
+  title,
+  personnel,
+  gameManager,
+  fireFn,
+}: PersonnelDataGridProps) => {
+  const people = useAppSelector((state) => state.people);
   const { gameData } = gameManager;
   const personnelDataGridRows = personnel.map((person) => {
     const { name: zoneName } = gameData.zones[person.homeZoneId];
-    const { id, name, loyalty, intelligenceLevel, agent } = person;
+    const {
+      id,
+      name,
+      intelAttributes: { loyalty, intelligenceLevel },
+      agent,
+    } = person;
     return {
       id,
       zone: zoneName,
@@ -38,8 +48,8 @@ const PersonnelDataGrid = ({ title, personnel, gameManager, fireFn }: PersonnelD
       select: () => {},
       fire: (row) => {
         // console.log(people[row.id]);
-        fireFn(people[row.id])
-      }
+        fireFn(people[row.id]);
+      },
     };
   });
 
@@ -49,8 +59,10 @@ const PersonnelDataGrid = ({ title, personnel, gameManager, fireFn }: PersonnelD
         <Typography variant="overline">{title}</Typography>
       </Box>
       <Paper>
-
-        <DataGrid rows={personnelDataGridRows} columns={personnelDataGridColumns} />
+        <DataGrid
+          rows={personnelDataGridRows}
+          columns={personnelDataGridColumns}
+        />
       </Paper>
     </Box>
   );

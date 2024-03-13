@@ -24,6 +24,7 @@ import { setGoverningOrganizations } from "../features/governingOrganizationSlic
 import { setZones } from "../features/zoneSlice";
 import { setBuildings } from "../features/buildingSlice";
 import { setPeople } from "../features/personSlice";
+import EventScreenIntruder from "../elements/EventScreens/Intruder";
 
 const eventScreenMap = {
   "EVIL Applicant": EventScreenRecruit,
@@ -32,6 +33,7 @@ const eventScreenMap = {
   "Attack Zone": EventScreenCombatResults,
   "Monthly Report": MonthlyReportScreen,
   "Recon Zone": EventScreenReconZone,
+  "Intruder Alert!": EventScreenIntruder,
 };
 
 /**

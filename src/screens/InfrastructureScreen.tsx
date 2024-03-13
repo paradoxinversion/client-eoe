@@ -23,6 +23,7 @@ import { useState } from "react";
 import { getPeople } from "empire-of-evil/src/actions/people";
 import {
   addPersonnel,
+  getInfrastructureLoad,
   getResourceOutput,
   removePersonnel,
 } from "empire-of-evil/src/buildings";
@@ -31,6 +32,10 @@ import { GameData } from "empire-of-evil/src/GameManager";
 import { setPeople } from "../features/personSlice";
 import { setBuildings } from "../features/buildingSlice";
 import PersonnelDataGrid from "../dataGrids/personnelDataGrid";
+import {
+  getInfrastructure,
+  getOrgResources,
+} from "empire-of-evil/src/organization";
 
 interface InfrastructureScreenProps {
   gameManager: GameManager;
@@ -56,6 +61,7 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
                 zoneId: selectedBuilding?.zoneId,
                 excludePersonnel: true,
                 agentFilter: {
+                  excludeParticipants: true,
                   agentsOnly: true,
                   department:
                     selectedBuilding.type === "bank"
@@ -160,6 +166,18 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
               }).length
             }
           />
+          <MetricNumber
+            title="Infrastructure"
+            number={` ${
+              getOrgResources(
+                gameManager,
+                gameManager.gameData.player.organizationId
+              ).infrastructure
+            }/${getInfrastructureLoad(
+              gameManager,
+              gameManager.gameData.player.organizationId
+            )}`}
+          />
         </Stack>
         <Divider />
         {selectedBuilding ? (
@@ -202,6 +220,13 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
               <Typography>
                 Housing Output:{" "}
                 {getResourceOutput(gameManager, selectedBuilding).housing}
+              </Typography>
+              <Typography>
+                Infrastructure Output:{" "}
+                {
+                  getResourceOutput(gameManager, selectedBuilding)
+                    .infrastructure
+                }
               </Typography>
               <PersonnelDataGrid
                 fireFn={(person) => {
@@ -287,6 +312,24 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
                   organizationId: gameManager.gameData.player.organizationId,
                 })}
                 title={"Apartments"}
+                cb={(entity) => {
+                  console.log("Select", entity);
+                  dispatch(
+                    selectEntity({
+                      type: "building",
+                      selection: buildingsData[entity.id],
+                    })
+                  );
+                }}
+              />
+              <BuildingDataGrid
+                gridHeight={"200px"}
+                gameManager={gameManager}
+                buildings={buildings.getBuildings(gameManager, {
+                  type: "office",
+                  organizationId: gameManager.gameData.player.organizationId,
+                })}
+                title={"Offices"}
                 cb={(entity) => {
                   console.log("Select", entity);
                   dispatch(

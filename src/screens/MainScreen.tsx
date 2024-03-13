@@ -25,6 +25,11 @@ import ZonePanel from "../elements/ZonePanel";
 import BuildingDataGrid from "../dataGrids/buildingDataGrid";
 import * as eoe from "empire-of-evil";
 import PersonDataGrid from "../dataGrids/personDataGrid";
+import {
+  getEvilEmpire,
+  getOrgResources,
+} from "empire-of-evil/src/organization";
+import { getInfrastructureLoad } from "empire-of-evil/src/buildings";
 
 /**
  *
@@ -143,9 +148,20 @@ const MainScreen = ({
             <MetricNumber title="Expenses" number={payroll + buildingUpkeep} />
             <MetricNumber
               title="Infrastructure"
-              number={payroll + buildingUpkeep}
+              number={`${
+                getOrgResources(
+                  gameManager,
+                  gameManager.gameData.player.organizationId
+                ).infrastructure
+              }/${getInfrastructureLoad(
+                gameManager,
+                gameManager.gameData.player.organizationId
+              )}`}
             />
-            <MetricNumber title="Science" number={science} />
+            <MetricNumber
+              title="Science"
+              number={`${getEvilEmpire(gameManager).science} (+${science})`}
+            />
             <MetricNumber
               title="Zones"
               number={`${

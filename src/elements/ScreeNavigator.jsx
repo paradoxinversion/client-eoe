@@ -20,7 +20,7 @@ import {
   TravelExplore as TravelExploreIcon,
   TipsAndUpdates as TipsAndUpdatesIcon,
   Home as HomeIcon,
-  LocationCity as LocationCityIcon
+  LocationCity as LocationCityIcon,
 } from "@mui/icons-material";
 import TitleScreenOptions from "./ScreenNavigator/TitleScreenOptions";
 import { useState } from "react";
@@ -68,19 +68,19 @@ const screens = [
     icon: <GroupsIcon />,
   },
   {
-    screen: "science",
-    title: "Science",
-    icon: <FunctionsIcon />,
+    screen: "infrastructure",
+    title: "Infrastructure",
+    icon: <LocationCityIcon />,
   },
+  // {
+  //   screen: "science",
+  //   title: "Science",
+  //   icon: <FunctionsIcon />,
+  // },
   {
     screen: "plots",
     title: "Plots",
     icon: <TipsAndUpdatesIcon />,
-  },
-  {
-    screen: "infrastructure",
-    title: "Infrastructure",
-    icon: <LocationCityIcon />,
   },
 ];
 
@@ -116,11 +116,11 @@ function ScreenNavigator({ gameManager }) {
                 startIcon={screen.icon && screen.icon}
                 className="flex items-center tracking-wider text-sm p-2"
                 onClick={() => {
-                  dispatch(clearSelections())
+                  dispatch(clearSelections());
                   dispatch(setScreen(screen.screen));
                 }}
               >
-               {screen.title}
+                {screen.title}
               </Button>
             ))}
           </List>
@@ -134,7 +134,7 @@ function ScreenNavigator({ gameManager }) {
           </Button>
           <Dialog open={saveDialogOpen}>
             <DialogTitle>Save Your Data?</DialogTitle>
-            <DialogContent sx={{width: '300px'}}>
+            <DialogContent sx={{ width: "300px" }}>
               <DialogContentText>
                 Save your data? It will be saved to your hard drive.
               </DialogContentText>

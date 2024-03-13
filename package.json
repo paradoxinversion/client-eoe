@@ -4,6 +4,7 @@
   "private": true,
   "source": "./src/index.html",
   "homepage": "https://paradoxinversion.github.io/client-eoe",
+  "publicUrl": "https://paradoxinversion.github.io/client-eoe",
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
@@ -26,7 +27,7 @@
     "build": "parcel build ./src/index.html",
     "dev": "parcel ./src/index.html --no-cache",
     "predeploy": "yarn run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "browserslist": {
     "production": [

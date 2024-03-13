@@ -1,4 +1,4 @@
-import { getActivityParticipants } from "empire-of-evil/src/plots";
+import { Activity, getActivityParticipants } from "empire-of-evil/src/plots";
 import { useState, useRef, useEffect } from "react";
 import AgentSelector from "../elements/AgentSelector/AgentSelector";
 import AttackZonePlot from "../elements/AttackZonePlot";
@@ -20,8 +20,11 @@ import {
 import DataGrid from "react-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { selectEntity } from "../features/selectionSlice";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 
-const eoe = require("empire-of-evil");
+// const eoe = require("empire-of-evil");
+import * as eoe from "empire-of-evil";
+import { setPeople } from "../features/personSlice";
 
 const plotsWidgets = {
   "attack-zone": AttackZonePlot,
@@ -46,10 +49,10 @@ const activitiesColumns = [
  * @returns
  */
 const PlotsScreen = ({ gameManager }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { gameData, activityManager, plotManager } = gameManager;
-  const [currentActivity, setCurrentActivity] = useState(null);
-  const currentPlot = useSelector((state) => state.selections.plot);
+  const [currentActivity, setCurrentActivity] = useState<Activity | null>(null);
+  const currentPlot = useAppSelector((state) => state.selections.plot);
   const [plotWidgetOpen, setPlotWidgetOpen] = useState(false);
   const onClickActivity = (activity) => {
     dispatch(
@@ -68,12 +71,18 @@ const PlotsScreen = ({ gameManager }) => {
    */
   const onUpdateActivityParticipant = (participantId, add) => {
     if (add) {
-      currentActivity.addAgent(gameManager, gameData.people[participantId].id);
-    } else {
-      currentActivity.removeAgent(
+      const update = currentActivity.addAgent(
         gameManager,
         gameData.people[participantId].id
       );
+      dispatch(setPeople(update.people));
+    } else {
+      const update = currentActivity.removeAgent(
+        gameManager,
+        gameData.people[participantId].id
+      );
+
+      dispatch(setPeople(update.people));
     }
   };
   const plotRows = plotManager.plotQueue.map((plot, index) => ({
@@ -119,10 +128,12 @@ const PlotsScreen = ({ gameManager }) => {
               </p>
             </Box>
             <AgentSelector
-              agentsArray={eoe.organizations._getAgents(gameManager, {
+              agentsArray={eoe.actions.people.getPeople(gameManager, {
                 organizationId: gameData.player.organizationId,
-                exclude: {
-                  unavailable: true,
+                excludePersonnel: true,
+                agentFilter: {
+                  department: -1,
+                  excludeParticipants: true,
                 },
               })}
               cb={onUpdateActivityParticipant}

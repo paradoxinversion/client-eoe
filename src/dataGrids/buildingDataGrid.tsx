@@ -1,6 +1,7 @@
 import { Box, Typography, Paper } from "@mui/material";
 import DataGrid from "react-data-grid";
 import { dataGridButton } from "../datagridRenderers/dataGridButton";
+import { Building } from "empire-of-evil/src/types/interfaces/entities";
 
 const buildingDataGridColumns = [
   { key: "name", name: "Name" },
@@ -9,6 +10,7 @@ const buildingDataGridColumns = [
   { key: "upkeep", name: "Upkeep/mo" },
   { key: "personnel", name: "Personnel" },
   { key: "housingCapacity", name: "Housing" },
+  { key: "infrastructure", name: "Infrastructure" },
   { key: "wealthBonus", name: "Wealth" },
   { key: "cb", name: "Select", renderCell: dataGridButton },
 ];
@@ -19,6 +21,8 @@ const BuildingDataGrid = ({
   gameManager,
   gridHeight,
   cb,
+}: {
+  buildings: Building[];
 }) => {
   const { gameData } = gameManager;
   const buildingDataGridRows = buildings.map((building) => {
@@ -35,6 +39,7 @@ const BuildingDataGrid = ({
       personnel: `${personnel.length}/${maxPersonnel}`,
       housingCapacity,
       wealthBonus,
+      infrastructure: building.resourceAttributes.infrastructure,
       cb: (b) => {
         console.log("foo");
         cb && cb(b);
