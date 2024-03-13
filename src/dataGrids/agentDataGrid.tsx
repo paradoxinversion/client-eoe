@@ -1,12 +1,12 @@
 import { Box, Paper, Typography } from "@mui/material";
-import { Check as CheckIcon, Close as CloseIcon } from "@mui/icons-material"
+import { Check as CheckIcon, Close as CloseIcon } from "@mui/icons-material";
 import DataGrid from "react-data-grid";
 import { dataGridButton } from "../datagridRenderers/dataGridButton";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { selectEntity } from "../features/selectionSlice";
 import { Person } from "empire-of-evil/src/types/interfaces/entities";
 import { GameManager } from "empire-of-evil";
-import 'react-data-grid/lib/styles.css';
+import "react-data-grid/lib/styles.css";
 
 const agentDataGridColumns = [
   { key: "name", name: "Name" },
@@ -26,24 +26,37 @@ interface AgentDataGridProps {
 }
 
 const AgentDataGrid = ({ title, agents, gameManager }: AgentDataGridProps) => {
-  const peopleStore = useAppSelector(state => state.people);
+  const peopleStore = useAppSelector((state) => state.people);
   const dispatch = useAppDispatch();
-  const zoneStore = useAppSelector(state => state.zones)
+  const zoneStore = useAppSelector((state) => state.zones);
   const agentDataGridRows = agents.map((person) => {
     const { name: zoneName } = zoneStore[person.homeZoneId];
-    const { id, name, loyalty, intelligenceLevel, agent } = person;
+    const {
+      id,
+      name,
+      agent,
+      intelAttributes: { loyalty, intelligenceLevel },
+      vitalAttributes: { health, currentHealth },
+      basicAttributes: { intelligence, combat, administration },
+    } = person;
     return {
       id,
       zone: zoneName,
+      health: `${currentHealth}/${health}`,
+      intelligence,
+      combat,
+      administration,
       name,
       loyalty,
       intelLevel: intelligenceLevel,
       agent: !!agent ? <CheckIcon /> : <CloseIcon />,
       select: (row) => {
-        dispatch(selectEntity({
-          type: "person",
-          selection: peopleStore[row.id]
-        }))
+        dispatch(
+          selectEntity({
+            type: "person",
+            selection: peopleStore[row.id],
+          })
+        );
       },
     };
   });
@@ -54,7 +67,6 @@ const AgentDataGrid = ({ title, agents, gameManager }: AgentDataGridProps) => {
         <Typography variant="overline">{title}</Typography>
       </Box>
       <Paper>
-
         <DataGrid rows={agentDataGridRows} columns={agentDataGridColumns} />
       </Paper>
     </Box>

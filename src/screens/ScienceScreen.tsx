@@ -37,7 +37,6 @@ const columns = [
 ];
 interface ScienceScreenProps {
   gameManager: GameManager;
-
 }
 
 const ScienceScreen = ({ gameManager }: ScienceScreenProps) => {
@@ -48,7 +47,7 @@ const ScienceScreen = ({ gameManager }: ScienceScreenProps) => {
   const labs = getOrgLabs(gameManager, gameData.player.organizationId);
   const rows = labs.map((lab) => ({
     lab: lab.name,
-    maxScientists: lab.maxPersonnel,
+    maxScientists: lab.basicAttributes.maxPersonnel,
     selectLab: () => {
       setSelectedLab(lab);
     },
@@ -137,8 +136,8 @@ const ScienceScreen = ({ gameManager }: ScienceScreenProps) => {
               // zoneId: selectedLab?.zoneId,
               agentFilter: {
                 department: 2,
-                agentsOnly: true
-              }
+                agentsOnly: true,
+              },
             }).map((agent) => {
               return (
                 <Chip
@@ -148,7 +147,7 @@ const ScienceScreen = ({ gameManager }: ScienceScreenProps) => {
                     gameManager.updateGameData(updatedGameData);
                     // updateGameData(updatedGameData);
                     dispatch(setPeople(gameManager.gameData.people));
-                    dispatch(setBuildings(gameManager.gameData.buildings))
+                    dispatch(setBuildings(gameManager.gameData.buildings));
                     setPersonnelDialogOpen(false);
                   }}
                 />
@@ -157,7 +156,13 @@ const ScienceScreen = ({ gameManager }: ScienceScreenProps) => {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=>{setPersonnelDialogOpen(false)}}>Done</Button>
+          <Button
+            onClick={() => {
+              setPersonnelDialogOpen(false);
+            }}
+          >
+            Done
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>

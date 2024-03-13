@@ -1,12 +1,12 @@
 import { Box, Paper, Typography } from "@mui/material";
-import { Check as CheckIcon, Close as CloseIcon } from "@mui/icons-material"
+import { Check as CheckIcon, Close as CloseIcon } from "@mui/icons-material";
 import DataGrid from "react-data-grid";
 import { dataGridButton } from "../datagridRenderers/dataGridButton";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { selectEntity } from "../features/selectionSlice";
 import { Person, Zone } from "empire-of-evil/src/types/interfaces/entities";
 import { GameManager } from "empire-of-evil";
-import 'react-data-grid/lib/styles.css';
+import "react-data-grid/lib/styles.css";
 
 const zoneDataGridColumns = [
   { key: "name", name: "Name" },
@@ -23,12 +23,18 @@ interface ZoneDataGridProps {
 }
 
 const ZoneDataGrid = ({ title, zones, gameManager }: ZoneDataGridProps) => {
-  const peopleStore = useAppSelector(state => state.people);
+  // const peopleStore = useAppSelector((state) => state.people);
   const dispatch = useAppDispatch();
-  const zoneStore = useAppSelector(state => state.zones)
+  const zoneStore = useAppSelector((state) => state.zones);
   const agentDataGridRows = zones.map((zone) => {
-    const { id, name, intelligenceLevel, wealth, size } = zoneStore[zone.id];
-    // const { id, name, loyalty, intelligenceLevel, agent } = person;
+    const {
+      id,
+      name,
+      wealth,
+      size,
+      intelAttributes: { intelligenceLevel },
+    } = zoneStore[zone.id];
+
     return {
       id,
       name,
@@ -36,10 +42,12 @@ const ZoneDataGrid = ({ title, zones, gameManager }: ZoneDataGridProps) => {
       wealth,
       size,
       select: (row) => {
-        dispatch(selectEntity({
-          type: "zone",
-          selection: zoneStore[row.id]
-        }))
+        dispatch(
+          selectEntity({
+            type: "zone",
+            selection: zoneStore[row.id],
+          })
+        );
       },
     };
   });
@@ -50,7 +58,6 @@ const ZoneDataGrid = ({ title, zones, gameManager }: ZoneDataGridProps) => {
         <Typography variant="overline">{title}</Typography>
       </Box>
       <Paper>
-
         <DataGrid rows={agentDataGridRows} columns={zoneDataGridColumns} />
       </Paper>
     </Box>

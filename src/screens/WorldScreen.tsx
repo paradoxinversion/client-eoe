@@ -53,7 +53,7 @@ const WorldScreen = ({ gameManager }) => {
       nation: nation.name,
       population: getNationCitizens(gameManager, nation.id).length,
       agents: getAgents(gameManager, nation.organizationId).length,
-      zones: nation.size,
+      zones: getZones(gameManager, { nationId: nation.id }).length,
       viewNation: () => {
         dispatch(
           selectEntity({

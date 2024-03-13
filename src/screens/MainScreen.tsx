@@ -18,9 +18,7 @@ import {
   Stack,
   Paper,
 } from "@mui/material";
-import {
-  OpenWith as OpenWithIcon,
-} from "@mui/icons-material";
+import { OpenWith as OpenWithIcon } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { setScreen } from "../features/screenSlice";
 import ZonePanel from "../elements/ZonePanel";
@@ -37,6 +35,8 @@ import PersonDataGrid from "../dataGrids/personDataGrid";
 const MainScreen = ({
   // setScreen,
   gameManager,
+}: {
+  gameManager: eoe.GameManager;
 }) => {
   const dispatch = useDispatch();
   const { gameData } = gameManager;
@@ -49,6 +49,10 @@ const MainScreen = ({
     zoneId: empireZones[0].id,
     // nationId: gameManager.
   });
+  const empireResources = eoe.organizations.getOrgResources(
+    gameManager,
+    gameData.player.organizationId
+  );
   const empireWealth = eoe.zones.getZonesWealth(gameManager, empireZones);
   const infraCost = eoe.buildings.getInfrastructureLoad(
     gameManager,
@@ -70,20 +74,16 @@ const MainScreen = ({
     gameManager,
     gameData.player.organizationId
   );
-  const wealthBonuses = eoe.buildings.getWealthBonuses(
-    gameManager,
-    gameData.player.organizationId
-  );
 
   useEffect(() => {
     const gameOver = checkGameOverState(gameManager);
     if (gameOver) {
       dispatch(setScreen("game-over"));
     }
-    // const victory = checkVictoryState(gameData);
-    // if (victory){
-    //   setScreen("victory")
-    // }
+    const victory = checkVictoryState(gameManager);
+    if (victory) {
+      dispatch(setScreen("victory"));
+    }
   }, [gameManager, setScreen]);
   return (
     <Box>
@@ -123,13 +123,22 @@ const MainScreen = ({
             spacing={"1rem"}
             justifyContent={"center"}
           >
-            <MetricNumber
+            {/* <MetricNumber
               title="Wealth"
               number={`${
                 gameData.governingOrganizations[gameData.player.organizationId]
                   .wealth
               }
                   (+${parseInt(empireWealth + wealthBonuses)})`}
+            /> */}
+            <MetricNumber
+              title="Wealth"
+              number={`${
+                gameManager.gameData.governingOrganizations[
+                  gameData.player.organizationId
+                ].wealth
+              }
+                  (+${empireResources.wealth})`}
             />
             <MetricNumber title="Expenses" number={payroll + buildingUpkeep} />
             <MetricNumber

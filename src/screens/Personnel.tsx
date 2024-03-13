@@ -39,6 +39,7 @@ import {
 } from "empire-of-evil/src/actions/people";
 import { setPeople } from "../features/personSlice";
 import { fireAgent, terminateAgent } from "empire-of-evil/src/organization";
+import AgentDataGrid from "../dataGrids/agentDataGrid";
 
 interface PersonnelScreenProps {
   gameManager: eoe.GameManager;
@@ -100,28 +101,47 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
               title="Henchmen"
               number={
                 getPeople(gameManager, {
+                  organizationId: gameData.player.organizationId,
                   agentFilter: {
                     department: 0,
                   },
                 }).length
               }
             />
-            <MetricNumber title="Admins" number={
-               getPeople(gameManager, {
-                agentFilter: {
-                  department: 1,
-                },
-              }).length
-            } />
-            <MetricNumber title="Scientists" number={
-               getPeople(gameManager, {
-                agentFilter: {
-                  department: 2,
-                  
-                },
-              }).length
-            } />
-            <MetricNumber title="Deceased" number={9999} />
+            <MetricNumber
+              title="Admins"
+              number={
+                getPeople(gameManager, {
+                  organizationId: gameData.player.organizationId,
+                  agentFilter: {
+                    department: 1,
+                  },
+                }).length
+              }
+            />
+            <MetricNumber
+              title="Scientists"
+              number={
+                getPeople(gameManager, {
+                  organizationId: gameData.player.organizationId,
+                  agentFilter: {
+                    department: 2,
+                  },
+                }).length
+              }
+            />
+            <MetricNumber
+              title="Deceased"
+              number={
+                getPeople(gameManager, {
+                  organizationId: gameData.player.organizationId,
+                  deceasedOnly: true,
+                  agentFilter: {
+                    department: 2,
+                  },
+                }).length
+              }
+            />
           </Stack>
         </Box>
         {selectedAgent ? (
@@ -190,33 +210,55 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
             <Dialog open={fireAgentDialogOpen}>
               <DialogTitle>Fire Agent</DialogTitle>
               <DialogContent>
-                <Typography>Would you like to fire or TERMINATE this agent?</Typography>
-                <Typography>Firing this agent will remove them from the Empire roster.</Typography>
-                <Typography>TERMINATING this agent will remove them from their mortal coil.</Typography>
+                <Typography>
+                  Would you like to fire or TERMINATE this agent?
+                </Typography>
+                <Typography>
+                  Firing this agent will remove them from the Empire roster.
+                </Typography>
+                <Typography>
+                  TERMINATING this agent will remove them from their mortal
+                  coil.
+                </Typography>
               </DialogContent>
               <DialogActions>
-                <Button onClick={()=>{setFireAgentDialogOpen(false)}}>Cancel</Button>
-                <Button onClick={()=>{
-                  const update = fireAgent(selectedAgent);
-                  const ug = gameManager.updateGameData(update);
-                  dispatch(clearSelections());
-                  dispatch(setPeople(ug.people))
-                  setFireAgentDialogOpen(false);
-                }}>Fire</Button>
-                <Button onClick={()=>{
-                  const update = terminateAgent(selectedAgent);
-                  const ug = gameManager.updateGameData(update);
-                  dispatch(clearSelections());
-                  dispatch(setPeople(ug.people))
-                  setFireAgentDialogOpen(false);
-                }}>Terminate</Button>
+                <Button
+                  onClick={() => {
+                    setFireAgentDialogOpen(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    const update = fireAgent(selectedAgent);
+                    const ug = gameManager.updateGameData(update);
+                    dispatch(clearSelections());
+                    dispatch(setPeople(ug.people));
+                    setFireAgentDialogOpen(false);
+                  }}
+                >
+                  Fire
+                </Button>
+                <Button
+                  onClick={() => {
+                    const update = terminateAgent(selectedAgent);
+                    const ug = gameManager.updateGameData(update);
+                    dispatch(clearSelections());
+                    dispatch(setPeople(ug.people));
+                    setFireAgentDialogOpen(false);
+                  }}
+                >
+                  Terminate
+                </Button>
               </DialogActions>
             </Dialog>
             <Divider />
             <Box>
               <Button
                 disabled={
-                  selectedAgent.id === gameManager.gameData.player.overlordId
+                  selectedAgent.id === gameManager.gameData.player.overlordId ||
+                  selectedAgent.isPersonnel
                 }
                 onClick={() => {
                   setChangeDepartmentOpen(true);
@@ -226,7 +268,8 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
               </Button>
               <Button
                 disabled={
-                  selectedAgent.id === gameManager.gameData.player.overlordId
+                  selectedAgent.id === gameManager.gameData.player.overlordId ||
+                  selectedAgent.isPersonnel
                 }
                 onClick={() => {
                   setFireAgentDialogOpen(true);
@@ -236,12 +279,12 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
               </Button>
             </Box>
             <Divider />
-            <Box padding={'1rem'}>
-              
+            <Box padding={"1rem"}>
               <Box>
                 <Typography>Agent Profile</Typography>
                 <Typography>
-                  {selectedAgent.name} ({getAgentDepartment(selectedAgent.agent)})
+                  {selectedAgent.name} (
+                  {getAgentDepartment(selectedAgent.agent)})
                 </Typography>
               </Box>
               {selectedAgent.agent && selectedAgent.agent.department !== 3 && (
@@ -263,20 +306,25 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
                   </Button>
                 </Box>
               )}
+              <Typography>Salary: {selectedAgent.agent.salary}</Typography>
               <Typography>Attributes</Typography>
               <Box>
                 <Typography>
-                  Administration: {selectedAgent.administration}
+                  Administration: {selectedAgent.basicAttributes.administration}
                 </Typography>
-                <Typography>Combat: {selectedAgent.combat}</Typography>
                 <Typography>
-                  Intelligence: {selectedAgent.intelligence}
+                  Combat: {selectedAgent.basicAttributes.combat}
                 </Typography>
-                <Typography>Leadership: {selectedAgent.leadership}</Typography>
+                <Typography>
+                  Intelligence: {selectedAgent.basicAttributes.intelligence}
+                </Typography>
+                <Typography>
+                  Leadership: {selectedAgent.basicAttributes.leadership}
+                </Typography>
               </Box>
             </Box>
-              <Divider />
-            <Box padding='1rem'>
+            <Divider />
+            <Box padding="1rem">
               <Box>
                 <PersonDataGrid
                   people={getPeople(gameManager, {
@@ -295,9 +343,9 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
           <Box padding="1rem">
             <Grid container columns={10}>
               <Grid item xs={10}>
-                <PersonDataGrid
+                <AgentDataGrid
                   title={`EVIL Employee Roster (${currentAgents}/${maxAgents})`}
-                  people={eoe.organizations.getAgents(
+                  agents={eoe.organizations.getAgents(
                     gameManager,
                     gameData.player.organizationId
                   )}

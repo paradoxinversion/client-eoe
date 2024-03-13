@@ -21,7 +21,11 @@ import { clearSelections, selectEntity } from "../features/selectionSlice";
 import PersonDataGrid from "../dataGrids/personDataGrid";
 import { useState } from "react";
 import { getPeople } from "empire-of-evil/src/actions/people";
-import { addPersonnel, getResourceOutput, removePersonnel } from "empire-of-evil/src/buildings";
+import {
+  addPersonnel,
+  getResourceOutput,
+  removePersonnel,
+} from "empire-of-evil/src/buildings";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { GameData } from "empire-of-evil/src/GameManager";
 import { setPeople } from "../features/personSlice";
@@ -50,21 +54,32 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
             {selectedBuilding &&
               getPeople(gameManager, {
                 zoneId: selectedBuilding?.zoneId,
-                agentFilter: { agentsOnly: true, department: selectedBuilding.type === "bank" ? 1 : selectedBuilding.type === "laboratory" ? 2 : -1 },
+                excludePersonnel: true,
+                agentFilter: {
+                  agentsOnly: true,
+                  department:
+                    selectedBuilding.type === "bank"
+                      ? 1
+                      : selectedBuilding.type === "laboratory"
+                      ? 2
+                      : -1,
+                },
               }).map((person) => {
                 let relatedAttributeStat;
                 let relatedAttributeName = "";
                 switch (selectedBuilding.type) {
                   case "bank":
-                    relatedAttributeStat = person.administration;
+                    relatedAttributeStat =
+                      person.basicAttributes.administration;
                     relatedAttributeName = "Administration";
                     break;
                   case "laboratory":
-                    relatedAttributeStat = person.intelligence;
+                    relatedAttributeStat = person.basicAttributes.intelligence;
                     relatedAttributeName = "Intelligence";
                     break;
                   case "office":
-                    relatedAttributeStat = person.administration;
+                    relatedAttributeStat =
+                      person.basicAttributes.administration;
                     relatedAttributeName = "Administration";
                     break;
                   default:
@@ -159,7 +174,7 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
             <Button
               disabled={
                 selectedBuilding?.personnel.length ===
-                selectedBuilding?.maxPersonnel
+                selectedBuilding?.basicAttributes.maxPersonnel
               }
               onClick={() => {
                 setAssignStaffOpen(true);
@@ -173,27 +188,39 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
               <Stack>
                 <Typography>{selectedBuilding.type}</Typography>
                 <Typography>
-                  Upkeep Cost: ${selectedBuilding.upkeepCost}
+                  Upkeep Cost: ${selectedBuilding.basicAttributes.upkeepCost}
                 </Typography>
               </Stack>
-              <Typography>Science Output: {getResourceOutput(gameManager, selectedBuilding).science}</Typography>
+              <Typography>
+                Science Output:{" "}
+                {getResourceOutput(gameManager, selectedBuilding).science}
+              </Typography>
+              <Typography>
+                Wealth Output:{" "}
+                {getResourceOutput(gameManager, selectedBuilding).wealth}
+              </Typography>
+              <Typography>
+                Housing Output:{" "}
+                {getResourceOutput(gameManager, selectedBuilding).housing}
+              </Typography>
               <PersonnelDataGrid
-                fireFn={(person)=>{
-                  const update = removePersonnel(
-                    person,
-                    selectedBuilding
-                  );
+                fireFn={(person) => {
+                  const update = removePersonnel(person, selectedBuilding);
 
                   gameManager.updateGameData(update);
                   dispatch(setBuildings(update.buildings));
                   dispatch(setPeople(update.people));
-                  dispatch(selectEntity({
-                    type: 'building',
-                    selection: update.buildings[selectedBuilding.id]
-                  }))
+                  dispatch(
+                    selectEntity({
+                      type: "building",
+                      selection: update.buildings[selectedBuilding.id],
+                    })
+                  );
                 }}
                 title="Personnel"
-                personnel={selectedBuilding.personnel.map((id) => peopleData[id])}
+                personnel={selectedBuilding.personnel.map(
+                  (id) => peopleData[id]
+                )}
                 gameManager={gameManager}
               />
             </Box>
