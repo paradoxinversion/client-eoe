@@ -15,7 +15,10 @@ import {
   Stack,
   Paper,
 } from "@mui/material";
-import { OpenWith as OpenWithIcon } from "@mui/icons-material";
+import {
+  OpenWith as OpenWithIcon,
+  NotificationImportant as NotificationImportantIcon,
+} from "@mui/icons-material";
 import { setScreen } from "../../features/screenSlice";
 import BuildingDataGrid from "../../dataGrids/buildingDataGrid";
 import * as eoe from "empire-of-evil";
@@ -142,48 +145,11 @@ const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
       <Box padding="1rem">
         <Paper sx={{ width: "100%", padding: "0.5rem" }}>
           <Stack spacing={2} direction="row" alignItems="center">
-            <OpenWithIcon />
-            <Typography>Foo</Typography>
-            <Typography>Bar</Typography>
+            <NotificationImportantIcon />
+            <Typography>Click the date to end your turn.</Typography>
           </Stack>
         </Paper>
       </Box>
-      <Grid
-        spacing="1rem"
-        container
-        id="overview-holdings"
-        padding="1rem"
-        component="section"
-        columns={10}
-      >
-        <Grid item xs={5}>
-          <Card sx={{ padding: "1rem" }}>
-            <ZoneDataGrid
-              gameManager={gameManager}
-              zones={empireZones}
-              title="Empire Zones"
-            />
-          </Card>
-        </Grid>
-        <Grid item xs={5}>
-          <Card sx={{ padding: "1rem" }}>
-            <BuildingDataGrid
-              title={"Empire Buildings"}
-              buildings={buildings}
-              gameManager={gameManager}
-            />
-          </Card>
-        </Grid>
-        <Grid item xs={5}>
-          <Card sx={{ padding: "1rem" }}>
-            <PersonDataGrid
-              title={"People"}
-              people={people}
-              gameManager={gameManager}
-            />
-          </Card>
-        </Grid>
-      </Grid>
     </>
   );
 };

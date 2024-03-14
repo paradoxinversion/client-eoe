@@ -12,6 +12,7 @@ import {
   Box,
   Container,
   Toolbar,
+  Divider,
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setInitialized } from "../../features/gameManagerSlice";
@@ -53,21 +54,23 @@ const NewGameScreen = ({ gameManager }) => {
   };
   return (
     <>
-      <Box>
-        <Typography>Welcome to your EVIL Interface</Typography>
+      <Box padding={"1rem"}>
+        <Typography variant="h3">Welcome to your EVIL Interface</Typography>
+      </Box>
+      <Divider />
+
+      <Box padding={"1rem"} component="form">
         <Typography>
           Welcome, Overlord! Before we can authorize your session and take you
           to the Dashboard, we'll need to handle some <em>minor</em> onboarding
           items.
         </Typography>
-      </Box>
-      <Box component="form">
         <TextField
-          label="Overlord Name"
+          label="Overlord Name (Optional)"
           onChange={(e) => setOverlordName(e.currentTarget.value)}
         />
       </Box>
-      <Button onClick={onNewGame}>Start the Game</Button>
+      <Button onClick={onNewGame}>Take Control</Button>
     </>
   );
 };

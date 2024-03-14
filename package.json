@@ -15,6 +15,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/webpack": "^5.28.5",
     "@types/webpack-dev-server": "^4.7.2",
+    "cross-env": "^7.0.3",
     "empire-of-evil": "../empire-of-evil",
     "react": "^18.2.0",
     "react-data-grid": "^7.0.0-beta.42",
@@ -27,9 +28,9 @@
     "clean": "rm dist/bundle.js",
     "start": "parcel ./src/index.html",
     "build-dev": "webpack --mode development",
-    "build-prod": "webpack --mode production",
+    "build-prod": "cross-env NODE_ENV=production webpack --mode production ",
     "dev": "webpack serve --hot",
-    "predeploy": "rm -rf ./dist && yarn run build",
+    "predeploy": "yarn run build-prod",
     "deploy": "gh-pages -d dist"
   },
   "browserslist": {

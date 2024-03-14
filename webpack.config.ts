@@ -50,7 +50,7 @@ const config: webpack.Configuration = {
   devtool: "eval-source-map",
   plugins: [
     new HtmlWebpackPlugin({
-      title: "Foobar",
+      title: "Empire of Evil",
       templateContent: ({ htmlWebpackPlugin }) =>
         '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' +
         htmlWebpackPlugin.options.title +
