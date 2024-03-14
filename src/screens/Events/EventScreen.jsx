@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import EventScreenCombatResults from "../elements/EventScreenCombatResults";
-import EventScreenProceed from "../elements/EventScreenProceed";
-import EventScreenRecruit from "../elements/EventScreenRecruit";
-import MonthlyReportScreen from "./MonthlyReportScreen";
-import Modal from "../elements/Modal";
-import EventScreenReconZone from "../elements/EventScreenReconZone";
+import EventScreenCombatResults from "../../elements/EventScreenCombatResults";
+import EventScreenProceed from "../../elements/EventScreenProceed";
+import EventScreenRecruit from "../../elements/EventScreenRecruit";
+import MonthlyReportScreen from "../MonthlyReportScreen";
+import Modal from "../../elements/Modal";
+import EventScreenReconZone from "../../elements/EventScreenReconZone";
 import { GameManager } from "empire-of-evil";
 import {
   Box,
@@ -18,13 +18,13 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
-import { setScreen } from "../features/screenSlice";
-import { setNations } from "../features/nationSlice";
-import { setGoverningOrganizations } from "../features/governingOrganizationSlice";
-import { setZones } from "../features/zoneSlice";
-import { setBuildings } from "../features/buildingSlice";
-import { setPeople } from "../features/personSlice";
-import EventScreenIntruder from "../elements/EventScreens/Intruder";
+import { setScreen } from "../../features/screenSlice";
+import { setNations } from "../../features/nationSlice";
+import { setGoverningOrganizations } from "../../features/governingOrganizationSlice";
+import { setZones } from "../../features/zoneSlice";
+import { setBuildings } from "../../features/buildingSlice";
+import { setPeople } from "../../features/personSlice";
+import EventScreenIntruder from "../../elements/EventScreens/Intruder";
 
 const eventScreenMap = {
   "EVIL Applicant": EventScreenRecruit,

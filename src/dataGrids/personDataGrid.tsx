@@ -3,7 +3,7 @@ import { Check as CheckIcon, Close as CloseIcon } from "@mui/icons-material";
 import DataGrid from "react-data-grid";
 import { dataGridButton } from "../datagridRenderers/dataGridButton";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { selectEntity } from "../features/selectionSlice";
+import { clearSelections, selectEntity } from "../features/selectionSlice";
 import { Person } from "empire-of-evil/src/types/interfaces/entities";
 import { GameManager } from "empire-of-evil";
 import "react-data-grid/lib/styles.css";
@@ -42,6 +42,7 @@ const PersonDataGrid = ({
       intelLevel: intelligenceLevel,
       agent: !!agent ? <CheckIcon /> : <CloseIcon />,
       select: (row) => {
+        dispatch(clearSelections());
         dispatch(
           selectEntity({
             type: "person",

@@ -1,5 +1,4 @@
 import {
-  AppBar,
   Button,
   List,
   Dialog,
@@ -7,15 +6,13 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Card,
-  CardContent,
-  CardHeader,
-  Toolbar,
-  Typography,
 } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
 import { setScreen } from "../../features/screenSlice";
-import { populateActivities, populatePlots } from "empire-of-evil/src/plots";
+import {
+  Activity,
+  populateActivities,
+  populatePlots,
+} from "empire-of-evil/src/plots";
 import { setInitialized } from "../../features/gameManagerSlice";
 import { deleteSavedGame } from "../../actions/dataManagement";
 import { useState } from "react";
@@ -24,11 +21,17 @@ import { setNations } from "../../features/nationSlice";
 import { setZones } from "../../features/zoneSlice";
 import { setBuildings } from "../../features/buildingSlice";
 import { setPeople } from "../../features/personSlice";
+import { GameManager } from "empire-of-evil";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
-export default TitleScreenOptions = ({ gameManager }) => {
+interface TitleScreenOptionsProps {
+  gameManager: GameManager;
+}
+
+const TitleScreenOptions = ({ gameManager }: TitleScreenOptionsProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const dispatch = useDispatch();
-  const saveData = useSelector((state) => state.gameManager.saveData);
+  const dispatch = useAppDispatch();
+  const saveData = useAppSelector((state) => state.gameManager.saveData);
   return (
     <List>
       <Button
@@ -45,20 +48,19 @@ export default TitleScreenOptions = ({ gameManager }) => {
           <Button
             color="inherit"
             onClick={() => {
-              /**
-               * @type {import("empire-of-evil/src/typedef").SaveData}
-               */
-              const sd = JSON.parse(saveData);
+              const sd = { ...saveData };
               populateActivities(gameManager);
               populatePlots(gameManager);
               gameManager.plotManager.setPlotQueue(sd.plotData.plots);
-              Object.values(sd.plotData.activities).forEach((activity) => {
-                const currentActivity =
-                  gameManager.activityManager.activities.find(
-                    (a) => a.name === activity.name
-                  );
-                currentActivity.setAgents(activity.agents);
-              });
+              Object.values(sd.plotData.activities).forEach(
+                (activity: Activity) => {
+                  const currentActivity =
+                    gameManager.activityManager.activities.find(
+                      (a) => a.name === activity.name
+                    );
+                  currentActivity.setAgents(activity.agents);
+                }
+              );
               gameManager.setGameData(sd.gameData);
               gameManager.setInitialized(true);
               const {
@@ -66,10 +68,10 @@ export default TitleScreenOptions = ({ gameManager }) => {
                 nations,
                 zones,
                 buildings,
-                people
-              } = gameManager.gameData
-              
-              // Update the redux store 
+                people,
+              } = gameManager.gameData;
+
+              // Update the redux store
               dispatch(setGoverningOrganizations(governingOrganizations));
               dispatch(setNations(nations));
               dispatch(setZones(zones));
@@ -99,10 +101,13 @@ export default TitleScreenOptions = ({ gameManager }) => {
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
-              <Button onClick={() => {
-                deleteSavedGame();
-                setDeleteDialogOpen(false);
-              }} autoFocus>
+              <Button
+                onClick={() => {
+                  deleteSavedGame();
+                  setDeleteDialogOpen(false);
+                }}
+                autoFocus
+              >
                 Delete
               </Button>
             </DialogActions>
@@ -112,3 +117,5 @@ export default TitleScreenOptions = ({ gameManager }) => {
     </List>
   );
 };
+
+export default TitleScreenOptions;

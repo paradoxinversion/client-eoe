@@ -13,12 +13,10 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import BuildingDataGrid from "../dataGrids/buildingDataGrid";
+import BuildingDataGrid from "../../dataGrids/buildingDataGrid";
 import { GameManager, buildings, zones } from "empire-of-evil";
-import MetricNumber from "../elements/MetricNumber/MetricNumber";
-import ZonePanel from "../elements/ZonePanel";
-import { clearSelections, selectEntity } from "../features/selectionSlice";
-import PersonDataGrid from "../dataGrids/personDataGrid";
+import MetricNumber from "../../elements/MetricNumber/MetricNumber";
+import { clearSelections, selectEntity } from "../../features/selectionSlice";
 import { useState } from "react";
 import { getPeople } from "empire-of-evil/src/actions/people";
 import {
@@ -27,15 +25,12 @@ import {
   getResourceOutput,
   removePersonnel,
 } from "empire-of-evil/src/buildings";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { GameData } from "empire-of-evil/src/GameManager";
-import { setPeople } from "../features/personSlice";
-import { setBuildings } from "../features/buildingSlice";
-import PersonnelDataGrid from "../dataGrids/personnelDataGrid";
-import {
-  getInfrastructure,
-  getOrgResources,
-} from "empire-of-evil/src/organization";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { setPeople } from "../../features/personSlice";
+import { setBuildings } from "../../features/buildingSlice";
+import PersonnelDataGrid from "../../dataGrids/personnelDataGrid";
+import { getOrgResources } from "empire-of-evil/src/organization";
+import ZoneDataGrid from "../../dataGrids/zoneDataGrid";
 
 interface InfrastructureScreenProps {
   gameManager: GameManager;
@@ -256,8 +251,7 @@ const InfrastructureScreen = ({ gameManager }: InfrastructureScreenProps) => {
               <Box>
                 <Typography>Zones</Typography>
               </Box>
-              <ZonePanel
-                gridHeight={"200px"}
+              <ZoneDataGrid
                 gameManager={gameManager}
                 zones={zones.getZones(
                   gameManager,

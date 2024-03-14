@@ -35,7 +35,7 @@ const AgentDataGrid = ({ title, agents, gameManager }: AgentDataGridProps) => {
       id,
       name,
       agent,
-      intelAttributes: { loyalty, intelligenceLevel },
+      intelAttributes: { loyalty, intelligenceLevel, loyalties },
       vitalAttributes: { health, currentHealth },
       basicAttributes: { intelligence, combat, administration },
     } = person;
@@ -47,7 +47,7 @@ const AgentDataGrid = ({ title, agents, gameManager }: AgentDataGridProps) => {
       combat,
       administration,
       name,
-      loyalty,
+      loyalty: loyalties[person.agent.organizationId],
       intelLevel: intelligenceLevel,
       agent: !!agent ? <CheckIcon /> : <CloseIcon />,
       select: (row) => {

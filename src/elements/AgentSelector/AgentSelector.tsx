@@ -1,14 +1,10 @@
 import { Box, Checkbox, FormGroup, FormControlLabel } from "@mui/material";
-/**
- * A component to select Agents.
- * @param {Object} props
- * @param {import("empire-of-evil/src/typedef").Person[]} props.agentsArray
- */
-const AgentSelector = ({ agentsArray, cb, participantsArray }) => {
-  /**
-   *
-   * @param {Event} event
-   */
+import { Person } from "empire-of-evil/src/types/interfaces/entities";
+interface AgentSelectorProps {
+  agentsArray: Person[];
+  cb: Function;
+}
+const AgentSelector = ({ agentsArray, cb }: AgentSelectorProps) => {
   const handleCheckbox = (event) => {
     const value = event.target.checked;
     const agentId = event.target.name;

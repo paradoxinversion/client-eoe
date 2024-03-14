@@ -1,8 +1,8 @@
 import { addPersonnel, getOrgLabs } from "empire-of-evil/src/buildings";
 import { getAgentsInZone, _getAgents } from "empire-of-evil/src/organization";
 import { useState } from "react";
-import { toDataArray } from "../utilities/dataHelpers";
-import MetricCard from "../elements/MetricCard/MetricCard";
+import { toDataArray } from "../../utilities/dataHelpers";
+import MetricCard from "../../elements/MetricCard/MetricCard";
 import DataGrid from "react-data-grid";
 import {
   Box,
@@ -20,15 +20,15 @@ import {
   DialogActions,
 } from "@mui/material";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
-import MetricNumber from "../elements/MetricNumber/MetricNumber";
-import { dataGridButton } from "../datagridRenderers/dataGridButton";
-import PersonDataGrid from "../dataGrids/personDataGrid";
-import { setPeople } from "../features/personSlice";
-import { setBuildings } from "../features/buildingSlice";
+import MetricNumber from "../../elements/MetricNumber/MetricNumber";
+import { dataGridButton } from "../../datagridRenderers/dataGridButton";
+import PersonDataGrid from "../../dataGrids/personDataGrid";
+import { setPeople } from "../../features/personSlice";
+import { setBuildings } from "../../features/buildingSlice";
 import { useDispatch } from "react-redux";
 import { getPeople } from "empire-of-evil/src/actions/people";
 import { GameManager } from "empire-of-evil";
-import { useAppDispatch } from "../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 import { Building } from "empire-of-evil/src/types/interfaces/entities";
 const columns = [
   { key: "lab", name: "Lab" },

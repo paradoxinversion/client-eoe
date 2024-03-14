@@ -23,7 +23,6 @@ interface ZoneDataGridProps {
 }
 
 const ZoneDataGrid = ({ title, zones, gameManager }: ZoneDataGridProps) => {
-  // const peopleStore = useAppSelector((state) => state.people);
   const dispatch = useAppDispatch();
   const zoneStore = useAppSelector((state) => state.zones);
   const agentDataGridRows = zones.map((zone) => {
@@ -46,6 +45,12 @@ const ZoneDataGrid = ({ title, zones, gameManager }: ZoneDataGridProps) => {
           selectEntity({
             type: "zone",
             selection: zoneStore[row.id],
+          })
+        );
+        dispatch(
+          selectEntity({
+            type: "nation",
+            selection: null,
           })
         );
       },

@@ -29,11 +29,9 @@ const MonthlyReportScreen = ({ currentGameEvent, resolveEvent }) => {
 
         <Typography>
           Net:{" "}
-          {parseInt(
-            currentGameEvent.params.income.buildingWealth -
-              (currentGameEvent.params.expenses.payroll +
-                currentGameEvent.params.expenses.upkeep)
-          )}
+          {currentGameEvent.params.income.buildingWealth -
+            (currentGameEvent.params.expenses.payroll +
+              currentGameEvent.params.expenses.upkeep)}
         </Typography>
       </Box>
       <table>

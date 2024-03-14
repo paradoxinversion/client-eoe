@@ -4,46 +4,32 @@ import {
   checkVictoryState,
 } from "empire-of-evil/src/utilities";
 import { useEffect } from "react";
-import MetricCard from "../elements/MetricCard/MetricCard";
-import MetricNumber from "../elements/MetricNumber/MetricNumber";
+import MetricNumber from "../../elements/MetricNumber/MetricNumber";
 import {
-  AppBar,
   Button,
   Box,
   Grid,
   Card,
-  Toolbar,
   Typography,
   Divider,
   Stack,
   Paper,
 } from "@mui/material";
 import { OpenWith as OpenWithIcon } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { setScreen } from "../features/screenSlice";
-import ZonePanel from "../elements/ZonePanel";
-import BuildingDataGrid from "../dataGrids/buildingDataGrid";
+import { setScreen } from "../../features/screenSlice";
+import BuildingDataGrid from "../../dataGrids/buildingDataGrid";
 import * as eoe from "empire-of-evil";
-import PersonDataGrid from "../dataGrids/personDataGrid";
+import PersonDataGrid from "../../dataGrids/personDataGrid";
 import {
   getEvilEmpire,
   getOrgResources,
 } from "empire-of-evil/src/organization";
 import { getInfrastructureLoad } from "empire-of-evil/src/buildings";
+import ZoneDataGrid from "../../dataGrids/zoneDataGrid";
+import { useAppDispatch } from "../../app/hooks";
 
-/**
- *
- * @param {Object} props
- * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
- * @returns
- */
-const MainScreen = ({
-  // setScreen,
-  gameManager,
-}: {
-  gameManager: eoe.GameManager;
-}) => {
-  const dispatch = useDispatch();
+const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
+  const dispatch = useAppDispatch();
   const { gameData } = gameManager;
 
   const empireZones = eoe.zones.getZones(gameManager, gameData.player.empireId);
@@ -52,25 +38,17 @@ const MainScreen = ({
   });
   const people = eoe.actions.people.getPeople(gameManager, {
     zoneId: empireZones[0].id,
-    // nationId: gameManager.
   });
   const empireResources = eoe.organizations.getOrgResources(
     gameManager,
     gameData.player.organizationId
   );
-  const empireWealth = eoe.zones.getZonesWealth(gameManager, empireZones);
-  const infraCost = eoe.buildings.getInfrastructureLoad(
-    gameManager,
-    gameData.player.organizationId
-  );
+
   const science = eoe.organizations.getScience(
     gameManager,
     gameData.player.organizationId
   );
-  const infrastructure = eoe.organizations.getInfrastructure(
-    gameManager,
-    gameData.player.organizationId
-  );
+
   const buildingUpkeep = eoe.buildings.getUpkeep(
     gameManager,
     gameData.player.organizationId
@@ -91,28 +69,13 @@ const MainScreen = ({
     }
   }, [gameManager, setScreen]);
   return (
-    <Box>
-      <Toolbar />
-
+    <>
       <Box>
-        <Box id="home-greeting" component="header" padding="1rem">
-          <Typography variant="h3">Welcome, OVERLORD.</Typography>
-        </Box>
-        <Divider />
         <Box>
           <Button
             color="inherit"
             onClick={() => {
-              const result = advanceDay(gameManager);
-              // const gameOver = checkGameOverState(result.updatedGameData);
-              // if (gameOver) {
-              //   setScreen("game-over");
-              // }
-              // const victory = checkVictoryState(result.updatedGameData);
-              // if (victory){
-              //   setScreen("victory")
-              // }
-
+              advanceDay(gameManager);
               dispatch(setScreen("events"));
             }}
           >
@@ -122,20 +85,11 @@ const MainScreen = ({
         <Divider />
         <Box id="overview-cards" component="section">
           <Stack
-            id
             padding="1rem"
             direction={"row"}
             spacing={"1rem"}
             justifyContent={"center"}
           >
-            {/* <MetricNumber
-              title="Wealth"
-              number={`${
-                gameData.governingOrganizations[gameData.player.organizationId]
-                  .wealth
-              }
-                  (+${parseInt(empireWealth + wealthBonuses)})`}
-            /> */}
             <MetricNumber
               title="Wealth"
               number={`${
@@ -179,52 +133,8 @@ const MainScreen = ({
             />
             <MetricNumber
               title="Evil"
-              number={
-                eoe.organizations.getEvilEmpire(
-                  gameManager,
-                  gameData.player.organizationId
-                ).totalEvil
-              }
+              number={eoe.organizations.getEvilEmpire(gameManager).totalEvil}
             />
-            {/* <Card sx={{ width: 200 }}>
-              <CardContent>
-                <Typography gutterBottom variant="h6">
-                  Empire Resources
-                </Typography>
-                <Typography variant="body2">
-                  Wealth: $
-                  {
-                    gameData.governingOrganizations[
-                      gameData.player.organizationId
-                    ].wealth
-                  }
-                  (+${empireWealth + wealthBonuses})
-                </Typography>
-                <Typography variant="body2">
-                  Expenses: ${payroll + buildingUpkeep}
-                </Typography>
-                <Typography variant="body2">
-                  Infrastructure: {infraCost}/{infrastructure}
-                </Typography>
-                <Typography variant="body2">Science: {science}</Typography>
-                <Typography variant="body2">
-                  Zones:{" "}
-                  {`${
-                    eoe.zones.getZones(gameManager, gameData.player.empireId)
-                      .length
-                  }/${Object.keys(gameData.zones).length}`}
-                </Typography>
-                <Typography variant="body2">
-                  Agents:{" "}
-                  {
-                    eoe.organizations.getAgents(
-                      gameManager,
-                      gameData.player.organizationId
-                    ).length
-                  }
-                </Typography>
-              </CardContent>
-            </Card> */}
           </Stack>
         </Box>
         <Divider />
@@ -248,7 +158,7 @@ const MainScreen = ({
       >
         <Grid item xs={5}>
           <Card sx={{ padding: "1rem" }}>
-            <ZonePanel
+            <ZoneDataGrid
               gameManager={gameManager}
               zones={empireZones}
               title="Empire Zones"
@@ -274,7 +184,7 @@ const MainScreen = ({
           </Card>
         </Grid>
       </Grid>
-    </Box>
+    </>
   );
 };
 

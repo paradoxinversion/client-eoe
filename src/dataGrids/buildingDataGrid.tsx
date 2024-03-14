@@ -2,6 +2,7 @@ import { Box, Typography, Paper } from "@mui/material";
 import DataGrid from "react-data-grid";
 import { dataGridButton } from "../datagridRenderers/dataGridButton";
 import { Building } from "empire-of-evil/src/types/interfaces/entities";
+import { GameManager } from "empire-of-evil";
 
 const buildingDataGridColumns = [
   { key: "name", name: "Name" },
@@ -22,7 +23,11 @@ const BuildingDataGrid = ({
   gridHeight,
   cb,
 }: {
+  title: string;
   buildings: Building[];
+  gameManager: GameManager;
+  gridHeight?: string;
+  cb?: Function;
 }) => {
   const { gameData } = gameManager;
   const buildingDataGridRows = buildings.map((building) => {

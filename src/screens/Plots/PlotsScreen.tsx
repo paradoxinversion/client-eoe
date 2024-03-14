@@ -1,10 +1,10 @@
 import { Activity, getActivityParticipants } from "empire-of-evil/src/plots";
 import { useState, useRef, useEffect } from "react";
-import AgentSelector from "../elements/AgentSelector/AgentSelector";
-import AttackZonePlot from "../elements/AttackZonePlot";
-import Modal from "../elements/Modal";
-import ReconPlot from "../elements/ReconPlot";
-import { dataGridButton } from "../datagridRenderers/dataGridButton";
+import AgentSelector from "../../elements/AgentSelector/AgentSelector";
+import AttackZonePlot from "../../elements/AttackZonePlot";
+import Modal from "../../elements/Modal";
+import ReconPlot from "../../elements/ReconPlot";
+import { dataGridButton } from "../../datagridRenderers/dataGridButton";
 import {
   Box,
   Button,
@@ -19,12 +19,12 @@ import {
 } from "@mui/material";
 import DataGrid from "react-data-grid";
 import { useDispatch, useSelector } from "react-redux";
-import { selectEntity } from "../features/selectionSlice";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { selectEntity } from "../../features/selectionSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
 // const eoe = require("empire-of-evil");
 import * as eoe from "empire-of-evil";
-import { setPeople } from "../features/personSlice";
+import { setPeople } from "../../features/personSlice";
 
 const plotsWidgets = {
   "attack-zone": AttackZonePlot,
@@ -137,7 +137,6 @@ const PlotsScreen = ({ gameManager }) => {
                 },
               })}
               cb={onUpdateActivityParticipant}
-              participantsArray={currentActivity.agents}
             />
             <Button
               className="btn btn-primary"
