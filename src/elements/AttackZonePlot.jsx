@@ -1,7 +1,7 @@
 import { getAgents, getControlledZones } from "empire-of-evil/src/organization";
 import { Plot, PlotManager } from "empire-of-evil/src/plots";
 import { useState } from "react";
-import {useSelector} from 'react-redux'
+import { useSelector } from "react-redux";
 import { toDataArray } from "../utilities/dataHelpers";
 import { GameManager } from "empire-of-evil";
 import {
@@ -11,13 +11,10 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  FormControl,
-  FormControlLabel,
   Typography,
   Radio,
-  RadioGroup,
   Chip,
-  Stack
+  Stack,
 } from "@mui/material";
 /**
  *
@@ -27,7 +24,7 @@ import {
  * @returns
  */
 const AttackZonePlot = ({ gameManager, cb }) => {
-  const people = useSelector(state => state.people);
+  const people = useSelector((state) => state.people);
   const { gameData, plotManager } = gameManager;
   const [nation, setNation] = useState(null);
   const [zone, setZone] = useState(null);
@@ -54,50 +51,44 @@ const AttackZonePlot = ({ gameManager, cb }) => {
    * @param {import("empire-of-evil/src/typedef").Person} agent
    */
   const onUpdateAttackers = (e, agent) => {
-    
-      if (!attackers.includes(agent.id)) {
-        const updatedAttackers = JSON.parse(JSON.stringify(attackers));
-        updatedAttackers.push(agent.id);
-        setAttackers(updatedAttackers);
-      } else {
-        const updatedAttackers = JSON.parse(JSON.stringify(attackers));
-        setAttackers(
-          updatedAttackers.filter((person) => person !== agent.id)
-        );
-      }
-    
+    if (!attackers.includes(agent.id)) {
+      const updatedAttackers = JSON.parse(JSON.stringify(attackers));
+      updatedAttackers.push(agent.id);
+      setAttackers(updatedAttackers);
+    } else {
+      const updatedAttackers = JSON.parse(JSON.stringify(attackers));
+      setAttackers(updatedAttackers.filter((person) => person !== agent.id));
+    }
   };
   return (
     <>
       {/* <Typography variant="h4">Attack Zone</Typography> */}
-      <DialogTitle sx={{width: '500px'}}>Attack Zone</DialogTitle>
+      <DialogTitle sx={{ width: "500px" }}>Attack Zone</DialogTitle>
       <DialogContent>
         <Box>
           <Typography>Select a Nation</Typography>
         </Box>
         <Divider />
-        <Stack direction='row' spacing={1} padding={1}>
+        <Stack direction="row" spacing={1} padding={1}>
           {nations.map((n) => {
-              return (
-                <Chip
-                  name="nation-select"
-                  control={<Radio />}
-                  label={n.name}
-                  onClick={() => setNation(n)}
-                  variant={nation?.name === n.name ? 'outlined' : 'filled'}
-                />
-              );
-            })}
+            return (
+              <Chip
+                name="nation-select"
+                control={<Radio />}
+                label={n.name}
+                onClick={() => setNation(n)}
+                variant={nation?.name === n.name ? "outlined" : "filled"}
+              />
+            );
+          })}
         </Stack>
         {nation && (
           <>
             <Box>
-              <Typography>
-                Select the zone for this mission
-              </Typography>
+              <Typography>Select the zone for this mission</Typography>
             </Box>
             <Divider />
-            <Stack direction='row' spacing={1} padding={1}>
+            <Stack direction="row" spacing={1} padding={1}>
               {getControlledZones(gameManager, nation.organizationId).map(
                 (selectdZone) => (
                   <Chip
@@ -106,7 +97,9 @@ const AttackZonePlot = ({ gameManager, cb }) => {
                     control={<Radio />}
                     label={selectdZone.name}
                     onClick={() => setZone(selectdZone)}
-                    variant={zone?.name === selectdZone.name ? 'outlined' : 'filled'}
+                    variant={
+                      zone?.name === selectdZone.name ? "outlined" : "filled"
+                    }
                   />
                 )
               )}
@@ -116,42 +109,42 @@ const AttackZonePlot = ({ gameManager, cb }) => {
 
         {zone && (
           <Box>
-            <Box component='header'>
-              <Typography>
-                Select the Agents attending this mission
-              </Typography>
-              <Typography variant='caption'>
+            <Box component="header">
+              <Typography>Select the Agents attending this mission</Typography>
+              <Typography variant="caption">
                 *Agents attending this mission may suffer loss of life.
               </Typography>
             </Box>
             <Divider />
-            <Stack direction='row' spacing={1} padding={1}>
+            <Stack direction="row" spacing={1} padding={1}>
               {getAgents(gameManager, gameData.player.organizationId)
                 .filter(
                   (agent) =>
                     agent.agent.department === 0 || agent.agent.department === 3
                 )
                 .map((agent) => (
-                  <Chip label={agent.name} onClick={(e) => {
-                    onUpdateAttackers(e, agent);
-                  }}
-                  variant={attackers.includes(agent.id) ? 'outlined' : 'filled'} />
+                  <Chip
+                    label={agent.name}
+                    onClick={(e) => {
+                      onUpdateAttackers(e, agent);
+                    }}
+                    variant={
+                      attackers.includes(agent.id) ? "outlined" : "filled"
+                    }
+                  />
                 ))}
             </Stack>
             <Divider />
             <Box>
               <Typography>Selected Agents</Typography>
-             
-             
-              <Stack direction={'row'} spacing={1}>
+
+              <Stack direction={"row"} spacing={1}>
                 {attackers.map((agentId) => (
                   <Chip label={people[agentId].name}></Chip>
                 ))}
               </Stack>
             </Box>
-            <Box component='footer'>
-             
-            </Box>
+            <Box component="footer"></Box>
           </Box>
         )}
       </DialogContent>

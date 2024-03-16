@@ -1,32 +1,27 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import EventScreenCombatResults from "../../elements/EventScreenCombatResults";
+import EventScreenCombatResults from "../../elements/EventScreens/EventScreenCombatResults";
 import EventScreenProceed from "../../elements/EventScreenProceed";
 import EventScreenRecruit from "../../elements/EventScreenRecruit";
 import MonthlyReportScreen from "../MonthlyReportScreen";
-import Modal from "../../elements/Modal";
 import EventScreenReconZone from "../../elements/EventScreenReconZone";
-import { GameManager } from "empire-of-evil";
 import {
   Box,
   Dialog,
   DialogContent,
   DialogTitle,
   Divider,
-  Button,
-  Card,
-  CardContent,
   Typography,
 } from "@mui/material";
 import { setScreen } from "../../features/screenSlice";
-import { setNations } from "../../features/nationSlice";
-import { setGoverningOrganizations } from "../../features/governingOrganizationSlice";
-import { setZones } from "../../features/zoneSlice";
-import { setBuildings } from "../../features/buildingSlice";
-import { setPeople } from "../../features/personSlice";
 import EventScreenIntruder from "../../elements/EventScreens/Intruder";
 import ScienceProjectComplete from "../../elements/EventScreens/ScienceProjectComplete";
 import { updateGameData } from "../../actions/dataManagement";
+import GameEvent from "empire-of-evil/src/events/GameEvent";
+export interface GameEventComponentProps {
+  resolveEvent: () => void;
+  currentGameEvent: GameEvent;
+}
 
 const eventScreenMap = {
   "EVIL Applicant": EventScreenRecruit,
@@ -39,11 +34,6 @@ const eventScreenMap = {
   "Science Project Complete": ScienceProjectComplete,
 };
 
-/**
- * @param {Object} props
- * @param {GameManager} props.gameManager
- * @returns
- */
 const EventsScreen = ({ gameManager }) => {
   const { gameData, eventManager: eventQueue } = gameManager;
 

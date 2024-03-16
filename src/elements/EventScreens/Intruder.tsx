@@ -1,18 +1,16 @@
-import { Box, Button, Divider, CardContent, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import { IntegratedManagerProps } from "../..";
+import { GameEventComponentProps } from "../../screens/Events/EventScreen";
 
-/**
- * @param {object} props
- * @param {object} props.currentGameEvent
- * @param {Function} props.resolveEvent
- * @returns
- */
 const EventScreenIntruder = ({
   resolveEvent,
   gameManager,
   currentGameEvent,
-}) => {
+}: IntegratedManagerProps & GameEventComponentProps) => {
   const intruder =
-    gameManager.gameData.people[currentGameEvent.params.intruderId];
+    gameManager.gameData.people[
+      currentGameEvent.params.intruderAlert.intruderId
+    ];
   return (
     <Box>
       <Typography>
@@ -28,7 +26,6 @@ const EventScreenIntruder = ({
       <Typography>Their fate is in your hands.</Typography>
       <Typography></Typography>
       <Button
-        buttonText="Okay"
         onClick={() => {
           resolveEvent();
         }}
