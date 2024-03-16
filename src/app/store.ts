@@ -8,6 +8,7 @@ import buildingReducer from "../features/buildingSlice";
 import screenReducer from "../features/screenSlice";
 import selectionReducer from "../features/selectionSlice";
 import configReducer from "../features/configSlice";
+import scienceReducer from "../features/scienceSlice";
 import { config } from "../config/config";
 const rootReducer = combineReducers({
   gameManager: gameManagerReducer,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   screen: screenReducer,
   selections: selectionReducer,
   config: configReducer,
+  science: scienceReducer,
 });
 
 export function setupStore(preloadedState) {
@@ -31,7 +33,7 @@ export function setupStore(preloadedState) {
 export const store = setupStore({
   gameManager: {
     initialized: false,
-    saveData: localStorage.getItem("eoe-save"),
+    saveData: JSON.parse(localStorage.getItem("eoe-save")),
   },
   config: config(),
 });

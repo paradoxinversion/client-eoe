@@ -1,56 +1,23 @@
-import { GameManager } from "empire-of-evil";
-import {
-  handleNewGame,
-  hireStartingAgents,
-} from "empire-of-evil/src/gameSetup";
-import { populateActivities, populatePlots } from "empire-of-evil/src/plots";
 import { useState } from "react";
 import {
   TextField,
   Button,
   Typography,
   Box,
-  Container,
-  Toolbar,
   Divider,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { setInitialized } from "../../features/gameManagerSlice";
-import { setGoverningOrganizations } from "../../features/governingOrganizationSlice";
-import { setNations } from "../../features/nationSlice";
-import { setZones } from "../../features/zoneSlice";
-import { setBuildings } from "../../features/buildingSlice";
-import { setPeople } from "../../features/personSlice";
-import { setScreen } from "../../features/screenSlice";
+import { newGame } from "../../actions/dataManagement";
+import { IntegratedManagerProps } from "../..";
 
-/**
- *
- * @param {Object} props
- * @param {GameManager} props.gameManager
- * @returns
- */
-const NewGameScreen = ({ gameManager }) => {
-  const dispatch = useDispatch();
+const NewGameScreen = ({ gameManager }: IntegratedManagerProps) => {
   const [overlordName, setOverlordName] = useState("OVERLORD");
   const onNewGame = () => {
-    handleNewGame(gameManager);
-    hireStartingAgents(gameManager);
-    populateActivities(gameManager);
-    populatePlots(gameManager);
-    gameManager.setInitialized(true);
-    const { governingOrganizations, nations, zones, buildings, people } =
-      gameManager.gameData;
-
-    // Update the redux store
-    dispatch(setGoverningOrganizations(governingOrganizations));
-    dispatch(setNations(nations));
-    dispatch(setZones(zones));
-    dispatch(setBuildings(buildings));
-    dispatch(setPeople(people));
-    dispatch(setInitialized(true));
-
-    // setScreen("main");
-    dispatch(setScreen("main"));
+    newGame(gameManager);
   };
   return (
     <>
@@ -59,16 +26,29 @@ const NewGameScreen = ({ gameManager }) => {
       </Box>
       <Divider />
 
-      <Box padding={"1rem"} component="form">
+      <Box padding={"1rem"}>
         <Typography>
           Welcome, Overlord! Before we can authorize your session and take you
           to the Dashboard, we'll need to handle some <em>minor</em> onboarding
-          items.
+          items. Please complete the regristration form below.
         </Typography>
+      </Box>
+      <Box padding={"1rem"} component="form">
         <TextField
+          name="overlordName"
           label="Overlord Name (Optional)"
+          helperText="If you leave this blank, we'll just call you Overlord."
           onChange={(e) => setOverlordName(e.currentTarget.value)}
         />
+        <FormControl>
+          <InputLabel id="pet">pet</InputLabel>
+          <Select labelId="pet" id="pet-select" value={4} label="pet">
+            <MenuItem value={1}>Dog</MenuItem>
+            <MenuItem value={2}>Cat</MenuItem>
+            <MenuItem value={3}>Bird</MenuItem>
+            <MenuItem value={4}>Exotic Cat</MenuItem>
+          </Select>
+        </FormControl>
       </Box>
       <Button onClick={onNewGame}>Take Control</Button>
     </>

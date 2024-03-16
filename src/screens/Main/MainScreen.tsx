@@ -5,43 +5,21 @@ import {
 } from "empire-of-evil/src/utilities";
 import { useEffect } from "react";
 import MetricNumber from "../../elements/MetricNumber/MetricNumber";
-import {
-  Button,
-  Box,
-  Grid,
-  Card,
-  Typography,
-  Divider,
-  Stack,
-  Paper,
-} from "@mui/material";
-import {
-  OpenWith as OpenWithIcon,
-  NotificationImportant as NotificationImportantIcon,
-} from "@mui/icons-material";
+import { Button, Box, Typography, Divider, Stack, Paper } from "@mui/material";
+import { NotificationImportant as NotificationImportantIcon } from "@mui/icons-material";
 import { setScreen } from "../../features/screenSlice";
-import BuildingDataGrid from "../../dataGrids/buildingDataGrid";
 import * as eoe from "empire-of-evil";
-import PersonDataGrid from "../../dataGrids/personDataGrid";
 import {
   getEvilEmpire,
   getOrgResources,
 } from "empire-of-evil/src/organization";
 import { getInfrastructureLoad } from "empire-of-evil/src/buildings";
-import ZoneDataGrid from "../../dataGrids/zoneDataGrid";
 import { useAppDispatch } from "../../app/hooks";
 
 const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
   const dispatch = useAppDispatch();
   const { gameData } = gameManager;
 
-  const empireZones = eoe.zones.getZones(gameManager, gameData.player.empireId);
-  const buildings = eoe.buildings.getBuildings(gameManager, {
-    organizationId: gameData.player.organizationId,
-  });
-  const people = eoe.actions.people.getPeople(gameManager, {
-    zoneId: empireZones[0].id,
-  });
   const empireResources = eoe.organizations.getOrgResources(
     gameManager,
     gameData.player.organizationId

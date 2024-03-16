@@ -8,6 +8,7 @@
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.15.11",
+    "@mui/lab": "^5.0.0-alpha.168",
     "@mui/material": "^5.15.11",
     "@reduxjs/toolkit": "^2.2.1",
     "@testing-library/jest-dom": "^5.16.5",

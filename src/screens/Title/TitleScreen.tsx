@@ -8,9 +8,11 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { useAppSelector } from "../../app/hooks";
 
 function TitleScreen() {
-  const [saveData, setSaveData] = useState(localStorage.getItem("eoe-save"));
+  // const [saveData, setSaveData] = useState(localStorage.getItem("eoe-save"));
+  const saveData = useAppSelector(state => state.gameManager.saveData)
   return (
     <Box>
       <Box padding="1rem">

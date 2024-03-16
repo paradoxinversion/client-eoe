@@ -1,27 +1,15 @@
-import { getNationCitizens } from "empire-of-evil/src/nations";
-import { getAgents } from "empire-of-evil/src/organization";
-import { useState } from "react";
-import { toDataArray } from "../../utilities/dataHelpers";
-import { Box, Toolbar, Typography, Divider, Paper, Card } from "@mui/material";
-import DataGrid from "react-data-grid";
-import { dataGridButton } from "../../datagridRenderers/dataGridButton";
-import { selectEntity } from "../../features/selectionSlice";
-import MetricNumber from "../../elements/MetricNumber/MetricNumber";
-import { getZones } from "empire-of-evil/src/actions/zones";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import ZoneDataGrid from "../../dataGrids/zoneDataGrid";
+import { Box, Typography, Divider } from "@mui/material";
+import { useAppSelector } from "../../app/hooks";
 import WorldNation from "./WorldNation";
 import WorldOverview from "./WorldOverview";
 import WorldZone from "./WorldZone";
 import WorldPerson from "./WorldPerson";
+import { IntegratedManagerProps } from "../..";
 
-const WorldScreen = ({ gameManager }) => {
-  const dispatch = useAppDispatch();
+const WorldScreen = ({ gameManager }: IntegratedManagerProps) => {
   const selectedNation = useAppSelector((state) => state.selections.nation);
   const selectedZone = useAppSelector((state) => state.selections.zone);
   const selectedPerson = useAppSelector((state) => state.selections.person);
-  const { gameData } = gameManager;
-  const nationsArray = toDataArray(gameData.nations);
   return (
     <>
       <Box component="header" padding="1rem">

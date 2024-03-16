@@ -6,21 +6,13 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  ListItem,
+  ListItemButton,
+  ListItemText,
 } from "@mui/material";
 import { setScreen } from "../../features/screenSlice";
-import {
-  Activity,
-  populateActivities,
-  populatePlots,
-} from "empire-of-evil/src/plots";
-import { setInitialized } from "../../features/gameManagerSlice";
-import { deleteSavedGame } from "../../actions/dataManagement";
+import { deleteSavedGame, loadGame } from "../../actions/dataManagement";
 import { useState } from "react";
-import { setGoverningOrganizations } from "../../features/governingOrganizationSlice";
-import { setNations } from "../../features/nationSlice";
-import { setZones } from "../../features/zoneSlice";
-import { setBuildings } from "../../features/buildingSlice";
-import { setPeople } from "../../features/personSlice";
 import { GameManager } from "empire-of-evil";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
@@ -33,64 +25,39 @@ const TitleScreenOptions = ({ gameManager }: TitleScreenOptionsProps) => {
   const dispatch = useAppDispatch();
   const saveData = useAppSelector((state) => state.gameManager.saveData);
   return (
-    <List>
-      <Button
-        color="inherit"
-        onClick={() => {
-          dispatch(setScreen("new-game"));
-        }}
-      >
-        New Session
-      </Button>
+    <List sx={{ width: "inherit" }}>
+      <ListItem>
+        <ListItemButton
+          onClick={() => {
+            dispatch(setScreen("new-game"));
+          }}
+        >
+          <ListItemText primary={"New Session"} />
+        </ListItemButton>
+      </ListItem>
 
       {saveData && (
         <>
-          <Button
-            color="inherit"
-            onClick={() => {
-              const sd = { ...saveData };
-              populateActivities(gameManager);
-              populatePlots(gameManager);
-              gameManager.plotManager.setPlotQueue(sd.plotData.plots);
-              Object.values(sd.plotData.activities).forEach(
-                (activity: Activity) => {
-                  const currentActivity =
-                    gameManager.activityManager.activities.find(
-                      (a) => a.name === activity.name
-                    );
-                  currentActivity.setAgents(activity.agents);
-                }
-              );
-              gameManager.setGameData(sd.gameData);
-              gameManager.setInitialized(true);
-              const {
-                governingOrganizations,
-                nations,
-                zones,
-                buildings,
-                people,
-              } = gameManager.gameData;
+          <ListItem>
+            <ListItemButton
+              onClick={() => {
+                loadGame(gameManager);
+              }}
+            >
+              <ListItemText primary={"Load Session"} />
+            </ListItemButton>
+          </ListItem>
 
-              // Update the redux store
-              dispatch(setGoverningOrganizations(governingOrganizations));
-              dispatch(setNations(nations));
-              dispatch(setZones(zones));
-              dispatch(setBuildings(buildings));
-              dispatch(setPeople(people));
-              dispatch(setInitialized(true));
-              dispatch(setScreen("main"));
-            }}
-          >
-            Load Session
-          </Button>
-          <Button
-            color="inherit"
-            onClick={() => {
-              setDeleteDialogOpen(true);
-            }}
-          >
-            Delete Session
-          </Button>
+          <ListItem>
+            <ListItemButton
+              onClick={() => {
+                setDeleteDialogOpen(true);
+              }}
+            >
+              <ListItemText primary={"Delete Session"} />
+            </ListItemButton>
+          </ListItem>
+
           <Dialog open={deleteDialogOpen}>
             <DialogTitle>Delete Your Data?</DialogTitle>
             <DialogContent>

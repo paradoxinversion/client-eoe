@@ -1,8 +1,13 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
-import { gameSetup } from "empire-of-evil";
+import { GameManager, gameSetup } from "empire-of-evil";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+export interface IntegratedManagerProps {
+  gameManager: GameManager;
+}
 
 const gameManager = gameSetup.createGameManager();
 
@@ -16,10 +21,18 @@ if (store.getState().config.haltReload) {
   };
 }
 
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
+
 root.render(
-  <Provider store={store}>
-    <App gameManager={gameManager} />
-  </Provider>
+  <ThemeProvider theme={darkTheme}>
+    <Provider store={store}>
+      <App gameManager={gameManager} />
+    </Provider>
+  </ThemeProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

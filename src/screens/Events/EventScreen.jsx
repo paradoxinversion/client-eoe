@@ -25,6 +25,8 @@ import { setZones } from "../../features/zoneSlice";
 import { setBuildings } from "../../features/buildingSlice";
 import { setPeople } from "../../features/personSlice";
 import EventScreenIntruder from "../../elements/EventScreens/Intruder";
+import ScienceProjectComplete from "../../elements/EventScreens/ScienceProjectComplete";
+import { updateGameData } from "../../actions/dataManagement";
 
 const eventScreenMap = {
   "EVIL Applicant": EventScreenRecruit,
@@ -34,6 +36,7 @@ const eventScreenMap = {
   "Monthly Report": MonthlyReportScreen,
   "Recon Zone": EventScreenReconZone,
   "Intruder Alert!": EventScreenIntruder,
+  "Science Project Complete": ScienceProjectComplete,
 };
 
 /**
@@ -66,14 +69,7 @@ const EventsScreen = ({ gameManager }) => {
     ) {
       dispatch(setScreen("game-over"));
     }
-    gameManager.updateGameData(updatedGameData);
-    const { governingOrganizations, nations, zones, buildings, people } =
-      gameManager.gameData;
-    dispatch(setGoverningOrganizations(governingOrganizations));
-    dispatch(setNations(nations));
-    dispatch(setZones(zones));
-    dispatch(setBuildings(buildings));
-    dispatch(setPeople(people));
+    updateGameData(gameManager, updatedGameData);
 
     if (eventQueue.eventIndex === eventQueue.events.length - 1) {
       eventQueue.clearEvents();
@@ -98,7 +94,7 @@ const EventsScreen = ({ gameManager }) => {
   return (
     <Box component="section">
       <Dialog open={open}>
-        <DialogTitle>{ce.eventName}</DialogTitle>
+        <DialogTitle sx={{ minWidth: "500px" }}>{ce.eventName}</DialogTitle>
         <Divider />
         <DialogContent>
           <Box>

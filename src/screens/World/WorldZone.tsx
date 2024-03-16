@@ -8,28 +8,20 @@ import {
   Typography,
 } from "@mui/material";
 import MetricNumber from "../../elements/MetricNumber/MetricNumber";
-import ZoneDataGrid from "../../dataGrids/zoneDataGrid";
-import { GameManager } from "empire-of-evil";
-import { Nation } from "empire-of-evil/src/types/interfaces/entities";
-import { getZones } from "empire-of-evil/src/actions/zones";
+import { actions, buildings } from "empire-of-evil";
 import { useAppSelector } from "../../app/hooks";
-import { getPeople } from "empire-of-evil/src/actions/people";
 import PersonDataGrid from "../../dataGrids/personDataGrid";
 import BuildingDataGrid from "../../dataGrids/buildingDataGrid";
-import { getBuildings } from "empire-of-evil/src/buildings";
+import { IntegratedManagerProps } from "../..";
 
-interface WorldZoneProps {
-  gameManager: GameManager;
-}
-
-const WorldZone = ({ gameManager }: WorldZoneProps) => {
+const WorldZone = ({ gameManager }: IntegratedManagerProps) => {
   const selectedZone = useAppSelector((state) => state.selections.zone);
   return (
     <Box>
       <Stack direction={"row"} spacing="1rem" padding="1rem">
         <MetricNumber
           number={
-            getPeople(gameManager, {
+            actions.people.getPeople(gameManager, {
               zoneId: selectedZone.id,
             }).length
           }
@@ -37,7 +29,7 @@ const WorldZone = ({ gameManager }: WorldZoneProps) => {
         />
         <MetricNumber
           number={
-            getBuildings(gameManager, {
+            buildings.getBuildings(gameManager, {
               zoneId: selectedZone.id,
             }).length
           }
@@ -54,7 +46,7 @@ const WorldZone = ({ gameManager }: WorldZoneProps) => {
           <AccordionDetails>
             <PersonDataGrid
               title="people"
-              people={getPeople(gameManager, {
+              people={actions.people.getPeople(gameManager, {
                 zoneId: selectedZone.id,
               })}
               gameManager={gameManager}
@@ -66,7 +58,7 @@ const WorldZone = ({ gameManager }: WorldZoneProps) => {
           <AccordionDetails>
             <PersonDataGrid
               title="morgue"
-              people={getPeople(gameManager, {
+              people={actions.people.getPeople(gameManager, {
                 zoneId: selectedZone.id,
                 deceasedOnly: true,
               })}
@@ -79,7 +71,7 @@ const WorldZone = ({ gameManager }: WorldZoneProps) => {
           <AccordionDetails>
             <BuildingDataGrid
               title=""
-              buildings={getBuildings(gameManager, {
+              buildings={buildings.getBuildings(gameManager, {
                 zoneId: selectedZone.id,
               })}
               gameManager={gameManager}

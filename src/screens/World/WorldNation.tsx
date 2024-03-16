@@ -1,23 +1,18 @@
 import { Box, Divider, Typography } from "@mui/material";
 import MetricNumber from "../../elements/MetricNumber/MetricNumber";
 import ZoneDataGrid from "../../dataGrids/zoneDataGrid";
-import { GameManager } from "empire-of-evil";
-import { Nation } from "empire-of-evil/src/types/interfaces/entities";
-import { getZones } from "empire-of-evil/src/actions/zones";
 import { useAppSelector } from "../../app/hooks";
+import { actions } from "empire-of-evil";
+import { IntegratedManagerProps } from "../..";
 
-interface OverviewProps {
-  gameManager: GameManager;
-}
-
-const WorldNation = ({ gameManager }: OverviewProps) => {
+const WorldNation = ({ gameManager }: IntegratedManagerProps) => {
   const selectedNation = useAppSelector((state) => state.selections.nation);
   return (
     <Box>
       <Box padding="1rem">
         <MetricNumber
           number={
-            getZones(gameManager, {
+            actions.zones.getZones(gameManager, {
               organizationId: selectedNation.organizationId,
             }).length
           }
@@ -31,7 +26,7 @@ const WorldNation = ({ gameManager }: OverviewProps) => {
       <Box padding="1rem">
         <ZoneDataGrid
           gameManager={gameManager}
-          zones={getZones(gameManager, {
+          zones={actions.zones.getZones(gameManager, {
             organizationId: selectedNation.organizationId,
           })}
           title=""

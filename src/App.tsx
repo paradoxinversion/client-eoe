@@ -1,7 +1,6 @@
 import "./App.css";
-import { useState } from "react";
 
-import ScreenNavigator from "./elements/ScreeNavigator";
+import ScreenNavigator from "./elements/ScreenNavigator";
 import { Box, CssBaseline, AppBar, Toolbar, Typography } from "@mui/material";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -21,6 +20,7 @@ import EventsScreen from "./screens/Events/EventScreen";
 import GameOverScreen from "./screens/Endgame/GameOverScreen";
 import VictoryScreen from "./screens/Endgame/VictoryScreen";
 import InfrastructureScreen from "./screens/Infrastructure/InfrastructureScreen";
+import HelpScreen from "./screens/Help/HelpScreen";
 
 const screens = {
   title: TitleScreen,
@@ -35,14 +35,12 @@ const screens = {
   "game-over": GameOverScreen,
   victory: VictoryScreen,
   infrastructure: InfrastructureScreen,
+  help: HelpScreen,
 };
 
 function App({ gameManager }) {
   const currentScreen = useAppSelector((state) => state.screen);
-  const [gameData, _setGameData] = useState({});
-  const [gameScreen, setGameScreen] = useState("title");
   const CurrentScreen = screens[currentScreen];
-  // const screenTitle = screens[currentScreen].title;
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -57,7 +55,7 @@ function App({ gameManager }) {
       <ScreenNavigator gameManager={gameManager} />
       <Box sx={{ flexGrow: 1 }}>
         <ScreenLayout>
-          <CurrentScreen gameManager={gameManager} setScreen={setGameScreen} />
+          <CurrentScreen gameManager={gameManager} />
         </ScreenLayout>
       </Box>
     </Box>

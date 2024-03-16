@@ -1,4 +1,3 @@
-import { useSelector, useDispatch } from "react-redux";
 import { saveGame } from "../actions/dataManagement";
 import { setScreen } from "../features/screenSlice";
 import {
@@ -11,6 +10,10 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  ListItemIcon,
 } from "@mui/material";
 
 import {
@@ -21,10 +24,13 @@ import {
   TipsAndUpdates as TipsAndUpdatesIcon,
   Home as HomeIcon,
   LocationCity as LocationCityIcon,
+  QuestionAnswer as QuestionAnswerIcon,
+  QuestionMark as QuestionMarkIcon,
 } from "@mui/icons-material";
 import TitleScreenOptions from "./ScreenNavigator/TitleScreenOptions";
 import { useState } from "react";
-import { clearSelections, selectEntity } from "../features/selectionSlice";
+import { clearSelections } from "../features/selectionSlice";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 
 const screens = [
   {
@@ -37,31 +43,6 @@ const screens = [
     title: "World",
     icon: <TravelExploreIcon />,
   },
-  // {
-  //   screen: "intel",
-  //   title: "Intel",
-  //   icon: (
-  //     <svg
-  //       xmlns="http://www.w3.org/2000/svg"
-  //       fill="none"
-  //       viewBox="0 0 24 24"
-  //       strokeWidth={1.5}
-  //       stroke="currentColor"
-  //       className="w-5 h-5 mr-2"
-  //     >
-  //       <path
-  //         strokeLinecap="round"
-  //         strokeLinejoin="round"
-  //         d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
-  //       />
-  //       <path
-  //         strokeLinecap="round"
-  //         strokeLinejoin="round"
-  //         d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-  //       />
-  //     </svg>
-  //   ),
-  // },
   {
     screen: "personnel",
     title: "Personnel",
@@ -72,26 +53,31 @@ const screens = [
     title: "Infrastructure",
     icon: <LocationCityIcon />,
   },
-  // {
-  //   screen: "science",
-  //   title: "Science",
-  //   icon: <FunctionsIcon />,
-  // },
+  {
+    screen: "science",
+    title: "Science",
+    icon: <FunctionsIcon />,
+  },
   {
     screen: "plots",
     title: "Plots",
     icon: <TipsAndUpdatesIcon />,
   },
+  {
+    screen: "help",
+    title: "Help",
+    icon: <QuestionMarkIcon />,
+  },
 ];
 
-export const screenNavigatorWidth = 150;
+export const screenNavigatorWidth = 250;
 
 function ScreenNavigator({ gameManager }) {
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
-  const dispatch = useDispatch();
-  const f = useSelector((state) => state.gameManager);
-
-  const { activityManager, plotManager } = gameManager;
+  const dispatch = useAppDispatch();
+  const gameInitialized = useAppSelector(
+    (state) => state.gameManager
+  ).initialized;
 
   return (
     <Drawer
@@ -107,31 +93,34 @@ function ScreenNavigator({ gameManager }) {
       }}
     >
       <Toolbar />
-      {f.initialized && Object.keys(gameManager.gameData).length > 0 ? (
+      {gameInitialized && Object.keys(gameManager.gameData).length > 0 ? (
         <>
           <List sx={{ width: "inherit" }}>
-            {screens.map((screen) => (
-              <Button
-                key={screen.screen}
-                startIcon={screen.icon && screen.icon}
-                className="flex items-center tracking-wider text-sm p-2"
+            {screens.map((gameScreen) => (
+              <ListItem key={gameScreen.screen}>
+                <ListItemButton
+                  onClick={() => {
+                    dispatch(clearSelections());
+                    dispatch(setScreen(gameScreen.screen));
+                  }}
+                >
+                  <ListItemIcon>{gameScreen.icon}</ListItemIcon>
+                  <ListItemText primary={gameScreen.title} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+            <ListItem>
+              <ListItemButton
                 onClick={() => {
-                  dispatch(clearSelections());
-                  dispatch(setScreen(screen.screen));
+                  setSaveDialogOpen(true);
                 }}
               >
-                {screen.title}
-              </Button>
-            ))}
+                <ListItemIcon>{<SaveIcon />}</ListItemIcon>
+                <ListItemText primary={"Save"} />
+              </ListItemButton>
+            </ListItem>
           </List>
-          <Button
-            startIcon={<SaveIcon />}
-            onClick={() => {
-              setSaveDialogOpen(true);
-            }}
-          >
-            Save
-          </Button>
+
           <Dialog open={saveDialogOpen}>
             <DialogTitle>Save Your Data?</DialogTitle>
             <DialogContent sx={{ width: "300px" }}>
@@ -143,7 +132,7 @@ function ScreenNavigator({ gameManager }) {
               <Button onClick={() => setSaveDialogOpen(false)}>Cancel</Button>
               <Button
                 onClick={() => {
-                  saveGame(gameManager, activityManager, plotManager);
+                  saveGame(gameManager);
                   setSaveDialogOpen(false);
                 }}
                 autoFocus

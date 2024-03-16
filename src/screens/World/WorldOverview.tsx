@@ -1,20 +1,12 @@
-import { Box, Card, Divider, Typography } from "@mui/material";
-import MetricNumber from "../../elements/MetricNumber/MetricNumber";
-import ZoneDataGrid from "../../dataGrids/zoneDataGrid";
+import { Box, Card, Typography } from "@mui/material";
 import { GameManager } from "empire-of-evil";
-import { Nation } from "empire-of-evil/src/types/interfaces/entities";
-import { getZones } from "empire-of-evil/src/actions/zones";
-import { useAppSelector } from "../../app/hooks";
 import DataGrid from "react-data-grid";
-import { toDataArray } from "../../utilities/dataHelpers";
-import { getNationCitizens } from "empire-of-evil/src/nations";
-import { getAgents } from "empire-of-evil/src/organization";
 import { useDispatch } from "react-redux";
 import { dataGridButton } from "../../datagridRenderers/dataGridButton";
 import { selectEntity } from "../../features/selectionSlice";
-interface OverviewProps {
-  gameManager: GameManager;
-}
+import { actions, nations, organizations } from "empire-of-evil";
+import { IntegratedManagerProps } from "../..";
+
 const nationsTableColumns = [
   { key: "nation", name: "Nation" },
   { key: "population", name: "Population" },
@@ -22,15 +14,16 @@ const nationsTableColumns = [
   { key: "agents", name: "Agents" },
   { key: "viewNation", name: "View Nation", renderCell: dataGridButton },
 ];
-const WorldOverview = ({ gameManager }: OverviewProps) => {
+const WorldOverview = ({ gameManager }: IntegratedManagerProps) => {
   const dispatch = useDispatch();
-  const { gameData } = gameManager;
-  const nationsArray = toDataArray(gameData.nations);
+
+  const nationsArray = nations.getNations(gameManager, {});
   const nationsRows = nationsArray.map((nation) => ({
     nation: nation.name,
-    population: getNationCitizens(gameManager, nation.id).length,
-    agents: getAgents(gameManager, nation.organizationId).length,
-    zones: getZones(gameManager, { nationId: nation.id }).length,
+    population: actions.people.getPeople(gameManager, { nationId: nation.id })
+      .length,
+    agents: organizations.getAgents(gameManager, nation.organizationId).length,
+    zones: actions.zones.getZones(gameManager, { nationId: nation.id }).length,
     viewNation: () => {
       dispatch(
         selectEntity({
