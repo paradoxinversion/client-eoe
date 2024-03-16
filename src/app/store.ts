@@ -9,6 +9,7 @@ import screenReducer from "../features/screenSlice";
 import selectionReducer from "../features/selectionSlice";
 import configReducer from "../features/configSlice";
 import scienceReducer from "../features/scienceSlice";
+import gameLogReducer from "../features/gameLogSlice";
 import { config } from "../config/config";
 const rootReducer = combineReducers({
   gameManager: gameManagerReducer,
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   selections: selectionReducer,
   config: configReducer,
   science: scienceReducer,
+  gameLog: gameLogReducer,
 });
 
 export function setupStore(preloadedState) {

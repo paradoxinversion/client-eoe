@@ -3,7 +3,6 @@ import { AppBar, Box, Divider, Toolbar, Typography } from "@mui/material";
 const VictoryScreen = () => {
   return (
     <Box>
-      <Toolbar />
       <Box>
         <Box padding={"1rem"}>
           <Typography variant="h3">Victory</Typography>

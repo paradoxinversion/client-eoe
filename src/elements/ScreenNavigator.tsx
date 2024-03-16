@@ -125,7 +125,8 @@ function ScreenNavigator({ gameManager }) {
             <DialogTitle>Save Your Data?</DialogTitle>
             <DialogContent sx={{ width: "300px" }}>
               <DialogContentText>
-                Save your data? It will be saved to your hard drive.
+                Save your data? It will be saved to your browser's local
+                storage. If you clear your history, you may lose your data!
               </DialogContentText>
             </DialogContent>
             <DialogActions>

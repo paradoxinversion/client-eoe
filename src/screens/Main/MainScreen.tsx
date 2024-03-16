@@ -15,6 +15,8 @@ import {
 } from "empire-of-evil/src/organization";
 import { getInfrastructureLoad } from "empire-of-evil/src/buildings";
 import { useAppDispatch } from "../../app/hooks";
+import { updateGameData } from "../../actions/dataManagement";
+import { updateSimActions } from "../../features/gameLogSlice";
 
 const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
   const dispatch = useAppDispatch();
@@ -57,6 +59,7 @@ const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
             color="inherit"
             onClick={() => {
               advanceDay(gameManager);
+              dispatch(updateSimActions(gameManager.gameData.gameLog));
               dispatch(setScreen("events"));
             }}
           >
