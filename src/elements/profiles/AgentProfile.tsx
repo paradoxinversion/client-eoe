@@ -1,4 +1,13 @@
-import { Box, Button, Divider, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { IntegratedManagerProps } from "../..";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { actions } from "empire-of-evil";
@@ -12,8 +21,8 @@ const AgentProfile = ({ gameManager }: IntegratedManagerProps) => {
   return (
     <Box padding="1rem">
       <Box>
-        <Typography>Agent Profile</Typography>
-        <Typography>
+        <Typography variant="h4">Agent Profile</Typography>
+        <Typography variant="h5">
           {selectedAgent.name} (
           {actions.people.getAgentDepartment(selectedAgent.agent)})
         </Typography>
@@ -37,18 +46,56 @@ const AgentProfile = ({ gameManager }: IntegratedManagerProps) => {
           </Button>
         </Box>
       )}
-      <Typography>Salary: {selectedAgent.agent.salary}</Typography>
-      <Typography>Attributes</Typography>
-      <Box>
-        <Typography>
-          Administration: {selectedAgent.skills.administration}
-        </Typography>
-        <Typography>Combat: {selectedAgent.skills.combat}</Typography>
-        <Typography>
-          Intelligence: {selectedAgent.standardAttributes.intelligence}
-        </Typography>
-        <Typography>Leadership: {selectedAgent.skills.leadership}</Typography>
-      </Box>
+      <Grid container spacing="1rem" height={"100%"}>
+        <Grid item height={"100%"}>
+          <Card>
+            <CardContent sx={{ width: "max-content" }}>
+              <Typography variant="overline">FOo</Typography>
+              <Typography>Salary: {selectedAgent.agent.salary}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item>
+          <Card>
+            <CardContent sx={{ width: "max-content" }}>
+              <Typography variant="overline">FOo</Typography>
+              <Typography>
+                Agility: {selectedAgent.standardAttributes.agility}
+              </Typography>
+              <Typography>
+                Constitution: {selectedAgent.standardAttributes.constitution}
+              </Typography>
+              <Typography>
+                Intelligence: {selectedAgent.standardAttributes.intelligence}
+              </Typography>
+              <Typography>
+                Strength: {selectedAgent.standardAttributes.strength}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item>
+          <Card>
+            <CardContent sx={{ width: "max-content" }}>
+              <Typography variant="overline">Skills</Typography>
+              <Typography>
+                Administration: {selectedAgent.skills.administration}
+              </Typography>
+              <Typography>Combat: {selectedAgent.skills.combat}</Typography>
+              <Typography>Disguise: {selectedAgent.skills.disguise}</Typography>
+              <Typography>
+                Espionage: {selectedAgent.skills.espionage}
+              </Typography>
+              <Typography>
+                Leadership: {selectedAgent.skills.leadership}
+              </Typography>
+              <Typography>Science: {selectedAgent.skills.science}</Typography>
+              <Typography>Security: {selectedAgent.skills.security}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+
       <Divider />
       <Box>
         <PersonDataGrid

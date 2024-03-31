@@ -1,15 +1,22 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Activity, Plot } from 'empire-of-evil/src/plots';
-import { Building, GoverningOrganization, Nation, Person, Zone } from 'empire-of-evil/src/types/interfaces/entities';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import Plot from "empire-of-evil/src/plots/Plot";
+import Activity from "empire-of-evil/src/activities/Activity";
+import {
+  Building,
+  GoverningOrganization,
+  Nation,
+  Person,
+  Zone,
+} from "empire-of-evil/src/types/interfaces/entities";
 
 interface SelectionState {
-  governmentOrganization: GoverningOrganization,
-  zone: Zone,
-  nation: Nation,
-  person: Person,
-  building: Building,
-  plot: Plot,
-  activity: Activity
+  governmentOrganization: GoverningOrganization;
+  zone: Zone;
+  nation: Nation;
+  person: Person;
+  building: Building;
+  plot: Plot;
+  activity: Activity;
 }
 
 const INITIAL_SELECTION_STATE: SelectionState = {
@@ -19,11 +26,11 @@ const INITIAL_SELECTION_STATE: SelectionState = {
   person: null,
   building: null,
   plot: null,
-  activity: null
-}
+  activity: null,
+};
 
 export const selectionSlice = createSlice({
-  name: 'selection',
+  name: "selection",
   initialState: INITIAL_SELECTION_STATE,
   reducers: {
     clearSelections: () => {
@@ -32,15 +39,18 @@ export const selectionSlice = createSlice({
     /**
      * Requires a type and selection
      */
-    selectEntity: (state, action: PayloadAction<{type: string, selection: Object}>) => {
+    selectEntity: (
+      state,
+      action: PayloadAction<{ type: string; selection: Object }>
+    ) => {
       return {
         ...state,
-        [action.payload.type]: action.payload.selection
-      }
-    }
-  }
-})
+        [action.payload.type]: action.payload.selection,
+      };
+    },
+  },
+});
 
-export const { clearSelections, selectEntity } = selectionSlice.actions
+export const { clearSelections, selectEntity } = selectionSlice.actions;
 
-export default selectionSlice.reducer
+export default selectionSlice.reducer;

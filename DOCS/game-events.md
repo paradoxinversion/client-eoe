@@ -2,3 +2,5 @@ Game Events are situations that need to be resolved. After each turn, there is a
 
 `advanceDay` is responsible for gathering game events and returning game data with the events that should occur at the end of a turn from the main screen. If there are events, the main screen should then switch to the events screen.
 
+Resolution
+Plot events have resolution functions that handle committing any changes to game data. This includes changes from plots and science projects. 

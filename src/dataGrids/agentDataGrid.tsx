@@ -11,8 +11,8 @@ import "react-data-grid/lib/styles.css";
 const agentDataGridColumns = [
   { key: "name", name: "Name" },
   { key: "health", name: "Health" },
-  { key: "intelligence", name: "Intelligence" },
-  { key: "combat", name: "Combat" },
+  { key: "aptitude", name: "Aptitude" },
+  { key: "prowess", name: "Prowess" },
   { key: "administration", name: "Administration" },
   { key: "zone", name: "Zone" },
   { key: "loyalty", name: "Loyalty" },
@@ -39,11 +39,13 @@ const AgentDataGrid = ({ title, agents, gameManager }: AgentDataGridProps) => {
       derivedAttributes: {
         health: { totalHealth: health, currentHealth },
       },
-      standardAttributes: { intelligence },
-      skills: { combat, administration },
+      standardAttributes: { intelligence, agility },
+      skills: { combat, administration, espionage, science, security },
     } = person;
     return {
       id,
+      aptitude: intelligence + administration + espionage + science,
+      prowess: agility + combat + security,
       zone: zoneName,
       health: `${currentHealth}/${health}`,
       intelligence,

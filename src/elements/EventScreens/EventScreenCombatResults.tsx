@@ -1,5 +1,8 @@
 import { Box, Button, Divider, Typography } from "@mui/material";
 import { GameEventComponentProps } from "../../screens/Events/EventScreen";
+import { AttackZoneParams } from "empire-of-evil/src/gameEvents";
+import { PlotResult } from "empire-of-evil/src/plots/Plot";
+import { CombatResult } from "empire-of-evil/src/combat";
 
 const combatRoundSeconds = 3;
 
@@ -7,10 +10,12 @@ const EventScreenCombatResults = ({
   currentGameEvent,
   resolveEvent,
 }: GameEventComponentProps) => {
-  console.log(currentGameEvent.params.attackZone);
-  const wasVictorious =
-    currentGameEvent.params.attackZone.plot.resolution.data.victoryResult;
-  const rounds = currentGameEvent.params.attackZone.plot.resolution.data.rounds;
+  const params = currentGameEvent?.params as AttackZoneParams;
+  const resolution = params.plot.resolution as PlotResult;
+  resolution.resolutionData as CombatResult;
+  const wasVictorious = (resolution.resolutionData as CombatResult)
+    .victoryResult;
+  const rounds = (resolution.resolutionData as CombatResult).rounds;
 
   const getCombatTime = () => {
     const combatSeconds = rounds * combatRoundSeconds;
@@ -36,7 +41,7 @@ const EventScreenCombatResults = ({
         id="combat-log-container"
         sx={{ height: "15rem", overflowY: "scroll" }}
       >
-        {currentGameEvent?.params?.attackZone.plot?.resolution?.data?.combatLog?.map(
+        {(resolution.resolutionData as CombatResult).combatLog?.map(
           (logString, index) => (
             <Typography key={`log-${index}`} variant="body2">
               {logString}

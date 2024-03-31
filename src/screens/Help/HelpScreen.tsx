@@ -3,14 +3,14 @@ import { Box, Typography } from "@mui/material";
 const HelpScreen = () => {
   return (
     <Box padding="1rem">
-      <Typography>Help</Typography>
+      <Typography variant="h3">Help</Typography>
       <Typography>
         Empire of EVIL is a 4x management game. Your goal is to control the
         world. You'll need to manage your resources, personnel, and territory to
         achieve this. You'll also need to research new technologies and execute
         EVIL plots to undermine your enemies.
       </Typography>
-      <Typography>Playing the Game</Typography>
+      <Typography variant="h4">Playing the Game</Typography>
       <Box padding="1rem">
         <Typography>
           Use the buttons on the left to navigate between the different screens.
@@ -19,7 +19,7 @@ const HelpScreen = () => {
           infrastructure.{" "}
         </Typography>
       </Box>
-      <Typography>First Steps</Typography>
+      <Typography variant="h4">First Steps</Typography>
       <Box padding="1rem">
         <Typography>
           First, you'll want to visit the <strong>Personnel</strong> screen and
@@ -31,7 +31,7 @@ const HelpScreen = () => {
           building (relevant bonuses are noted during agent selection).
         </Typography>
       </Box>
-      <Typography>Science Projects</Typography>
+      <Typography variant="h4">Science Projects</Typography>
       <Box padding="1rem">
         <Typography>
           When you have Scientists working in Laboratories, you should visit the{" "}
@@ -39,7 +39,7 @@ const HelpScreen = () => {
         </Typography>
       </Box>
 
-      <Typography>Plots</Typography>
+      <Typography variant="h4">Plots</Typography>
       <Box padding="1rem">
         <Typography>
           The <strong>Plots</strong> screen is where you'll determine what EVIL

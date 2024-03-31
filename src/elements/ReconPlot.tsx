@@ -1,5 +1,4 @@
 import { getAgents, getControlledZones } from "empire-of-evil/src/organization";
-import { Plot } from "empire-of-evil/src/plots";
 import { useState } from "react";
 import { toDataArray } from "../utilities/dataHelpers";
 import {
@@ -15,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { people } from "empire-of-evil/src/actions";
-
+import Plot from "empire-of-evil/src/plots/Plot";
 /**
  *
  * @param {Object} props
@@ -30,11 +29,17 @@ const ReconPlot = ({ gameManager, cb }) => {
     (nation) => nation.organizationId !== gameData.player.organizationId
   );
   const preparePlot = () => {
-    const plotParams = {
-      zoneId: zone.id,
-      participants,
-    };
-    const plot = new Plot("Recon Zone", "recon-zone", plotParams);
+    const plot = new Plot(
+      "Recon Zone",
+      "recon-zone",
+      {
+        targetZone: zone.id,
+        participants,
+      },
+      {
+        surrender: true,
+      }
+    );
     plotManager.addPlot(plot);
   };
   const onUpdateParticipants = (e, agent) => {
@@ -69,9 +74,9 @@ const ReconPlot = ({ gameManager, cb }) => {
                   <Grid item>
                     <Chip
                       label={n.name}
-                      type={"radio"}
-                      name="nation-select"
-                      id={`nation-select-${n.id}`}
+                      // type={"radio"}
+                      // name="nation-select"
+                      // id={`nation-select-${n.id}`}
                       variant={nation?.id === n.id ? "outlined" : "filled"}
                       onClick={() => {
                         setNation(n);
@@ -91,6 +96,7 @@ const ReconPlot = ({ gameManager, cb }) => {
                 {getControlledZones(gameManager, nation.organizationId).map(
                   (selectedZone) => (
                     <Chip
+                      component={"button"}
                       label={selectedZone.name}
                       name="zone-select"
                       id={`zone-select-${selectedZone.id}`}
@@ -143,7 +149,6 @@ const ReconPlot = ({ gameManager, cb }) => {
                       <Grid item>
                         <Chip
                           label={selectedAgent.name}
-                          type={"checkbox"}
                           id={`agent-select-${selectedAgent.id}`}
                           variant={
                             participants.includes(selectedAgent.id)
@@ -181,7 +186,7 @@ const ReconPlot = ({ gameManager, cb }) => {
       </CardContent>
       <DialogActions>
         <Button
-          disable={!nation || !zone}
+          disabled={!nation || !zone}
           onClick={(e) => {
             e.preventDefault();
             preparePlot();
@@ -191,7 +196,7 @@ const ReconPlot = ({ gameManager, cb }) => {
           Done
         </Button>
         <Button
-          disable={!nation || !zone}
+          disabled={!nation || !zone}
           onClick={(e) => {
             e.preventDefault();
             cb();

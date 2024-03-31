@@ -1,5 +1,6 @@
 import { getAgents, getControlledZones } from "empire-of-evil/src/organization";
-import { Plot, PlotManager } from "empire-of-evil/src/plots";
+// import { Plot, PlotManager } from "empire-of-evil/src/plots";
+import { PlotManager } from "empire-of-evil/src/plots/PlotManager";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { toDataArray } from "../utilities/dataHelpers";
@@ -16,6 +17,7 @@ import {
   Chip,
   Stack,
 } from "@mui/material";
+import Plot from "empire-of-evil/src/plots/Plot";
 /**
  *
  * @param {Object} props

@@ -11,7 +11,7 @@ import { IntegratedManagerProps } from "../..";
 import { useAppDispatch } from "../../app/hooks";
 import { selectEntity } from "../../features/selectionSlice";
 import { useState } from "react";
-import { Activity } from "empire-of-evil/src/plots";
+import Activity from "empire-of-evil/src/activities/Activity";
 import { plots, actions } from "empire-of-evil";
 import DataGrid from "react-data-grid";
 import AgentSelector from "../../elements/AgentSelector/AgentSelector";
