@@ -36,8 +36,11 @@ const AgentDataGrid = ({ title, agents, gameManager }: AgentDataGridProps) => {
       name,
       agent,
       intelAttributes: { loyalty, intelligenceLevel, loyalties },
-      vitalAttributes: { health, currentHealth },
-      basicAttributes: { intelligence, combat, administration },
+      derivedAttributes: {
+        health: { totalHealth: health, currentHealth },
+      },
+      standardAttributes: { intelligence },
+      skills: { combat, administration },
     } = person;
     return {
       id,

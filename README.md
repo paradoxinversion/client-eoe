@@ -18,3 +18,4 @@ yarn add <path>/empire-of-evil
 
 - Some parcel build errors in development can be remedied by deleting the parcel cache.
 - Storybook currently seems to interfere with Parcel's HMR.
+

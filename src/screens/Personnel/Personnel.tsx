@@ -6,6 +6,7 @@ import { organizations } from "empire-of-evil";
 import { getPeople } from "empire-of-evil/src/actions/people";
 import PersonnelOverview from "./PersonnelOverview";
 import PersonnelProfile from "./PersonnelProfile";
+import PersonnelCaptives from "./PersonnelCaptives";
 
 interface PersonnelScreenProps {
   gameManager: eoe.GameManager;
@@ -92,6 +93,7 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
       ) : (
         <PersonnelOverview gameManager={gameManager} />
       )}
+      <PersonnelCaptives gameManager={gameManager} />
     </>
   );
 };

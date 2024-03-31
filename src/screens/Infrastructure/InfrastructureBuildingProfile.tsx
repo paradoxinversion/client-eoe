@@ -53,18 +53,16 @@ const InfrastructureBuildingProfile = ({
                   let relatedAttributeName = "";
                   switch (selectedBuilding.type) {
                     case "bank":
-                      relatedAttributeStat =
-                        person.basicAttributes.administration;
+                      relatedAttributeStat = person.skills.administration;
                       relatedAttributeName = "Administration";
                       break;
                     case "laboratory":
                       relatedAttributeStat =
-                        person.basicAttributes.intelligence;
+                        person.standardAttributes.intelligence;
                       relatedAttributeName = "Intelligence";
                       break;
                     case "office":
-                      relatedAttributeStat =
-                        person.basicAttributes.administration;
+                      relatedAttributeStat = person.skills.administration;
                       relatedAttributeName = "Administration";
                       break;
                     default:

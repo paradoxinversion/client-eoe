@@ -41,15 +41,13 @@ const AgentProfile = ({ gameManager }: IntegratedManagerProps) => {
       <Typography>Attributes</Typography>
       <Box>
         <Typography>
-          Administration: {selectedAgent.basicAttributes.administration}
+          Administration: {selectedAgent.skills.administration}
         </Typography>
-        <Typography>Combat: {selectedAgent.basicAttributes.combat}</Typography>
+        <Typography>Combat: {selectedAgent.skills.combat}</Typography>
         <Typography>
-          Intelligence: {selectedAgent.basicAttributes.intelligence}
+          Intelligence: {selectedAgent.standardAttributes.intelligence}
         </Typography>
-        <Typography>
-          Leadership: {selectedAgent.basicAttributes.leadership}
-        </Typography>
+        <Typography>Leadership: {selectedAgent.skills.leadership}</Typography>
       </Box>
       <Divider />
       <Box>

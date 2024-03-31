@@ -9,9 +9,12 @@ import {
   Chip,
   DialogActions,
   DialogTitle,
+  Grid,
+  Paper,
   Stack,
   Typography,
 } from "@mui/material";
+import { people } from "empire-of-evil/src/actions";
 
 /**
  *
@@ -47,35 +50,38 @@ const ReconPlot = ({ gameManager, cb }) => {
         );
       }
     }
-
   };
   return (
     <>
       <DialogTitle>Execute Reconnaisance Operation</DialogTitle>
-      <CardContent sx={{height: "500px"}}>
+      <CardContent sx={{ height: "500px" }}>
         <Typography>
           Send agents for covert intelligence-gathering in a foreign zone.
         </Typography>
-        <div>
-          <Box>
+        <Box padding="1" marginBottom="1rem">
+          <Box marginBottom="1rem">
             <Typography>Select a Nation</Typography>
           </Box>
-          <Stack direction="row" spacing={1} padding={1}>
-            {nations.map((n) => {
-              return (
-                <Chip
-                  label={n.name}
-                  type={"radio"}
-                  name="nation-select"
-                  id={`nation-select-${n.id}`}
-                  variant={nation?.id === n.id ? "outlined" : "filled"}
-                  onClick={() => {
-                    setNation(n);
-                  }}
-                />
-              );
-            })}
-          </Stack>
+          <Paper sx={{ marginBottom: "1rem" }}>
+            <Grid container spacing={1} padding={1}>
+              {nations.map((n) => {
+                return (
+                  <Grid item>
+                    <Chip
+                      label={n.name}
+                      type={"radio"}
+                      name="nation-select"
+                      id={`nation-select-${n.id}`}
+                      variant={nation?.id === n.id ? "outlined" : "filled"}
+                      onClick={() => {
+                        setNation(n);
+                      }}
+                    />
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </Paper>
           {nation && (
             <div>
               <Box component={"header"}>
@@ -107,27 +113,51 @@ const ReconPlot = ({ gameManager, cb }) => {
                   Select the Agents attending this mission.
                 </p>
               </header>
-              <Stack direction="row" spacing={1} padding={1}>
-                {getAgents(gameManager, gameData.player.organizationId)
-                  .filter(
-                    (agent) =>
-                      agent.agent.department === 0 ||
-                      agent.agent.department === 3
-                  )
-                  .map((selectedAgent) => (
-                    <Chip
-                      label={selectedAgent.name}
-                      type={"checkbox"}
-                      id={`agent-select-${selectedAgent.id}`}
-                      variant={
-                        participants.includes(selectedAgent.id) ? 'outlined' : 'filled'
-                      }
-                      onClick={(e) => {
-                        onUpdateParticipants(e, selectedAgent);
-                      }}
-                    />
-                  ))}
-              </Stack>
+              <Paper>
+                <Grid
+                  container
+                  spacing={1}
+                  rowSpacing={1}
+                  sx={{
+                    overflowY: "scroll",
+                    padding: "0.5rem",
+                    maxHeight: "150px",
+                  }}
+                >
+                  {people
+                    .getPeople(gameManager, {
+                      excludeDeceased: true,
+                      excludePersonnel: true,
+                      excludeCaptured: true,
+                      agentFilter: {
+                        agentsOnly: true,
+                        department: -1,
+                      },
+                    })
+                    .filter(
+                      (agent) =>
+                        agent.agent.department === 0 ||
+                        agent.agent.department === 3
+                    )
+                    .map((selectedAgent) => (
+                      <Grid item>
+                        <Chip
+                          label={selectedAgent.name}
+                          type={"checkbox"}
+                          id={`agent-select-${selectedAgent.id}`}
+                          variant={
+                            participants.includes(selectedAgent.id)
+                              ? "outlined"
+                              : "filled"
+                          }
+                          onClick={(e) => {
+                            onUpdateParticipants(e, selectedAgent);
+                          }}
+                        />
+                      </Grid>
+                    ))}
+                </Grid>
+              </Paper>
               <div>
                 <p className="text-lg border-b mb-4">Selected Agents</p>
                 <Stack direction="row" spacing={1} padding={1}>
@@ -147,7 +177,7 @@ const ReconPlot = ({ gameManager, cb }) => {
               </footer>
             </div>
           )}
-        </div>
+        </Box>
       </CardContent>
       <DialogActions>
         <Button
@@ -169,7 +199,6 @@ const ReconPlot = ({ gameManager, cb }) => {
         >
           Cancel
         </Button>
-
       </DialogActions>
     </>
   );

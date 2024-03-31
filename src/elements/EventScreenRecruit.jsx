@@ -53,23 +53,23 @@ const EventScreenRecruit = ({
             rows={[
               {
                 attribute: "Combat",
-                value: currentGameEvent.params.recruit?.basicAttributes.combat,
+                value: currentGameEvent.params.recruit?.skills.combat,
               },
               {
                 attribute: "Administration",
                 value:
-                  currentGameEvent.params.recruit?.basicAttributes
+                  currentGameEvent.params.recruit?.standardAttributes
                     .administration,
               },
               {
                 attribute: "Intelligence",
                 value:
-                  currentGameEvent.params.recruit?.basicAttributes.intelligence,
+                  currentGameEvent.params.recruit?.standardAttributes
+                    .intelligence,
               },
               {
                 attribute: "Leadership",
-                value:
-                  currentGameEvent.params.recruit?.basicAttributes.leadership,
+                value: currentGameEvent.params.recruit?.skills.leadership,
               },
               {
                 attribute: "Loyalty",
@@ -105,8 +105,8 @@ const EventScreenRecruit = ({
                   <FormControlLabel
                     value={agent.id}
                     control={<Radio />}
-                    label={`${agent.name} (${subordinates.length}/${agent.basicAttributes.leadership})`}
-                    disabled={subordinates.length === agent.leadership}
+                    label={`${agent.name} (${subordinates.length}/${agent.skills.leadership})`}
+                    disabled={subordinates.length === agent.skills.leadership}
                   />
                 );
               }
