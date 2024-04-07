@@ -29,8 +29,15 @@ const InfrastructureBuildingProfile = ({
       <Dialog open={assignStaffOpen}>
         <DialogTitle>Assign Staff</DialogTitle>
         <DialogContent>
-          <DialogContentText>Foobar</DialogContentText>
-          <Typography>Assign Staff members to this building</Typography>
+          <DialogContentText>
+            Assign Staff members to this building
+          </DialogContentText>
+
+          {selectedBuilding.type === "laboratory" && (
+            <Typography variant="caption">
+              This facility must be staffed by scientists.
+            </Typography>
+          )}
           <Grid container spacing={1} columns={3}>
             {selectedBuilding &&
               actions.people

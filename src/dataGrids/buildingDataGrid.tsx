@@ -46,7 +46,6 @@ const BuildingDataGrid = ({
       wealthBonus,
       infrastructure: building.resourceAttributes.infrastructure,
       cb: (b) => {
-        console.log("foo");
         cb && cb(b);
       },
     };

@@ -1,14 +1,10 @@
 import { Box, Button, Divider, CardContent, Typography } from "@mui/material";
 
-/**
- * @param {object} props
- * @param {object} props.currentGameEvent
- * @param {Function} props.resolveEvent
- * @returns
- */
-const EventScreenProceed = ({ resolveEvent }) => {
+const EventScreenPetEvent = ({ currentGameEvent, resolveEvent }) => {
+  console.log(currentGameEvent);
   return (
     <Box>
+      <Typography>{currentGameEvent.getEventText()}</Typography>
       <Button
         onClick={() => {
           resolveEvent();
@@ -20,4 +16,4 @@ const EventScreenProceed = ({ resolveEvent }) => {
   );
 };
 
-export default EventScreenProceed;
+export default EventScreenPetEvent;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {Box, Button, DialogTitle, Divider, Toolbar} from "@mui/material";
+import { Box, Button, DialogTitle, Divider, Toolbar } from "@mui/material";
 
 /**
  * @param {object} props
@@ -12,11 +12,12 @@ const EventScreenStandardReport = ({ resolveEvent }) => {
     <Box>
       <Divider />
       <Button
-        buttonText="Okay"
         onClick={() => {
           resolveEvent();
         }}
-      />
+      >
+        Okay
+      </Button>
     </Box>
   );
 };

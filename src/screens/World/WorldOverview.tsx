@@ -22,7 +22,10 @@ const WorldOverview = ({ gameManager }: IntegratedManagerProps) => {
     nation: nation.name,
     population: actions.people.getPeople(gameManager, { nationId: nation.id })
       .length,
-    agents: organizations.getAgents(gameManager, nation.organizationId).length,
+    agents: actions.people.getPeople(gameManager, {
+      organizationId: nation.organizationId,
+      agentFilter: { agentsOnly: true },
+    }).length,
     zones: actions.zones.getZones(gameManager, { nationId: nation.id }).length,
     viewNation: () => {
       dispatch(

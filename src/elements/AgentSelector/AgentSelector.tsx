@@ -1,26 +1,67 @@
-import { Box, Checkbox, FormGroup, FormControlLabel } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  FormGroup,
+  FormControlLabel,
+  List,
+} from "@mui/material";
 import { Person } from "empire-of-evil/src/types/interfaces/entities";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { setSelectedAgents } from "../../features/ActivityParticipantSelector/ActivityParticipantSelectorSlice";
+import { isPersonParticipant } from "empire-of-evil/src/activities/activityUtilities";
+import { GameManager } from "empire-of-evil";
 interface AgentSelectorProps {
   agentsArray: Person[];
   cb: Function;
+  gameManager: GameManager;
 }
-const AgentSelector = ({ agentsArray, cb }: AgentSelectorProps) => {
-  const handleCheckbox = (event) => {
-    const value = event.target.checked;
+const AgentSelector = ({
+  agentsArray,
+  cb,
+  gameManager,
+}: AgentSelectorProps) => {
+  const dispatch = useAppDispatch();
+  const { selectedAgents, activity } = useAppSelector(
+    (state) => state.activityParticipantSelector
+  );
+
+  const handleCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = event.target.checked;
     const agentId = event.target.name;
-    cb && cb(agentId, value);
+    if (checked) {
+      dispatch(setSelectedAgents([...selectedAgents, agentId]));
+    } else {
+      dispatch(
+        setSelectedAgents(selectedAgents.filter((id) => id !== agentId))
+      );
+    }
+
+    cb && cb(agentId, checked);
   };
+  useEffect(() => {
+    console.log(activity.agents);
+    dispatch(setSelectedAgents(activity.agents.map((agent) => agent)));
+  }, []);
   return (
-    <Box>
-      <FormGroup>
-        {agentsArray.map((agent) => (
-          <FormControlLabel
-            name={agent.id}
-            control={<Checkbox />}
-            label={agent.name}
-            onChange={handleCheckbox}
-          />
-        ))}
+    <Box padding="1rem">
+      <FormGroup sx={{ height: "150px", overflowY: "scroll" }}>
+        {agentsArray
+          .filter(
+            (agent) =>
+              selectedAgents.includes(agent.id) ||
+              !isPersonParticipant(gameManager, agent)
+          )
+          .map((agent) => (
+            <FormControlLabel
+              key={agent.id}
+              name={agent.id}
+              control={<Checkbox checked={selectedAgents.includes[agent.id]} />}
+              label={agent.name}
+              onChange={handleCheckbox}
+              checked={selectedAgents.includes(agent.id)}
+            />
+          ))}
       </FormGroup>
     </Box>
   );

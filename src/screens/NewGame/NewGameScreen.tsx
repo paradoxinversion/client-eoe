@@ -24,17 +24,18 @@ import { IntegratedManagerProps } from "../..";
 const NewGameScreen = ({ gameManager }: IntegratedManagerProps) => {
   const [overlordFormData, setOverlordFormData] = useState({
     overlordName: "",
-    pet: 0,
-    number: 0,
+    pet: -1,
   });
 
   const onNewGame = () => {
-    console.log(overlordFormData);
-
-    newGame(gameManager);
+    newGame(gameManager, {
+      overlordName: overlordFormData.overlordName,
+      pet: !!overlordFormData.pet,
+    });
   };
 
   const handleInput = (event) => {
+    console.log(event.target.value);
     setOverlordFormData({
       ...overlordFormData,
       [event.target.name]: event.target.value,
@@ -90,6 +91,7 @@ const NewGameScreen = ({ gameManager }: IntegratedManagerProps) => {
                   label="pet"
                   name="pet"
                   sx={{ width: "120px" }}
+                  onChange={handleInput}
                 >
                   <MenuItem value={0}>No Pets</MenuItem>
                   <MenuItem value={1}>(House) Cat</MenuItem>

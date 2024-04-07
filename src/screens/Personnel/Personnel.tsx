@@ -15,10 +15,10 @@ interface PersonnelScreenProps {
 const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
   const selectedAgent = useAppSelector((state) => state.selections.person);
   const { gameData } = gameManager;
-  const currentAgents = organizations.getAgents(
-    gameManager,
-    gameData.player.organizationId
-  ).length;
+  const currentAgents = getPeople(gameManager, {
+    organizationId: gameData.player.organizationId,
+    agentFilter: { agentsOnly: true },
+  }).length;
 
   const maxAgents = organizations.getMaxAgents(
     gameManager,

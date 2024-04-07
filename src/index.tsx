@@ -26,7 +26,6 @@ const darkTheme = createTheme({
     mode: "dark",
   },
 });
-
 root.render(
   <ThemeProvider theme={darkTheme}>
     <Provider store={store}>

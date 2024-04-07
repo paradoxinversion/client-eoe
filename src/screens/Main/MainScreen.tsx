@@ -5,8 +5,19 @@ import {
 } from "empire-of-evil/src/utilities";
 import { useEffect } from "react";
 import MetricNumber from "../../elements/MetricNumber/MetricNumber";
-import { Button, Box, Typography, Divider, Stack, Paper } from "@mui/material";
-import { NotificationImportant as NotificationImportantIcon } from "@mui/icons-material";
+import {
+  Button,
+  Box,
+  Typography,
+  Divider,
+  Stack,
+  Paper,
+  List,
+} from "@mui/material";
+import {
+  NotificationImportant as NotificationImportantIcon,
+  Done as DoneIcon,
+} from "@mui/icons-material";
 import { setScreen } from "../../features/screenSlice";
 import * as eoe from "empire-of-evil";
 import {
@@ -14,14 +25,17 @@ import {
   getOrgResources,
 } from "empire-of-evil/src/organization";
 import { getInfrastructureLoad } from "empire-of-evil/src/buildings";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { updateGameData } from "../../actions/dataManagement";
 import { updateSimActions } from "../../features/gameLogSlice";
+import EventLogItem from "../../elements/EventLogItem";
+import { advanceDays } from "empire-of-evil/src/actions/advanceDay";
 
 const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
   const dispatch = useAppDispatch();
   const { gameData } = gameManager;
-
+  const eventLog = useAppSelector((state) => state.gameLog.events);
+  const reverseLog = [...eventLog].reverse();
   const empireResources = eoe.organizations.getOrgResources(
     gameManager,
     gameData.player.organizationId
@@ -64,6 +78,16 @@ const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
             }}
           >
             {new Date(gameData.gameDate).toDateString()}
+          </Button>
+          <Button
+            color="inherit"
+            onClick={() => {
+              advanceDays(gameManager, 5);
+              dispatch(updateSimActions(gameManager.gameData.gameLog));
+              dispatch(setScreen("events"));
+            }}
+          >
+            5 Days
           </Button>
         </Box>
         <Divider />
@@ -109,10 +133,10 @@ const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
             <MetricNumber
               title="Agents"
               number={
-                eoe.organizations.getAgents(
-                  gameManager,
-                  gameData.player.organizationId
-                ).length
+                eoe.actions.people.getPeople(gameManager, {
+                  organizationId: gameData.player.organizationId,
+                  agentFilter: { agentsOnly: true },
+                }).length
               }
             />
             <MetricNumber
@@ -123,14 +147,16 @@ const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
         </Box>
         <Divider />
       </Box>
-      <Box padding="1rem">
-        <Paper sx={{ width: "100%", padding: "0.5rem" }}>
-          <Stack spacing={2} direction="row" alignItems="center">
-            <NotificationImportantIcon />
-            <Typography>Click the date to end your turn.</Typography>
-          </Stack>
-        </Paper>
-      </Box>
+      <List>
+        {reverseLog.map((event, index) => (
+          <EventLogItem
+            key={index}
+            text={event.text}
+            color={event.color}
+            icon={event.icon}
+          />
+        ))}
+      </List>
     </>
   );
 };

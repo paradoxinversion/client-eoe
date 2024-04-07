@@ -15,6 +15,7 @@ import {
   RadioGroup,
 } from "@mui/material";
 import Datagrid from "react-data-grid";
+import { getPeople } from "empire-of-evil/src/actions/people";
 const recruitGridColumns = [
   { key: "attribute", name: "" },
   { key: "value", name: "" },
@@ -98,19 +99,20 @@ const EventScreenRecruit = ({
         <p className="text-lg border-b mb-4">Commander</p>
         <FormControl name="recruit-commander" onChange={onCommanderSelect}>
           <RadioGroup className="flex flex-wrap">
-            {getAgents(gameManager, gameData.player.organizationId).map(
-              (agent) => {
-                const subordinates = getAgentSubordinates(gameManager, agent);
-                return (
-                  <FormControlLabel
-                    value={agent.id}
-                    control={<Radio />}
-                    label={`${agent.name} (${subordinates.length}/${agent.skills.leadership})`}
-                    disabled={subordinates.length === agent.skills.leadership}
-                  />
-                );
-              }
-            )}
+            {getPeople(gameManager, {
+              organizationId: gameData.player.organizationId,
+              agentFilter: { agentsOnly: true },
+            }).map((agent) => {
+              const subordinates = getAgentSubordinates(gameManager, agent);
+              return (
+                <FormControlLabel
+                  value={agent.id}
+                  control={<Radio />}
+                  label={`${agent.name} (${subordinates.length}/${agent.skills.leadership})`}
+                  disabled={subordinates.length === agent.skills.leadership}
+                />
+              );
+            })}
           </RadioGroup>
         </FormControl>
       </section>

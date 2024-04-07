@@ -8,7 +8,7 @@ import {
   Dialog,
 } from "@mui/material";
 import { IntegratedManagerProps } from "../..";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { selectEntity } from "../../features/selectionSlice";
 import { useState } from "react";
 import Activity from "empire-of-evil/src/activities/Activity";
@@ -16,6 +16,12 @@ import { plots, actions } from "empire-of-evil";
 import DataGrid from "react-data-grid";
 import AgentSelector from "../../elements/AgentSelector/AgentSelector";
 import { updateGameData } from "../../actions/dataManagement";
+import {
+  setActivity,
+  setSelectedAgents,
+} from "../../features/ActivityParticipantSelector/ActivityParticipantSelectorSlice";
+import { current } from "@reduxjs/toolkit";
+import { act } from "react-dom/test-utils";
 
 const activitiesColumns = [
   { key: "agent", name: "Agent" },
@@ -27,15 +33,27 @@ const ActivitiesOverview = ({ gameManager }: IntegratedManagerProps) => {
   const { gameData, activityManager } = gameManager;
   const [currentActivity, setCurrentActivity] = useState<Activity | null>(null);
   const [activityOpen, setActivityOpen] = useState(false);
-  const onClickActivity = (activity) => {
+  const selectedAgents = useAppSelector(
+    (state) => state.activityParticipantSelector.selectedAgents
+  );
+  const onClickActivity = (activity: Activity) => {
     dispatch(
       selectEntity({
         type: "activity",
         selection: { name: activity.name, agents: activity.agents },
       })
     );
+    dispatch(
+      setActivity({
+        name: activity.name,
+        agents: activity.agents,
+        type: activity.type,
+        costPerParticipant: activity.costPerParticipant,
+      })
+    );
     setCurrentActivity(activity);
     setActivityOpen(true);
+    console.log(activity);
   };
 
   const activityRows = plots
@@ -75,9 +93,8 @@ const ActivitiesOverview = ({ gameManager }: IntegratedManagerProps) => {
           <Box padding="1rem">
             <Grid container>
               {activityManager.activities.map((activity) => (
-                <Grid item>
+                <Grid key={activity.name} item>
                   <Button
-                    key={`${activity.name}`}
                     onClick={() => {
                       onClickActivity(activity);
                     }}
@@ -106,11 +123,24 @@ const ActivitiesOverview = ({ gameManager }: IntegratedManagerProps) => {
       </Box>
       {currentActivity && (
         <Dialog open={activityOpen}>
-          <Box>
+          <Box padding={"1rem"}>
             <Box component="header">
-              <p className="text-xl font-bold">
+              <Typography variant="h5">
                 {currentActivity.name}: Participants
-              </p>
+              </Typography>
+              <Typography variant="body2">
+                ${currentActivity.costPerParticipant}/participant
+              </Typography>
+              <Typography variant="body2">
+                {currentActivity.description}
+              </Typography>
+              <Typography>
+                Total Cost: $
+                {currentActivity.costPerParticipant * selectedAgents.length}
+              </Typography>
+              <Typography variant="overline">
+                Select the agents participating in this activity
+              </Typography>
             </Box>
             <AgentSelector
               agentsArray={actions.people.getPeople(gameManager, {
@@ -118,10 +148,10 @@ const ActivitiesOverview = ({ gameManager }: IntegratedManagerProps) => {
                 excludePersonnel: true,
                 agentFilter: {
                   department: -1,
-                  excludeParticipants: true,
                 },
               })}
               cb={onUpdateActivityParticipant}
+              gameManager={gameManager}
             />
             <Button
               className="btn btn-primary"
@@ -134,6 +164,8 @@ const ActivitiesOverview = ({ gameManager }: IntegratedManagerProps) => {
                 );
                 setCurrentActivity(null);
                 setActivityOpen(false);
+                dispatch(setActivity(null));
+                dispatch(setSelectedAgents([]));
               }}
             >
               Close

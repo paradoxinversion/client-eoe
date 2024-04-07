@@ -10,6 +10,7 @@ import selectionReducer from "../features/selectionSlice";
 import configReducer from "../features/configSlice";
 import scienceReducer from "../features/scienceSlice";
 import gameLogReducer from "../features/gameLogSlice";
+import ActivityParticipantSelectorReducer from "../features/ActivityParticipantSelector/ActivityParticipantSelectorSlice";
 import { config } from "../config/config";
 const rootReducer = combineReducers({
   gameManager: gameManagerReducer,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   config: configReducer,
   science: scienceReducer,
   gameLog: gameLogReducer,
+  activityParticipantSelector: ActivityParticipantSelectorReducer,
 });
 
 export function setupStore(preloadedState) {

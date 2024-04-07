@@ -2,7 +2,7 @@ import { Box, Typography, Divider, Grid, Dialog, Button } from "@mui/material";
 import { IntegratedManagerProps } from "../..";
 import { selectEntity } from "../../features/selectionSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { plotSetupRenderers } from "./PlotsScreen";
 import DataGrid from "react-data-grid";
 import { dataGridButton } from "../../datagridRenderers/dataGridButton";
@@ -20,10 +20,15 @@ const PlotsOverview = ({ gameManager }: IntegratedManagerProps) => {
   const { plotManager, gameData } = gameManager;
   const PlotWidget = currentPlot && plotSetupRenderers[currentPlot.type];
   const plotRows = plotManager.plotQueue.map((plot, index) => ({
+    index,
     plot: plot.name,
-    // @ts-ignore
-    agents: plot?.plotParams?.participants?.length,
+    agents: plot.standardParams.participants.length,
+    cancel: (row) => {
+      plotManager.removePlot(index);
+    },
   }));
+
+  useEffect(() => {}, [plotManager.plots]);
   return (
     <Box>
       <Box>

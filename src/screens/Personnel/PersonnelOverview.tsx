@@ -1,14 +1,14 @@
 import { Box, Grid } from "@mui/material";
 import AgentDataGrid from "../../dataGrids/agentDataGrid";
 import { IntegratedManagerProps } from "../..";
-import { organizations } from "empire-of-evil";
+import { organizations, actions } from "empire-of-evil";
 
 const PersonnelOverview = ({ gameManager }: IntegratedManagerProps) => {
   const organizationId = gameManager.gameData.player.organizationId;
-  const currentAgents = organizations.getAgents(
-    gameManager,
-    organizationId
-  ).length;
+  const currentAgents = actions.people.getPeople(gameManager, {
+    organizationId,
+    agentFilter: { agentsOnly: true },
+  }).length;
 
   const maxAgents = organizations.getMaxAgents(gameManager, organizationId);
   return (
@@ -18,7 +18,10 @@ const PersonnelOverview = ({ gameManager }: IntegratedManagerProps) => {
           <Grid item xs={10}>
             <AgentDataGrid
               title={`EVIL Employee Roster (${currentAgents}/${maxAgents})`}
-              agents={organizations.getAgents(gameManager, organizationId)}
+              agents={actions.people.getPeople(gameManager, {
+                organizationId,
+                agentFilter: { agentsOnly: true },
+              })}
               gameManager={gameManager}
             />
           </Grid>

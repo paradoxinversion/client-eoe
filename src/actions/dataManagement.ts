@@ -13,6 +13,7 @@ import { setProjects } from "../features/scienceSlice";
 import { setScreen } from "../features/screenSlice";
 import { GameData, GameLog } from "empire-of-evil/src/GameManager";
 import {
+  NewGameOptions,
   handleNewGame,
   hireStartingAgents,
 } from "empire-of-evil/src/gameSetup";
@@ -54,8 +55,8 @@ export const deleteSavedGame = () => {
   localStorage.removeItem("eoe-save");
 };
 
-export const newGame = (gameManager: GameManager) => {
-  handleNewGame(gameManager);
+export const newGame = (gameManager: GameManager, options: NewGameOptions) => {
+  handleNewGame(gameManager, options);
   hireStartingAgents(gameManager);
   populateActivities(gameManager);
   populatePlots(gameManager);
@@ -83,7 +84,7 @@ export const updateGameData = (
   updatedGameData: Partial<GameData>,
   updatedLog?: Partial<GameLog>
 ) => {
-  gameManager.updateGameData(updatedGameData);
+  // gameManager.updateGameData(updatedGameData);
   const { governingOrganizations, nations, zones, buildings, people } =
     gameManager.gameData;
   store.dispatch(setGoverningOrganizations(governingOrganizations));

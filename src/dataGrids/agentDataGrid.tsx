@@ -10,6 +10,7 @@ import "react-data-grid/lib/styles.css";
 
 const agentDataGridColumns = [
   { key: "name", name: "Name" },
+  { key: "codename", name: "Code Name" },
   { key: "health", name: "Health" },
   { key: "aptitude", name: "Aptitude" },
   { key: "prowess", name: "Prowess" },
@@ -46,6 +47,7 @@ const AgentDataGrid = ({ title, agents, gameManager }: AgentDataGridProps) => {
       id,
       aptitude: intelligence + administration + espionage + science,
       prowess: agility + combat + security,
+      codename: agent.codename,
       zone: zoneName,
       health: `${currentHealth}/${health}`,
       intelligence,

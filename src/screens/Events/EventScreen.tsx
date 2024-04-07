@@ -18,44 +18,64 @@ import EventScreenIntruder from "../../elements/EventScreens/Intruder";
 import ScienceProjectComplete from "../../elements/EventScreens/ScienceProjectComplete";
 import { updateGameData } from "../../actions/dataManagement";
 import GameEvent from "empire-of-evil/src/events/GameEvent";
+import { addEventLog } from "../../features/gameLogSlice";
+import { eventConfig } from "empire-of-evil/src/gameEvents";
+import { GameManager } from "empire-of-evil";
+import EventScreenPetEvent from "../../elements/EventScreens/EventScreenPetEvent";
 export interface GameEventComponentProps {
   resolveEvent: () => void;
   currentGameEvent: GameEvent;
 }
 
 const eventScreenMap = {
-  "EVIL Applicant": EventScreenRecruit,
-  "Standard Report": EventScreenProceed,
-  "Wealth Change": EventScreenProceed,
-  "Attack Zone": EventScreenCombatResults,
-  "Monthly Report": MonthlyReportScreen,
-  "Recon Zone": EventScreenReconZone,
-  "Intruder Alert!": EventScreenIntruder,
-  "Science Project Complete": ScienceProjectComplete,
+  recruit: EventScreenRecruit,
+  standardReport: EventScreenProceed,
+  wealthMod: EventScreenProceed,
+  attackZone: EventScreenCombatResults,
+  monthlyReport: MonthlyReportScreen,
+  reconZone: EventScreenReconZone,
+  intruder: EventScreenIntruder,
+  projectComplete: ScienceProjectComplete,
+  temperTantrum: EventScreenProceed,
+  occupationalHazard: EventScreenProceed,
+  petEvent: EventScreenPetEvent,
 };
 
-const EventsScreen = ({ gameManager }) => {
+const EventsScreen = ({ gameManager }: { gameManager: GameManager }) => {
   const { gameData, eventManager: eventQueue } = gameManager;
 
   const [eventScreen, setEventScreen] = useState(
-    eventQueue.getCurrentEvent().eventName
+    eventQueue.getCurrentEvent().type
   );
   const [open, setOpen] = useState(true);
 
   const dispatch = useDispatch();
-
+  console.log(eventQueue.getCurrentEvent().type, eventScreen);
   // Select the component we need for the ecurrent event
-  const CurrentEventComponent = eventScreenMap[eventScreen];
+  const CurrentEventComponent =
+    eventScreenMap[eventQueue.getCurrentEvent().type];
 
   const resolveEvent = (resolveArgs) => {
     eventQueue.resolveCurrentEvent(gameManager, resolveArgs);
+    const event = eventConfig[eventQueue.getCurrentEvent().type];
+    if (event) {
+      let color = "primary";
+      dispatch(
+        addEventLog({
+          text: eventQueue.getCurrentEvent().eventText,
+          color,
+          icon: eventConfig[eventQueue.getCurrentEvent().type].icon,
+        })
+      );
+    }
     const resolvedEventData = eventQueue.getCurrentEvent().eventData;
     const updatedGameData = {
       ...gameData,
       ...resolvedEventData.resolution.updatedGameData,
     };
     if (
-      updatedGameData.people[gameData.player.overlordId]?.currentHealth <= 0
+      updatedGameData.people[gameData.player.overlordId]?.derivedAttributes
+        .health.currentHealth <= 0
     ) {
       dispatch(setScreen("game-over"));
     }

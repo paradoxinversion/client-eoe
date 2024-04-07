@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import { IntegratedManagerProps } from "../..";
 import { GameEventComponentProps } from "../../screens/Events/EventScreen";
-import { IntruderAlertEventParams } from "empire-of-evil/src/gameEvents";
+import { IntruderAlertEventParams } from "empire-of-evil/src/events/eventFunctions/intruderAlert";
 
 const EventScreenIntruder = ({
   resolveEvent,

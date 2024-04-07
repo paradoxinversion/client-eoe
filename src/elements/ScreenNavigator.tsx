@@ -64,6 +64,11 @@ const screens = [
     icon: <TipsAndUpdatesIcon />,
   },
   {
+    screen: "captives",
+    title: "Captives",
+    icon: <TipsAndUpdatesIcon />,
+  },
+  {
     screen: "help",
     title: "Help",
     icon: <QuestionMarkIcon />,

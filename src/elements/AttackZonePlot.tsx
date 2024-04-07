@@ -1,10 +1,5 @@
-import { getAgents, getControlledZones } from "empire-of-evil/src/organization";
-// import { Plot, PlotManager } from "empire-of-evil/src/plots";
-import { PlotManager } from "empire-of-evil/src/plots/PlotManager";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { toDataArray } from "../utilities/dataHelpers";
-import { GameManager } from "empire-of-evil";
 import {
   Box,
   Button,
@@ -18,6 +13,9 @@ import {
   Stack,
 } from "@mui/material";
 import Plot from "empire-of-evil/src/plots/Plot";
+import { getZones } from "empire-of-evil/src/actions/zones";
+import { useAppSelector } from "../app/hooks";
+import { getPeople } from "empire-of-evil/src/actions/people";
 /**
  *
  * @param {Object} props
@@ -26,7 +24,7 @@ import Plot from "empire-of-evil/src/plots/Plot";
  * @returns
  */
 const AttackZonePlot = ({ gameManager, cb }) => {
-  const people = useSelector((state) => state.people);
+  const people = useAppSelector((state) => state.people);
   const { gameData, plotManager } = gameManager;
   const [nation, setNation] = useState(null);
   const [zone, setZone] = useState(null);
@@ -43,7 +41,9 @@ const AttackZonePlot = ({ gameManager, cb }) => {
       },
       participants: attackers,
     };
-    const plot = new Plot("Attack Zone", "attack-zone", plotParams);
+    const plot = new Plot("Attack Zone", "attack-zone", plotParams, {
+      surrender: false,
+    });
     plotManager.addPlot(plot);
   };
 
@@ -76,7 +76,8 @@ const AttackZonePlot = ({ gameManager, cb }) => {
             return (
               <Chip
                 name="nation-select"
-                control={<Radio />}
+                // control={<Radio />}
+                component={"button"}
                 label={n.name}
                 onClick={() => setNation(n)}
                 variant={nation?.name === n.name ? "outlined" : "filled"}
@@ -91,20 +92,21 @@ const AttackZonePlot = ({ gameManager, cb }) => {
             </Box>
             <Divider />
             <Stack direction="row" spacing={1} padding={1}>
-              {getControlledZones(gameManager, nation.organizationId).map(
-                (selectdZone) => (
-                  <Chip
-                    value={selectdZone}
-                    name="zone-select"
-                    control={<Radio />}
-                    label={selectdZone.name}
-                    onClick={() => setZone(selectdZone)}
-                    variant={
-                      zone?.name === selectdZone.name ? "outlined" : "filled"
-                    }
-                  />
-                )
-              )}
+              {getZones(gameManager, {
+                organizationId: nation.organizationId,
+              }).map((selectdZone) => (
+                <Chip
+                  component={"button"}
+                  // value={selectdZone}
+                  name="zone-select"
+                  // control={<Radio />}
+                  label={selectdZone.name}
+                  onClick={() => setZone(selectdZone)}
+                  variant={
+                    zone?.name === selectdZone.name ? "outlined" : "filled"
+                  }
+                />
+              ))}
             </Stack>
           </>
         )}
@@ -119,7 +121,10 @@ const AttackZonePlot = ({ gameManager, cb }) => {
             </Box>
             <Divider />
             <Stack direction="row" spacing={1} padding={1}>
-              {getAgents(gameManager, gameData.player.organizationId)
+              {getPeople(gameManager, {
+                organizationId: gameData.player.organizationId,
+                agentFilter: { agentsOnly: true },
+              })
                 .filter(
                   (agent) =>
                     agent.agent.department === 0 || agent.agent.department === 3

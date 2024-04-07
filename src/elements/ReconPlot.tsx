@@ -1,4 +1,3 @@
-import { getAgents, getControlledZones } from "empire-of-evil/src/organization";
 import { useState } from "react";
 import { toDataArray } from "../utilities/dataHelpers";
 import {
@@ -8,13 +7,19 @@ import {
   Chip,
   DialogActions,
   DialogTitle,
+  FormControl,
+  FormControlLabel,
   Grid,
   Paper,
+  Radio,
+  RadioGroup,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { people } from "empire-of-evil/src/actions";
 import Plot from "empire-of-evil/src/plots/Plot";
+import { getZones } from "empire-of-evil/src/actions/zones";
 /**
  *
  * @param {Object} props
@@ -25,6 +30,9 @@ const ReconPlot = ({ gameManager, cb }) => {
   const [nation, setNation] = useState(null);
   const [zone, setZone] = useState(null);
   const [participants, setParticipants] = useState([]);
+  const [plotParams, setPlotParams] = useState({
+    surrender: true,
+  });
   const nations = toDataArray(gameData.nations).filter(
     (nation) => nation.organizationId !== gameData.player.organizationId
   );
@@ -36,9 +44,7 @@ const ReconPlot = ({ gameManager, cb }) => {
         targetZone: zone.id,
         participants,
       },
-      {
-        surrender: true,
-      }
+      plotParams
     );
     plotManager.addPlot(plot);
   };
@@ -56,10 +62,26 @@ const ReconPlot = ({ gameManager, cb }) => {
       }
     }
   };
+
+  const handleParams = (e) => {
+    const { name } = e.target;
+    let value = e.target.value;
+    if (value === "true") {
+      value = true;
+    } else if (value === "false") {
+      value = false;
+    }
+
+    setPlotParams({
+      ...plotParams,
+      [name]: value,
+    });
+    console.log(plotParams);
+  };
   return (
     <>
       <DialogTitle>Execute Reconnaisance Operation</DialogTitle>
-      <CardContent sx={{ height: "500px" }}>
+      <CardContent sx={{ height: "500px", overflowY: "scroll" }}>
         <Typography>
           Send agents for covert intelligence-gathering in a foreign zone.
         </Typography>
@@ -88,29 +110,33 @@ const ReconPlot = ({ gameManager, cb }) => {
             </Grid>
           </Paper>
           {nation && (
-            <div>
+            <Box>
               <Box component={"header"}>
                 <Typography>Select the zone for this mission</Typography>
               </Box>
-              <Stack direction="row" spacing={1} padding={1}>
-                {getControlledZones(gameManager, nation.organizationId).map(
-                  (selectedZone) => (
-                    <Chip
-                      component={"button"}
-                      label={selectedZone.name}
-                      name="zone-select"
-                      id={`zone-select-${selectedZone.id}`}
-                      variant={
-                        zone?.id === selectedZone.id ? "outlined" : "filled"
-                      }
-                      onClick={(e) => {
-                        setZone(selectedZone);
-                      }}
-                    />
-                  )
-                )}
-              </Stack>
-            </div>
+              <Paper>
+                <Grid container spacing={1} padding={1}>
+                  {getZones(gameManager, {
+                    organizationId: nation.organizationId,
+                  }).map((selectedZone) => (
+                    <Grid item>
+                      <Chip
+                        component={"button"}
+                        label={selectedZone.name}
+                        name="zone-select"
+                        id={`zone-select-${selectedZone.id}`}
+                        variant={
+                          zone?.id === selectedZone.id ? "outlined" : "filled"
+                        }
+                        onClick={(e) => {
+                          setZone(selectedZone);
+                        }}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Paper>
+            </Box>
           )}
           {zone && (
             <div className="mb-4">
@@ -175,6 +201,41 @@ const ReconPlot = ({ gameManager, cb }) => {
                   ))}
                 </Stack>
               </div>
+              <Box>
+                <Typography>
+                  There is a possibility agents on this mission will be detected
+                  by enemy counterintelligence. If caught, how should they
+                  proceed?
+                </Typography>
+                <FormControl>
+                  <RadioGroup
+                    name="surrender"
+                    value={plotParams.surrender}
+                    onChange={handleParams}
+                  >
+                    <Tooltip
+                      title="Agents will surrender if caught by enemy counterintelligence."
+                      placement="right"
+                    >
+                      <FormControlLabel
+                        value={true}
+                        control={<Radio />}
+                        label="Surrender"
+                      />
+                    </Tooltip>
+                    <Tooltip
+                      title="Agents will engage enemy counterintelligence if caught."
+                      placement="right"
+                    >
+                      <FormControlLabel
+                        value={false}
+                        control={<Radio />}
+                        label="Engage"
+                      />
+                    </Tooltip>
+                  </RadioGroup>
+                </FormControl>
+              </Box>
               <footer>
                 <p className="text-xs">
                   *Agents attending this mission may suffer loss of life.

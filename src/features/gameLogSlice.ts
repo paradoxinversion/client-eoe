@@ -5,25 +5,32 @@ const INITIAL_STATE: GameLog = {
   simActions: {
     people: {},
   },
+  events: [],
 };
 
 export const gameLogSlice = createSlice({
   name: "gameLog",
   initialState: INITIAL_STATE,
   reducers: {
+    addEventLog: (state, action) => {
+      const s = [...state.events];
+      s.push(action.payload);
+      return {
+        ...state,
+        events: s,
+      };
+    },
     updateSimActions: (state, action) => {
       return {
         ...state,
-        simActions: {
-          ...state.simActions,
-          ...action.payload,
-        },
+
+        ...action.payload,
       };
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { updateSimActions } = gameLogSlice.actions;
+export const { updateSimActions, addEventLog } = gameLogSlice.actions;
 
 export default gameLogSlice.reducer;
