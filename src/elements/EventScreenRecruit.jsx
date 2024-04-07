@@ -13,9 +13,17 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
+  Grid,
+  Chip,
+  Paper,
 } from "@mui/material";
+import {
+  LocalPolice as LocalPoliceIcon,
+  Business as BusinessIcon,
+} from "@mui/icons-material";
 import Datagrid from "react-data-grid";
 import { getPeople } from "empire-of-evil/src/actions/people";
+import HeaderGridItem from "./HeaderGridItem";
 const recruitGridColumns = [
   { key: "attribute", name: "" },
   { key: "value", name: "" },
@@ -48,73 +56,79 @@ const EventScreenRecruit = ({
           <Typography>Recruit Details</Typography>
         </Box>
         <Box xs={{ height: 100 }}>
-          <Datagrid
-            style={{ height: "auto" }}
-            columns={recruitGridColumns}
-            rows={[
-              {
-                attribute: "Combat",
-                value: currentGameEvent.params.recruit?.skills.combat,
-              },
-              {
-                attribute: "Administration",
-                value:
-                  currentGameEvent.params.recruit?.standardAttributes
-                    .administration,
-              },
-              {
-                attribute: "Intelligence",
-                value:
-                  currentGameEvent.params.recruit?.standardAttributes
-                    .intelligence,
-              },
-              {
-                attribute: "Leadership",
-                value: currentGameEvent.params.recruit?.skills.leadership,
-              },
-              {
-                attribute: "Loyalty",
-                value: `${currentGameEvent.params.recruit?.intelAttributes.loyalty}?`,
-              },
-            ]}
-          />
+          <Grid container padding="1rem" spacing="1rem">
+            <HeaderGridItem
+              title="Combat"
+              content={currentGameEvent.params.recruit?.skills.combat}
+            />
+            <HeaderGridItem
+              title="Administration"
+              content={currentGameEvent.params.recruit?.skills.administration}
+            />
+            <HeaderGridItem
+              title="Intelligence"
+              content={
+                currentGameEvent.params.recruit?.standardAttributes.intelligence
+              }
+            />
+            <HeaderGridItem
+              title="Leadership"
+              content={currentGameEvent.params.recruit?.skills.leadership}
+            />
+            <HeaderGridItem
+              title="Loyalty"
+              content={`${currentGameEvent.params.recruit?.intelAttributes.loyalty}?`}
+            />
+          </Grid>
         </Box>
       </Box>
 
       <section className="mb-4">
-        <p className="text-lg border-b mb-4">
-          Select a department for this recruit
-        </p>
-        <FormControl className="grid grid-cols-3 gap-2" onChange={onChange}>
-          <RadioGroup row name="recruit-department">
-            <FormControlLabel value={0} control={<Radio />} label="Henchman" />
-            <FormControlLabel
-              value={1}
-              control={<Radio />}
-              label="Administrator"
-            />
-            <FormControlLabel value={2} control={<Radio />} label="Scientist" />
-          </RadioGroup>
-        </FormControl>
-        <p className="text-lg border-b mb-4">Commander</p>
-        <FormControl name="recruit-commander" onChange={onCommanderSelect}>
-          <RadioGroup className="flex flex-wrap">
-            {getPeople(gameManager, {
-              organizationId: gameData.player.organizationId,
-              agentFilter: { agentsOnly: true },
-            }).map((agent) => {
-              const subordinates = getAgentSubordinates(gameManager, agent);
-              return (
+        <Box>Select a department for this recruit</Box>
+        <Box>
+          <Paper sx={{ padding: "1rem" }}>
+            <FormControl onChange={onChange}>
+              <RadioGroup row name="recruit-department">
                 <FormControlLabel
-                  value={agent.id}
+                  value={0}
                   control={<Radio />}
-                  label={`${agent.name} (${subordinates.length}/${agent.skills.leadership})`}
-                  disabled={subordinates.length === agent.skills.leadership}
+                  label="Henchman"
                 />
-              );
-            })}
-          </RadioGroup>
-        </FormControl>
+                <FormControlLabel
+                  value={1}
+                  control={<Radio />}
+                  label="Administrator"
+                />
+                <FormControlLabel
+                  value={2}
+                  control={<Radio />}
+                  label="Scientist"
+                />
+              </RadioGroup>
+            </FormControl>
+          </Paper>
+        </Box>
+        <p className="text-lg border-b mb-4">Commander</p>
+        <Paper sx={{ padding: "1rem" }}>
+          <FormControl name="recruit-commander" onChange={onCommanderSelect}>
+            <RadioGroup row sx={{ overflowY: "scroll", height: "100px" }}>
+              {getPeople(gameManager, {
+                organizationId: gameData.player.organizationId,
+                agentFilter: { agentsOnly: true },
+              }).map((agent) => {
+                const subordinates = getAgentSubordinates(gameManager, agent);
+                return (
+                  <FormControlLabel
+                    value={agent.id}
+                    control={<Radio />}
+                    label={`${agent.name} (${subordinates.length}/${agent.skills.leadership})`}
+                    disabled={subordinates.length === agent.skills.leadership}
+                  />
+                );
+              })}
+            </RadioGroup>
+          </FormControl>
+        </Paper>
       </section>
       <Box className="w-32 flex justify-between">
         <Button

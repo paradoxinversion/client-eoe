@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Divider,
+  Grid,
   Stack,
   Toolbar,
   Typography,
@@ -22,23 +23,24 @@ const InfrastructureScreen = ({ gameManager }: IntegratedManagerProps) => {
           <Typography variant="h3">Infrastructure</Typography>
         </Box>
         <Divider />
-        <Stack
-          padding="1rem"
-          direction={"row"}
-          spacing={"1rem"}
-          justifyContent={"center"}
-        >
-          <MetricNumber
-            title="Buildings"
-            number={
-              buildings.getBuildings(gameManager, {
-                organizationId: gameManager.gameData.player.organizationId,
-              }).length
-            }
-          />
-          <MetricNumber
-            title="Infrastructure"
-            number={` ${
+        <Grid container padding="1rem" spacing={"1rem"}>
+          <Grid item>
+            <Typography variant="body2" color="GrayText">
+              Buildings
+            </Typography>
+            <Typography variant="body2">
+              {
+                buildings.getBuildings(gameManager, {
+                  organizationId: gameManager.gameData.player.organizationId,
+                }).length
+              }
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="body2" color="GrayText">
+              Infrastructure
+            </Typography>
+            <Typography variant="body2">{` ${
               organizations.getOrgResources(
                 gameManager,
                 gameManager.gameData.player.organizationId
@@ -46,9 +48,9 @@ const InfrastructureScreen = ({ gameManager }: IntegratedManagerProps) => {
             }/${buildings.getInfrastructureLoad(
               gameManager,
               gameManager.gameData.player.organizationId
-            )}`}
-          />
-        </Stack>
+            )}`}</Typography>
+          </Grid>
+        </Grid>
         <Divider />
         {selectedBuilding ? (
           <InfrastructureBuildingProfile gameManager={gameManager} />

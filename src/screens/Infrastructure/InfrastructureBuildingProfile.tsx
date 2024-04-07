@@ -98,7 +98,10 @@ const InfrastructureBuildingProfile = ({
                               selectedBuilding
                             );
 
-                            updateGameData(gameManager, update);
+                            updateGameData(
+                              gameManager,
+                              gameManager.updateGameData(update)
+                            );
                             dispatch(
                               selectEntity({
                                 type: "building",

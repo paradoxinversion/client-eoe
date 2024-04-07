@@ -1,4 +1,4 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Divider, Grid, Typography } from "@mui/material";
 import MetricNumber from "../../elements/MetricNumber/MetricNumber";
 import ZoneDataGrid from "../../dataGrids/zoneDataGrid";
 import { useAppSelector } from "../../app/hooks";
@@ -10,14 +10,20 @@ const WorldNation = ({ gameManager }: IntegratedManagerProps) => {
   return (
     <Box>
       <Box padding="1rem">
-        <MetricNumber
-          number={
-            actions.zones.getZones(gameManager, {
-              organizationId: selectedNation.organizationId,
-            }).length
-          }
-          title="Zones"
-        />
+        <Grid container>
+          <Grid item>
+            <Typography variant="body2" color="GrayText">
+              Zones
+            </Typography>
+            <Typography variant="body2">
+              {
+                actions.zones.getZones(gameManager, {
+                  organizationId: selectedNation.organizationId,
+                }).length
+              }
+            </Typography>
+          </Grid>
+        </Grid>
       </Box>
       <Divider />
       <Box padding="1rem">

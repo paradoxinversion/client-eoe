@@ -18,6 +18,7 @@ import { useState } from "react";
 import { setCodename } from "empire-of-evil/src/actions/people";
 import { setPeople } from "../../features/personSlice";
 import { getCodeName } from "empire-of-evil/src/generators/names";
+import HeaderGridItem from "../HeaderGridItem";
 
 const AgentProfile = ({ gameManager }: IntegratedManagerProps) => {
   const selectedAgent = useAppSelector((state) => state.selections.person);
@@ -111,56 +112,57 @@ const AgentProfile = ({ gameManager }: IntegratedManagerProps) => {
           </Button>
         </Box>
       )}
-      <Grid container spacing="1rem" height={"100%"}>
-        <Grid item height={"100%"}>
-          <Card>
-            <CardContent sx={{ width: "max-content" }}>
-              <Typography variant="overline">FOo</Typography>
-              <Typography>Salary: {selectedAgent.agent.salary}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item>
-          <Card>
-            <CardContent sx={{ width: "max-content" }}>
-              <Typography variant="overline">FOo</Typography>
-              <Typography>
-                Agility: {selectedAgent.standardAttributes.agility}
-              </Typography>
-              <Typography>
-                Constitution: {selectedAgent.standardAttributes.constitution}
-              </Typography>
-              <Typography>
-                Intelligence: {selectedAgent.standardAttributes.intelligence}
-              </Typography>
-              <Typography>
-                Strength: {selectedAgent.standardAttributes.strength}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item>
-          <Card>
-            <CardContent sx={{ width: "max-content" }}>
-              <Typography variant="overline">Skills</Typography>
-              <Typography>
-                Administration: {selectedAgent.skills.administration}
-              </Typography>
-              <Typography>Combat: {selectedAgent.skills.combat}</Typography>
-              <Typography>Disguise: {selectedAgent.skills.disguise}</Typography>
-              <Typography>
-                Espionage: {selectedAgent.skills.espionage}
-              </Typography>
-              <Typography>
-                Leadership: {selectedAgent.skills.leadership}
-              </Typography>
-              <Typography>Science: {selectedAgent.skills.science}</Typography>
-              <Typography>Security: {selectedAgent.skills.security}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+      <Typography variant="overline">Compensation</Typography>
+      <Grid container spacing="1rem">
+        <HeaderGridItem title="Salary" content={selectedAgent.agent.salary} />
       </Grid>
-
+      <Typography variant="overline">Aptitude</Typography>
+      <Grid container spacing="1rem">
+        <HeaderGridItem
+          title="Agility"
+          content={selectedAgent.standardAttributes.agility}
+        />
+        <HeaderGridItem
+          title="Constitution"
+          content={selectedAgent.standardAttributes.constitution}
+        />
+        <HeaderGridItem
+          title="Intelligence"
+          content={selectedAgent.standardAttributes.intelligence}
+        />
+        <HeaderGridItem
+          title="Strength"
+          content={selectedAgent.standardAttributes.strength}
+        />
+      </Grid>
+      <Typography variant="overline">Skills</Typography>
+      <Grid container spacing="1rem" marginBottom={1}>
+        <HeaderGridItem
+          title="Administration"
+          content={selectedAgent.skills.administration}
+        />
+        <HeaderGridItem title="Combat" content={selectedAgent.skills.combat} />
+        <HeaderGridItem
+          title="Disguise"
+          content={selectedAgent.skills.disguise}
+        />
+        <HeaderGridItem
+          title="Espionage"
+          content={selectedAgent.skills.espionage}
+        />
+        <HeaderGridItem
+          title="Leadership"
+          content={selectedAgent.skills.leadership}
+        />
+        <HeaderGridItem
+          title="Science"
+          content={selectedAgent.skills.science}
+        />
+        <HeaderGridItem
+          title="Security"
+          content={selectedAgent.skills.security}
+        />
+      </Grid>
       <Divider />
       <Box>
         <PersonDataGrid

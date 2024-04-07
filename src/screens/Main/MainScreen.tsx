@@ -13,6 +13,7 @@ import {
   Stack,
   Paper,
   List,
+  Grid,
 } from "@mui/material";
 import {
   NotificationImportant as NotificationImportantIcon,
@@ -30,6 +31,7 @@ import { updateGameData } from "../../actions/dataManagement";
 import { updateSimActions } from "../../features/gameLogSlice";
 import EventLogItem from "../../elements/EventLogItem";
 import { advanceDays } from "empire-of-evil/src/actions/advanceDay";
+import HeaderGridItem from "../../elements/HeaderGridItem";
 
 const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
   const dispatch = useAppDispatch();
@@ -92,25 +94,23 @@ const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
         </Box>
         <Divider />
         <Box id="overview-cards" component="section">
-          <Stack
-            padding="1rem"
-            direction={"row"}
-            spacing={"1rem"}
-            justifyContent={"center"}
-          >
-            <MetricNumber
+          <Grid container padding={"1rem"} spacing={"1rem"}>
+            <HeaderGridItem
               title="Wealth"
-              number={`${
+              content={`${
                 gameManager.gameData.governingOrganizations[
                   gameData.player.organizationId
                 ].wealth
               }
                   (+${empireResources.wealth})`}
             />
-            <MetricNumber title="Expenses" number={payroll + buildingUpkeep} />
-            <MetricNumber
+            <HeaderGridItem
+              title="Expenses"
+              content={payroll + buildingUpkeep}
+            />
+            <HeaderGridItem
               title="Infrastructure"
-              number={`${
+              content={`${
                 getOrgResources(
                   gameManager,
                   gameManager.gameData.player.organizationId
@@ -120,30 +120,32 @@ const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
                 gameManager.gameData.player.organizationId
               )}`}
             />
-            <MetricNumber
+            <HeaderGridItem
               title="Science"
-              number={`${getEvilEmpire(gameManager).science} (+${science})`}
+              content={`${getEvilEmpire(gameManager).science} (+${science})`}
             />
-            <MetricNumber
+            <HeaderGridItem
               title="Zones"
-              number={`${
+              content={`${
                 eoe.zones.getZones(gameManager, gameData.player.empireId).length
               }/${Object.keys(gameData.zones).length}`}
             />
-            <MetricNumber
+
+            <HeaderGridItem
               title="Agents"
-              number={
+              content={
                 eoe.actions.people.getPeople(gameManager, {
                   organizationId: gameData.player.organizationId,
                   agentFilter: { agentsOnly: true },
                 }).length
               }
             />
-            <MetricNumber
-              title="Evil"
-              number={eoe.organizations.getEvilEmpire(gameManager).totalEvil}
+
+            <HeaderGridItem
+              title="EVIL"
+              content={eoe.organizations.getEvilEmpire(gameManager).totalEvil}
             />
-          </Stack>
+          </Grid>
         </Box>
         <Divider />
       </Box>

@@ -1,4 +1,4 @@
-import { Box, Divider, Stack } from "@mui/material";
+import { Box, Divider, Grid, Stack } from "@mui/material";
 import MetricNumber from "../../elements/MetricNumber/MetricNumber";
 import { useAppSelector } from "../../app/hooks";
 import * as eoe from "empire-of-evil";
@@ -7,6 +7,7 @@ import { getPeople } from "empire-of-evil/src/actions/people";
 import PersonnelOverview from "./PersonnelOverview";
 import PersonnelProfile from "./PersonnelProfile";
 import PersonnelCaptives from "./PersonnelCaptives";
+import HeaderGridItem from "../../elements/HeaderGridItem";
 
 interface PersonnelScreenProps {
   gameManager: eoe.GameManager;
@@ -28,21 +29,22 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
   return (
     <>
       <Box padding="1rem">
-        <Stack direction="row" spacing="1rem" justifyContent={"center"}>
-          <MetricNumber
+        <Grid container spacing="1rem">
+          <HeaderGridItem
             title="Payroll"
-            number={`\$${organizations.getPayroll(
+            content={`\$${organizations.getPayroll(
               gameManager,
               gameData.player.organizationId
             )}`}
           />
-          <MetricNumber
+          <HeaderGridItem
             title="Agents"
-            number={`${currentAgents}/${maxAgents}`}
+            content={`${currentAgents}/${maxAgents}`}
           />
-          <MetricNumber
+
+          <HeaderGridItem
             title="Henchmen"
-            number={
+            content={
               getPeople(gameManager, {
                 organizationId: gameData.player.organizationId,
                 agentFilter: {
@@ -51,9 +53,10 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
               }).length
             }
           />
-          <MetricNumber
+
+          <HeaderGridItem
             title="Admins"
-            number={
+            content={
               getPeople(gameManager, {
                 organizationId: gameData.player.organizationId,
                 agentFilter: {
@@ -62,9 +65,10 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
               }).length
             }
           />
-          <MetricNumber
+
+          <HeaderGridItem
             title="Scientists"
-            number={
+            content={
               getPeople(gameManager, {
                 organizationId: gameData.player.organizationId,
                 agentFilter: {
@@ -73,9 +77,10 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
               }).length
             }
           />
-          <MetricNumber
+
+          <HeaderGridItem
             title="Deceased"
-            number={
+            content={
               getPeople(gameManager, {
                 organizationId: gameData.player.organizationId,
                 deceasedOnly: true,
@@ -85,7 +90,7 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
               }).length
             }
           />
-        </Stack>
+        </Grid>
       </Box>
       <Divider />
       {selectedAgent ? (

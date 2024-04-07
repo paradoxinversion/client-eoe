@@ -123,7 +123,7 @@ const AttackZonePlot = ({ gameManager, cb }) => {
             <Stack direction="row" spacing={1} padding={1}>
               {getPeople(gameManager, {
                 organizationId: gameData.player.organizationId,
-                agentFilter: { agentsOnly: true },
+                agentFilter: { agentsOnly: true, excludeParticipants: true },
               })
                 .filter(
                   (agent) =>

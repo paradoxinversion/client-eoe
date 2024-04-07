@@ -28,7 +28,10 @@ export const loadGame = (gameManager: GameManager) => {
   const saveData = store.getState().gameManager.saveData;
   populateActivities(gameManager);
   populatePlots(gameManager);
-  plotManager.setPlotQueue(saveData.plotData.plots);
+  // recreate plots
+  const oldPlots = saveData.plotData.plots.map((plot) => {
+    return plotManager.addPlot(plot);
+  });
   Object.values(saveData.plotData.activities).forEach((activity: Activity) => {
     const currentActivity = activityManager.activities.find(
       (a) => a.name === activity.name

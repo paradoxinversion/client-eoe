@@ -20,17 +20,23 @@ import {
 import { useDispatch } from "react-redux";
 import { newGame } from "../../actions/dataManagement";
 import { IntegratedManagerProps } from "../..";
+import { NewGameOptions } from "empire-of-evil/src/gameSetup";
 
 const NewGameScreen = ({ gameManager }: IntegratedManagerProps) => {
   const [overlordFormData, setOverlordFormData] = useState({
     overlordName: "",
     pet: -1,
+    codename: "",
+    empireName: "",
+    empireColor: "",
+    takePrisoners: 1,
   });
 
   const onNewGame = () => {
     newGame(gameManager, {
       overlordName: overlordFormData.overlordName,
-      pet: !!overlordFormData.pet,
+      pet: overlordFormData.pet > 0,
+      takePrisoners: overlordFormData.takePrisoners === 1,
     });
   };
 
@@ -144,89 +150,18 @@ const NewGameScreen = ({ gameManager }: IntegratedManagerProps) => {
               <Typography variant="overline">
                 Will you be taking prisoners?
               </Typography>
-              <RadioGroup row name="prisonersPolicy">
-                <FormControlLabel
-                  value="true"
-                  control={<Radio />}
-                  label="Yes"
-                />
-                <FormControlLabel
-                  value="false"
-                  control={<Radio />}
-                  label="No"
-                />
+              <RadioGroup
+                row
+                name="takePrisoners"
+                value={overlordFormData.takePrisoners}
+                onChange={handleInput}
+              >
+                <FormControlLabel value={1} control={<Radio />} label="Yes" />
+                <FormControlLabel value={0} control={<Radio />} label="No" />
               </RadioGroup>
             </FormControl>
           </Grid>
         </Grid>
-        <Stack>
-          <FormControl>
-            <Typography variant="overline">
-              When you were younger, you were known for...
-            </Typography>
-            <RadioGroup name="questionA">
-              <FormControlLabel
-                value="1"
-                control={<Radio />}
-                label="Winning every fight"
-              />
-              <FormControlLabel
-                value="2"
-                control={<Radio />}
-                label="Never getting caught"
-              />
-              <FormControlLabel
-                value="3"
-                control={<Radio />}
-                label="Knowing more than everyone else"
-              />
-            </RadioGroup>
-          </FormControl>
-          <FormControl>
-            <Typography variant="overline">
-              Your first EVIL deed was...
-            </Typography>
-            <RadioGroup name="questionB">
-              <FormControlLabel
-                value="1"
-                control={<Radio />}
-                label="Detonating a stink bomb in a public bathroom"
-              />
-              <FormControlLabel
-                value="2"
-                control={<Radio />}
-                label="Smoking in an animal sanctuary"
-              />
-              <FormControlLabel
-                value="3"
-                control={<Radio />}
-                label="Taking candy from a literal baby"
-              />
-            </RadioGroup>
-          </FormControl>
-          <FormControl>
-            <Typography variant="overline">
-              Your formula for complete control relies on...
-            </Typography>
-            <RadioGroup name="questionC">
-              <FormControlLabel
-                value="1"
-                control={<Radio />}
-                label="Staying on the cutting edge of technology"
-              />
-              <FormControlLabel
-                value="2"
-                control={<Radio />}
-                label="Keeping the people in the dark"
-              />
-              <FormControlLabel
-                value="3"
-                control={<Radio />}
-                label="Sowing discord among my enemies"
-              />
-            </RadioGroup>
-          </FormControl>
-        </Stack>
       </Box>
       <Button onClick={onNewGame}>Take Control</Button>
     </>

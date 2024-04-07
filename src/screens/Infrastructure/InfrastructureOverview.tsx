@@ -55,6 +55,29 @@ const InfrastructureOverview = ({ gameManager }: IntegratedManagerProps) => {
                 <Typography>Buildings</Typography>
               </Box>
               <Accordion>
+                <AccordionSummary>Hospitals</AccordionSummary>
+                <AccordionDetails>
+                  <BuildingDataGrid
+                    gridHeight={"200px"}
+                    gameManager={gameManager}
+                    buildings={buildings.getBuildings(gameManager, {
+                      type: "hospital",
+                      organizationId:
+                        gameManager.gameData.player.organizationId,
+                    })}
+                    title={"Hospitals"}
+                    cb={(entity) => {
+                      dispatch(
+                        selectEntity({
+                          type: "building",
+                          selection: buildingsState[entity.id],
+                        })
+                      );
+                    }}
+                  />
+                </AccordionDetails>
+              </Accordion>
+              <Accordion>
                 <AccordionSummary>Laboratories</AccordionSummary>
                 <AccordionDetails>
                   <BuildingDataGrid

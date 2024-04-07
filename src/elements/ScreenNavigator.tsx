@@ -26,6 +26,8 @@ import {
   LocationCity as LocationCityIcon,
   QuestionAnswer as QuestionAnswerIcon,
   QuestionMark as QuestionMarkIcon,
+  LocalHospital as LocalHospitalIcon,
+  Groups2 as Groups2Icon,
 } from "@mui/icons-material";
 import TitleScreenOptions from "./ScreenNavigator/TitleScreenOptions";
 import { useState } from "react";
@@ -64,9 +66,14 @@ const screens = [
     icon: <TipsAndUpdatesIcon />,
   },
   {
+    screen: "infirmary",
+    title: "Infirmary",
+    icon: <LocalHospitalIcon />,
+  },
+  {
     screen: "captives",
     title: "Captives",
-    icon: <TipsAndUpdatesIcon />,
+    icon: <Groups2Icon />,
   },
   {
     screen: "help",

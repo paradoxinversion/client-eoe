@@ -22,6 +22,7 @@ import VictoryScreen from "./screens/Endgame/VictoryScreen";
 import InfrastructureScreen from "./screens/Infrastructure/InfrastructureScreen";
 import HelpScreen from "./screens/Help/HelpScreen";
 import CaptivesScreen from "./screens/Captives/CaptivesScreen";
+import InfirmaryScreen from "./screens/Infirmary/Infirmary";
 
 const screens = {
   title: TitleScreen,
@@ -38,6 +39,7 @@ const screens = {
   infrastructure: InfrastructureScreen,
   help: HelpScreen,
   captives: CaptivesScreen,
+  infirmary: InfirmaryScreen,
 };
 
 function App({ gameManager }) {

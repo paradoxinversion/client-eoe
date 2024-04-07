@@ -161,9 +161,11 @@ const ReconPlot = ({ gameManager, cb }) => {
                       excludeDeceased: true,
                       excludePersonnel: true,
                       excludeCaptured: true,
+
                       agentFilter: {
                         agentsOnly: true,
                         department: -1,
+                        excludeParticipants: true,
                       },
                     })
                     .filter(
