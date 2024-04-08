@@ -6,6 +6,7 @@ import HeaderGridItem from "../../elements/HeaderGridItem";
 import DataGrid from "react-data-grid";
 import { getPeople } from "empire-of-evil/src/actions/people";
 import InfirmaryOverview from "./InfirmaryOverview";
+import InfirmaryPatients from "./InfirmaryPatients";
 const InfirmaryScreen = ({ gameManager }: IntegratedManagerProps) => {
   const [currentTab, setCurrentTab] = useState("overview");
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -22,6 +23,7 @@ const InfirmaryScreen = ({ gameManager }: IntegratedManagerProps) => {
           <TabList onChange={handleChange}>
             <Tab label="Overview" value="overview" />
             <Tab label="Staff" value="staff" />
+            <Tab label="Patients" value={"patients"} />
           </TabList>
         </Box>
         <TabPanel value="overview">
@@ -30,6 +32,10 @@ const InfirmaryScreen = ({ gameManager }: IntegratedManagerProps) => {
         </TabPanel>
         <TabPanel value="staff">
           <Typography>Staff</Typography>
+        </TabPanel>
+        <TabPanel value="patients">
+          <Typography>Patients</Typography>
+          <InfirmaryPatients gameManager={gameManager} />
         </TabPanel>
       </TabContext>
     </Box>

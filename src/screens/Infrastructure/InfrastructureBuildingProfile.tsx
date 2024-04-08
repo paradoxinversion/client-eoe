@@ -52,6 +52,8 @@ const InfrastructureBuildingProfile = ({
                         ? 1
                         : selectedBuilding.type === "laboratory"
                         ? 2
+                        : selectedBuilding.type === "hospital"
+                        ? 4
                         : -1,
                   },
                 })
@@ -71,6 +73,10 @@ const InfrastructureBuildingProfile = ({
                     case "office":
                       relatedAttributeStat = person.skills.administration;
                       relatedAttributeName = "Administration";
+                      break;
+                    case "hospital":
+                      relatedAttributeStat = person.skills.medicine;
+                      relatedAttributeName = "Medicine";
                       break;
                     default:
                       relatedAttributeStat = 0;

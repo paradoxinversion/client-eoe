@@ -41,9 +41,7 @@ const AttackZonePlot = ({ gameManager, cb }) => {
       },
       participants: attackers,
     };
-    const plot = new Plot("Attack Zone", "attack-zone", plotParams, {
-      surrender: false,
-    });
+    const plot = new Plot("Attack Zone", "attack-zone", plotParams, {});
     plotManager.addPlot(plot);
   };
 

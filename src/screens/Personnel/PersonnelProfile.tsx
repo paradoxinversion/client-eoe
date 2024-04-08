@@ -57,6 +57,7 @@ const PersonnelProfile = ({ gameManager }: IntegratedManagerProps) => {
                 control={<Radio />}
                 label="Scientist"
               />
+              <FormControlLabel value={4} control={<Radio />} label="Doctor" />
             </RadioGroup>
           </FormControl>
         </DialogContent>

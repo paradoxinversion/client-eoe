@@ -1,43 +1,89 @@
-import { Box, Button, Chip, Divider, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  Dialog,
+  DialogContent,
+  Divider,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { getPeople } from "empire-of-evil/src/actions/people";
 import { IntegratedManagerProps } from "../..";
 import HeaderGridItem from "../../elements/HeaderGridItem";
+import {
+  admitHospitalPatient,
+  getBuildings,
+} from "empire-of-evil/src/buildings";
+import { useState } from "react";
+import { updateGameData } from "../../actions/dataManagement";
 // import DataGrid from "react-data-grid"
 
 const InfirmaryOverview = ({ gameManager }: IntegratedManagerProps) => {
+  const [selectHospitalOpen, setSelectHospitalOpen] = useState(false);
+  const injuredPeople = getPeople(gameManager, {
+    organizationId: gameManager.gameData.player.organizationId,
+    injuredOnly: true,
+    noHospitalized: true,
+    agentFilter: {
+      agentsOnly: true,
+    },
+  });
+
   return (
     <>
+      <Dialog open={selectHospitalOpen}>
+        <DialogContent>
+          <Typography>Select a hospital</Typography>
+          {getBuildings(gameManager, {
+            organizationId: gameManager.gameData.player.organizationId,
+            type: "hospital",
+          }).map((hospital) => {
+            return (
+              <Box>
+                <Typography>{hospital.name}</Typography>
+                <Button
+                  onClick={() => {
+                    admitHospitalPatient(
+                      gameManager,
+                      hospital.id,
+                      injuredPeople[0].id
+                    );
+                    updateGameData(gameManager, gameManager.gameData);
+                    setSelectHospitalOpen(false);
+                  }}
+                >
+                  Admit Agent
+                </Button>
+              </Box>
+            );
+          })}
+          <Button
+            onClick={() => {
+              setSelectHospitalOpen(false);
+            }}
+          >
+            Cancel
+          </Button>
+        </DialogContent>
+      </Dialog>
       <Box>
         <Typography>Injured Agents</Typography>
         <Typography>
           The following agents have are currently injured.
         </Typography>
         <Grid container padding="1rem" spacing={"1rem"}>
-          {getPeople(gameManager, {
-            organizationId: gameManager.gameData.player.organizationId,
-            injuredOnly: true,
-            agentFilter: {
-              agentsOnly: true,
-            },
-          }).map((person) => {
+          {injuredPeople.map((person) => {
             const healthPercentage =
               (person.derivedAttributes.health.currentHealth /
                 person.derivedAttributes.health.totalHealth) *
               100;
             return (
               <Grid item>
-                {/* <HeaderGridItem
-                  title={person.name}
-                  content={`${
-                    healthPercentage > 75
-                      ? "Injured"
-                      : healthPercentage > 50
-                      ? "Seriously Injured"
-                      : "Critical"
-                  }`}
-                  
-                /> */}
                 <Chip
+                  onClick={() => {
+                    setSelectHospitalOpen(true);
+                  }}
                   label={`${person.name} (${
                     healthPercentage > 75
                       ? "Injured"
@@ -51,7 +97,7 @@ const InfirmaryOverview = ({ gameManager }: IntegratedManagerProps) => {
           })}
         </Grid>
         <Box>
-          <Button>Admit All ($999)</Button>
+          {injuredPeople.length > 0 && <Button>Admit All ($999)</Button>}
         </Box>
       </Box>
       <Divider />

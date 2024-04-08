@@ -32,6 +32,7 @@ import { updateSimActions } from "../../features/gameLogSlice";
 import EventLogItem from "../../elements/EventLogItem";
 import { advanceDays } from "empire-of-evil/src/actions/advanceDay";
 import HeaderGridItem from "../../elements/HeaderGridItem";
+import { setProjects } from "../../features/scienceSlice";
 
 const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
   const dispatch = useAppDispatch();
@@ -76,6 +77,7 @@ const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
             onClick={() => {
               advanceDay(gameManager);
               dispatch(updateSimActions(gameManager.gameData.gameLog));
+              dispatch(setProjects(gameManager.scienceManager.activeProjects));
               dispatch(setScreen("events"));
             }}
           >

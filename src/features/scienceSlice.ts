@@ -1,25 +1,24 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { ScienceProject, ScienceProjectStatus } from 'empire-of-evil/src/managers/scienceProjects';
-
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { ScienceProjectStatus } from "empire-of-evil/src/managers/science/types";
 
 export interface ScienceState {
-  activeProjects: ScienceProjectStatus[]
+  activeProjects: ScienceProjectStatus[];
 }
 
-const initialState: ScienceState = { activeProjects: [] }
+const initialState: ScienceState = { activeProjects: [] };
 export const scienceSlice = createSlice({
-  name: 'science',
+  name: "science",
   initialState,
   reducers: {
     setProjects: (state, action: PayloadAction<ScienceProjectStatus[]>) => {
       return {
         ...state,
         activeProjects: action.payload,
-      }
+      };
     },
-  }
-})
+  },
+});
 
-export const { setProjects } = scienceSlice.actions
+export const { setProjects } = scienceSlice.actions;
 
-export default scienceSlice.reducer
+export default scienceSlice.reducer;

@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   CardContent,
+  Checkbox,
   Chip,
   DialogActions,
   DialogTitle,
@@ -32,6 +33,7 @@ const ReconPlot = ({ gameManager, cb }) => {
   const [participants, setParticipants] = useState([]);
   const [plotParams, setPlotParams] = useState({
     surrender: true,
+    useDrones: false,
   });
   const nations = toDataArray(gameData.nations).filter(
     (nation) => nation.organizationId !== gameData.player.organizationId
@@ -139,111 +141,145 @@ const ReconPlot = ({ gameManager, cb }) => {
             </Box>
           )}
           {zone && (
-            <div className="mb-4">
-              <header>
-                <p className="text-lg border-b mb-4">
-                  Select the Agents attending this mission.
-                </p>
-              </header>
-              <Paper>
-                <Grid
-                  container
-                  spacing={1}
-                  rowSpacing={1}
-                  sx={{
-                    overflowY: "scroll",
-                    padding: "0.5rem",
-                    maxHeight: "150px",
-                  }}
+            <Box>
+              <FormControl>
+                <Tooltip
+                  title="Utilize drones for intelligence gathering"
+                  placement="right"
                 >
-                  {people
-                    .getPeople(gameManager, {
-                      excludeDeceased: true,
-                      excludePersonnel: true,
-                      excludeCaptured: true,
+                  <FormControlLabel
+                    name="useDrones"
+                    value={plotParams.useDrones}
+                    control={<Checkbox />}
+                    label="Use Drones"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      e.target.checked = !plotParams.useDrones;
+                      setPlotParams({
+                        ...plotParams,
+                        useDrones: !plotParams.useDrones,
+                      });
+                    }}
+                  />
+                </Tooltip>
+              </FormControl>
+              {plotParams.useDrones ? (
+                <Box>
+                  <Typography>
+                    Drones will be used for intelligence gathering. No agents
+                    are required.
+                  </Typography>
+                  <Typography>
+                    This will increase the cost of the operation.
+                  </Typography>
+                </Box>
+              ) : (
+                <>
+                  <Box>
+                    <Typography>
+                      Select the Agents attending this mission.
+                    </Typography>
+                  </Box>
+                  <Paper>
+                    <Grid
+                      container
+                      spacing={1}
+                      rowSpacing={1}
+                      sx={{
+                        overflowY: "scroll",
+                        padding: "0.5rem",
+                        maxHeight: "150px",
+                      }}
+                    >
+                      {people
+                        .getPeople(gameManager, {
+                          excludeDeceased: true,
+                          excludePersonnel: true,
+                          excludeCaptured: true,
 
-                      agentFilter: {
-                        agentsOnly: true,
-                        department: -1,
-                        excludeParticipants: true,
-                      },
-                    })
-                    .filter(
-                      (agent) =>
-                        agent.agent.department === 0 ||
-                        agent.agent.department === 3
-                    )
-                    .map((selectedAgent) => (
-                      <Grid item>
+                          agentFilter: {
+                            agentsOnly: true,
+                            department: -1,
+                            excludeParticipants: true,
+                          },
+                        })
+                        .filter(
+                          (agent) =>
+                            agent.agent.department === 0 ||
+                            agent.agent.department === 3
+                        )
+                        .map((selectedAgent) => (
+                          <Grid item>
+                            <Chip
+                              label={selectedAgent.name}
+                              id={`agent-select-${selectedAgent.id}`}
+                              variant={
+                                participants.includes(selectedAgent.id)
+                                  ? "outlined"
+                                  : "filled"
+                              }
+                              onClick={(e) => {
+                                onUpdateParticipants(e, selectedAgent);
+                              }}
+                            />
+                          </Grid>
+                        ))}
+                    </Grid>
+                  </Paper>
+                  <div>
+                    <p className="text-lg border-b mb-4">Selected Agents</p>
+                    <Stack direction="row" spacing={1} padding={1}>
+                      {participants.map((agent) => (
                         <Chip
-                          label={selectedAgent.name}
-                          id={`agent-select-${selectedAgent.id}`}
-                          variant={
-                            participants.includes(selectedAgent.id)
-                              ? "outlined"
-                              : "filled"
-                          }
-                          onClick={(e) => {
-                            onUpdateParticipants(e, selectedAgent);
-                          }}
+                          label={gameData.people[agent].name}
+                          key={`attackers-${agent}`}
+                          className="shadow-md rounded p-2"
                         />
-                      </Grid>
-                    ))}
-                </Grid>
-              </Paper>
-              <div>
-                <p className="text-lg border-b mb-4">Selected Agents</p>
-                <Stack direction="row" spacing={1} padding={1}>
-                  {participants.map((agent) => (
-                    <Chip
-                      label={gameData.people[agent].name}
-                      key={`attackers-${agent}`}
-                      className="shadow-md rounded p-2"
-                    />
-                  ))}
-                </Stack>
-              </div>
-              <Box>
-                <Typography>
-                  There is a possibility agents on this mission will be detected
-                  by enemy counterintelligence. If caught, how should they
-                  proceed?
-                </Typography>
-                <FormControl>
-                  <RadioGroup
-                    name="surrender"
-                    value={plotParams.surrender}
-                    onChange={handleParams}
-                  >
-                    <Tooltip
-                      title="Agents will surrender if caught by enemy counterintelligence."
-                      placement="right"
-                    >
-                      <FormControlLabel
-                        value={true}
-                        control={<Radio />}
-                        label="Surrender"
-                      />
-                    </Tooltip>
-                    <Tooltip
-                      title="Agents will engage enemy counterintelligence if caught."
-                      placement="right"
-                    >
-                      <FormControlLabel
-                        value={false}
-                        control={<Radio />}
-                        label="Engage"
-                      />
-                    </Tooltip>
-                  </RadioGroup>
-                </FormControl>
-              </Box>
-              <footer>
-                <p className="text-xs">
-                  *Agents attending this mission may suffer loss of life.
-                </p>
-              </footer>
-            </div>
+                      ))}
+                    </Stack>
+                  </div>
+                  <Box>
+                    <Typography>
+                      There is a possibility agents on this mission will be
+                      detected by enemy counterintelligence. If caught, how
+                      should they proceed?
+                    </Typography>
+                    <FormControl>
+                      <RadioGroup
+                        name="surrender"
+                        value={plotParams.surrender}
+                        onChange={handleParams}
+                      >
+                        <Tooltip
+                          title="Agents will surrender if caught by enemy counterintelligence."
+                          placement="right"
+                        >
+                          <FormControlLabel
+                            value={true}
+                            control={<Radio />}
+                            label="Surrender"
+                          />
+                        </Tooltip>
+                        <Tooltip
+                          title="Agents will engage enemy counterintelligence if caught."
+                          placement="right"
+                        >
+                          <FormControlLabel
+                            value={false}
+                            control={<Radio />}
+                            label="Engage"
+                          />
+                        </Tooltip>
+                      </RadioGroup>
+                    </FormControl>
+                  </Box>
+                  <Box>
+                    <p className="text-xs">
+                      *Agents attending this mission may suffer loss of life.
+                    </p>
+                  </Box>
+                </>
+              )}
+            </Box>
           )}
         </Box>
       </CardContent>

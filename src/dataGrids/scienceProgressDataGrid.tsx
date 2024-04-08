@@ -10,26 +10,28 @@ const scienceProgressDataGridColumns = [
   { key: "select", name: "Select", renderCell: dataGridButton },
 ];
 
-
 export interface ScienceProgressDataGridProps {
-    title: string;
-    gameManager: GameManager;
-    
+  title: string;
+  gameManager: GameManager;
 }
-const ScienceProgressDataGrid = ({ title, gameManager }: ScienceProgressDataGridProps) => {
+const ScienceProgressDataGrid = ({
+  title,
+  gameManager,
+}: ScienceProgressDataGridProps) => {
   const projects = useAppSelector((state) => state.science.activeProjects);
   return (
     <DataGrid
       columns={scienceProgressDataGridColumns}
       rows={projects.map((projectProgress) => {
-        const project = gameManager.scienceManager.PROJECTS[projectProgress.indexName];
+        const project =
+          gameManager.scienceManager.PROJECT_DEFINITIONS[
+            projectProgress.indexName
+          ];
         return {
           name: projectProgress.indexName,
-          progress: projectProgress.science,
+          progress: projectProgress.accumulatedScience,
           requiredScience: project.science,
-          select: () => {
-           
-          },
+          select: () => {},
         };
       })}
     />
