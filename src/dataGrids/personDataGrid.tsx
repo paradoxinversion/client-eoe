@@ -13,23 +13,19 @@ const personDataGridColumns = [
   { key: "loyalty", name: "Loyalty" },
   { key: "intelLevel", name: "Intelligence" },
   { key: "agent", name: "Agent?" },
+  { key: "personnel", name: "Personnel" },
   { key: "select", name: "Select", renderCell: dataGridButton },
 ];
 
 interface PersonDataGridProps {
   title: string;
   people: Person[];
-  gameManager: GameManager;
 }
 
-const PersonDataGrid = ({
-  title,
-  people,
-  gameManager,
-}: PersonDataGridProps) => {
+const PersonDataGrid = ({ title, people }: PersonDataGridProps) => {
   const peopleStore = useAppSelector((state) => state.people);
   const dispatch = useAppDispatch();
-  const { gameData } = gameManager;
+  const { gameData } = GameManager.getInstance();
   const personDataGridRows = people.map((person) => {
     const { name: zoneName } = gameData.zones[person.homeZoneId];
     const { id, name, agent } = person;
@@ -41,6 +37,7 @@ const PersonDataGrid = ({
       loyalty,
       intelLevel: intelligenceLevel,
       agent: !!agent ? <CheckIcon /> : <CloseIcon />,
+      personnel: person.isPersonnel ? <CheckIcon /> : <CloseIcon />,
       select: (row) => {
         dispatch(clearSelections());
         dispatch(

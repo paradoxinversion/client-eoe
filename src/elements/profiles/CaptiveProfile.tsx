@@ -5,7 +5,7 @@ import { updateGameData } from "../../actions/dataManagement";
 import { clearSelections } from "../../features/selectionSlice";
 import { getEvilEmpire, releaseCaptive } from "empire-of-evil/src/organization";
 
-const CaptiveProfile = ({ gameManager }) => {
+const CaptiveProfile = () => {
   const captive = useAppSelector((state) => state.selections.person);
   const dispatch = useAppDispatch();
   return (
@@ -16,14 +16,7 @@ const CaptiveProfile = ({ gameManager }) => {
         <Paper sx={{ padding: 1 }}>
           <Button
             onClick={() => {
-              updateGameData(
-                gameManager,
-                releaseCaptive(
-                  gameManager,
-                  getEvilEmpire(gameManager).id,
-                  captive
-                )
-              );
+              updateGameData(releaseCaptive(getEvilEmpire().id, captive));
               dispatch(clearSelections());
             }}
           >
@@ -31,7 +24,7 @@ const CaptiveProfile = ({ gameManager }) => {
           </Button>
           <Button
             onClick={() => {
-              updateGameData(gameManager, killPerson(captive));
+              updateGameData(killPerson(captive));
               dispatch(clearSelections());
             }}
           >

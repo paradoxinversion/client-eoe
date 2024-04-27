@@ -12,11 +12,11 @@ import {
 } from "@mui/material";
 import { GameManager } from "empire-of-evil";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { IntegratedManagerProps } from "../..";
+
 import { simActivities } from "empire-of-evil/src/sim/people";
 import { selectEntity } from "../../features/selectionSlice";
 
-const WorldPerson = ({ gameManager }: IntegratedManagerProps) => {
+const WorldPerson = () => {
   const dispatch = useAppDispatch();
   const selectedPerson = useAppSelector((state) => state.selections.person);
   const personZone = useAppSelector(

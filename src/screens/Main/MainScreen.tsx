@@ -23,7 +23,9 @@ import { setScreen } from "../../features/screenSlice";
 import * as eoe from "empire-of-evil";
 import {
   getEvilEmpire,
+  getOrgIncome,
   getOrgResources,
+  getOrgScienceOutput,
 } from "empire-of-evil/src/organization";
 import { getInfrastructureLoad } from "empire-of-evil/src/buildings";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -33,41 +35,42 @@ import EventLogItem from "../../elements/EventLogItem";
 import { advanceDays } from "empire-of-evil/src/actions/advanceDay";
 import HeaderGridItem from "../../elements/HeaderGridItem";
 import { setProjects } from "../../features/scienceSlice";
+import { getInfrastructurePercentage } from "empire-of-evil/src/actions/infrastructure";
 
-const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
+const currencyFormatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+
+const MainScreen = () => {
   const dispatch = useAppDispatch();
-  const { gameData } = gameManager;
+  const { gameData } = eoe.GameManager.getInstance();
   const eventLog = useAppSelector((state) => state.gameLog.events);
   const reverseLog = [...eventLog].reverse();
   const empireResources = eoe.organizations.getOrgResources(
-    gameManager,
+    gameData.player.organizationId
+  );
+  const infrastructurePercentage = getInfrastructurePercentage(
     gameData.player.organizationId
   );
 
-  const science = eoe.organizations.getScience(
-    gameManager,
-    gameData.player.organizationId
-  );
+  const science = eoe.organizations.getScience(gameData.player.organizationId);
 
   const buildingUpkeep = eoe.buildings.getUpkeep(
-    gameManager,
     gameData.player.organizationId
   );
-  const payroll = eoe.organizations.getPayroll(
-    gameManager,
-    gameData.player.organizationId
-  );
+  const payroll = eoe.organizations.getPayroll(gameData.player.organizationId);
 
   useEffect(() => {
-    const gameOver = checkGameOverState(gameManager);
+    const gameOver = checkGameOverState();
     if (gameOver) {
       dispatch(setScreen("game-over"));
     }
-    const victory = checkVictoryState(gameManager);
+    const victory = checkVictoryState();
     if (victory) {
       dispatch(setScreen("victory"));
     }
-  }, [gameManager, setScreen]);
+  }, [setScreen]);
   return (
     <>
       <Box>
@@ -75,9 +78,15 @@ const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
           <Button
             color="inherit"
             onClick={() => {
-              advanceDay(gameManager);
-              dispatch(updateSimActions(gameManager.gameData.gameLog));
-              dispatch(setProjects(gameManager.scienceManager.activeProjects));
+              advanceDay();
+              dispatch(
+                updateSimActions(eoe.GameManager.getInstance().gameData.gameLog)
+              );
+              dispatch(
+                setProjects(
+                  eoe.GameManager.getInstance().scienceManager.activeProjects
+                )
+              );
               dispatch(setScreen("events"));
             }}
           >
@@ -86,8 +95,10 @@ const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
           <Button
             color="inherit"
             onClick={() => {
-              advanceDays(gameManager, 5);
-              dispatch(updateSimActions(gameManager.gameData.gameLog));
+              advanceDays(5);
+              dispatch(
+                updateSimActions(eoe.GameManager.getInstance().gameData.gameLog)
+              );
               dispatch(setScreen("events"));
             }}
           >
@@ -99,44 +110,44 @@ const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
           <Grid container padding={"1rem"} spacing={"1rem"}>
             <HeaderGridItem
               title="Wealth"
-              content={`${
-                gameManager.gameData.governingOrganizations[
+              content={`${currencyFormatter.format(
+                eoe.GameManager.getInstance().gameData.governingOrganizations[
                   gameData.player.organizationId
                 ].wealth
-              }
-                  (+${empireResources.wealth})`}
+              )}
+                  (+${currencyFormatter.format(Math.trunc(getOrgIncome()))})`}
             />
             <HeaderGridItem
               title="Expenses"
-              content={payroll + buildingUpkeep}
+              content={currencyFormatter.format(payroll + buildingUpkeep)}
             />
             <HeaderGridItem
               title="Infrastructure"
               content={`${
                 getOrgResources(
-                  gameManager,
-                  gameManager.gameData.player.organizationId
+                  eoe.GameManager.getInstance().gameData.player.organizationId
                 ).infrastructure
               }/${getInfrastructureLoad(
-                gameManager,
-                gameManager.gameData.player.organizationId
+                eoe.GameManager.getInstance().gameData.player.organizationId
               )}`}
             />
             <HeaderGridItem
               title="Science"
-              content={`${getEvilEmpire(gameManager).science} (+${science})`}
+              content={`${getEvilEmpire().science} (+${Math.trunc(
+                getOrgScienceOutput()
+              )})`}
             />
             <HeaderGridItem
               title="Zones"
               content={`${
-                eoe.zones.getZones(gameManager, gameData.player.empireId).length
+                eoe.zones.getZones(gameData.player.empireId).length
               }/${Object.keys(gameData.zones).length}`}
             />
 
             <HeaderGridItem
               title="Agents"
               content={
-                eoe.actions.people.getPeople(gameManager, {
+                eoe.actions.people.getPeople({
                   organizationId: gameData.player.organizationId,
                   agentFilter: { agentsOnly: true },
                 }).length
@@ -145,7 +156,7 @@ const MainScreen = ({ gameManager }: { gameManager: eoe.GameManager }) => {
 
             <HeaderGridItem
               title="EVIL"
-              content={eoe.organizations.getEvilEmpire(gameManager).totalEvil}
+              content={eoe.organizations.getEvilEmpire().totalEvil}
             />
           </Grid>
         </Box>

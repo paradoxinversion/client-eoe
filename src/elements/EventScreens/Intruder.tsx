@@ -1,21 +1,21 @@
 import { Box, Button, Typography } from "@mui/material";
-import { IntegratedManagerProps } from "../..";
+
 import { GameEventComponentProps } from "../../screens/Events/EventScreen";
 import { IntruderAlertEventParams } from "empire-of-evil/src/events/eventFunctions/intruderAlert";
+import { GameManager } from "empire-of-evil";
 
 const EventScreenIntruder = ({
   resolveEvent,
-  gameManager,
   currentGameEvent,
-}: IntegratedManagerProps & GameEventComponentProps) => {
+}: GameEventComponentProps) => {
   const params = currentGameEvent.params as IntruderAlertEventParams;
-  const intruder = gameManager.gameData.people[params.intruderId];
+  const intruder = GameManager.getInstance().gameData.people[params.intruderId];
   return (
     <Box>
       <Typography>
         {intruder.name} from{" "}
         {
-          gameManager.gameData.governingOrganizations[
+          GameManager.getInstance().gameData.governingOrganizations[
             intruder.agent.organizationId
           ].name
         }{" "}

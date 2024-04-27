@@ -16,11 +16,7 @@ import { useState } from "react";
 import { GameManager } from "empire-of-evil";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
-interface TitleScreenOptionsProps {
-  gameManager: GameManager;
-}
-
-const TitleScreenOptions = ({ gameManager }: TitleScreenOptionsProps) => {
+const TitleScreenOptions = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const dispatch = useAppDispatch();
   const saveData = useAppSelector((state) => state.gameManager.saveData);
@@ -41,7 +37,7 @@ const TitleScreenOptions = ({ gameManager }: TitleScreenOptionsProps) => {
           <ListItem>
             <ListItemButton
               onClick={() => {
-                loadGame(gameManager);
+                loadGame();
               }}
             >
               <ListItemText primary={"Load Session"} />

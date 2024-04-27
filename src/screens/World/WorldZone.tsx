@@ -14,11 +14,11 @@ import { actions, buildings } from "empire-of-evil";
 import { useAppSelector } from "../../app/hooks";
 import PersonDataGrid from "../../dataGrids/personDataGrid";
 import BuildingDataGrid from "../../dataGrids/buildingDataGrid";
-import { IntegratedManagerProps } from "../..";
+
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useState } from "react";
 
-const WorldZone = ({ gameManager }: IntegratedManagerProps) => {
+const WorldZone = () => {
   const selectedZone = useAppSelector((state) => state.selections.zone);
   const [currentTab, setCurrentTab] = useState("people");
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -33,7 +33,7 @@ const WorldZone = ({ gameManager }: IntegratedManagerProps) => {
           </Typography>
           <Typography variant="body2">
             {
-              actions.people.getPeople(gameManager, {
+              actions.people.getPeople({
                 zoneId: selectedZone.id,
               }).length
             }
@@ -45,7 +45,7 @@ const WorldZone = ({ gameManager }: IntegratedManagerProps) => {
           </Typography>
           <Typography variant="body2">
             {
-              buildings.getBuildings(gameManager, {
+              buildings.getBuildings({
                 zoneId: selectedZone.id,
               }).length
             }
@@ -66,29 +66,26 @@ const WorldZone = ({ gameManager }: IntegratedManagerProps) => {
         <TabPanel value="people">
           <PersonDataGrid
             title="people"
-            people={actions.people.getPeople(gameManager, {
+            people={actions.people.getPeople({
               zoneId: selectedZone.id,
             })}
-            gameManager={gameManager}
           />
         </TabPanel>
         <TabPanel value="buildings">
           <BuildingDataGrid
             title=""
-            buildings={buildings.getBuildings(gameManager, {
+            buildings={buildings.getBuildings({
               zoneId: selectedZone.id,
             })}
-            gameManager={gameManager}
           />
         </TabPanel>
         <TabPanel value="morgue">
           <PersonDataGrid
             title="morgue"
-            people={actions.people.getPeople(gameManager, {
+            people={actions.people.getPeople({
               zoneId: selectedZone.id,
               deceasedOnly: true,
             })}
-            gameManager={gameManager}
           />
         </TabPanel>
       </TabContext>

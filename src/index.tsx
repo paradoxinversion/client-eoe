@@ -5,10 +5,6 @@ import { store } from "./app/store";
 import { Provider } from "react-redux";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
-export interface IntegratedManagerProps {
-  gameManager: GameManager;
-}
-
 const gameManager = gameSetup.createGameManager();
 
 const container = document.getElementById("app");
@@ -29,7 +25,7 @@ const darkTheme = createTheme({
 root.render(
   <ThemeProvider theme={darkTheme}>
     <Provider store={store}>
-      <App gameManager={gameManager} />
+      <App />
     </Provider>
   </ThemeProvider>
 );

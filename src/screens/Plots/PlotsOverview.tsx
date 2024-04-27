@@ -1,11 +1,12 @@
 import { Box, Typography, Divider, Grid, Dialog, Button } from "@mui/material";
-import { IntegratedManagerProps } from "../..";
+
 import { selectEntity } from "../../features/selectionSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useEffect, useState } from "react";
 import { plotSetupRenderers } from "./PlotsScreen";
 import DataGrid from "react-data-grid";
 import { dataGridButton } from "../../datagridRenderers/dataGridButton";
+import { GameManager } from "empire-of-evil";
 
 const queuedPlotsColumns = [
   { key: "plot", name: "Plot" },
@@ -13,11 +14,11 @@ const queuedPlotsColumns = [
   { key: "cancel", name: "Cancel", renderCell: dataGridButton },
 ];
 
-const PlotsOverview = ({ gameManager }: IntegratedManagerProps) => {
+const PlotsOverview = () => {
   const dispatch = useAppDispatch();
   const [plotWidgetOpen, setPlotWidgetOpen] = useState(false);
   const currentPlot = useAppSelector((state) => state.selections.plot);
-  const { plotManager, gameData } = gameManager;
+  const { plotManager, gameData } = GameManager.getInstance();
   const PlotWidget = currentPlot && plotSetupRenderers[currentPlot.type];
   const plotRows = plotManager.plotQueue.map((plot, index) => ({
     index,
@@ -84,7 +85,6 @@ const PlotsOverview = ({ gameManager }: IntegratedManagerProps) => {
         <Dialog open={plotWidgetOpen}>
           <PlotWidget
             gameData={gameData}
-            gameManager={gameManager}
             plotManager={plotManager}
             cb={() => {
               setPlotWidgetOpen(false);

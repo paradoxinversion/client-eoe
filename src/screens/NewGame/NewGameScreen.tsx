@@ -19,10 +19,10 @@ import {
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { newGame } from "../../actions/dataManagement";
-import { IntegratedManagerProps } from "../..";
+
 import { NewGameOptions } from "empire-of-evil/src/gameSetup";
 
-const NewGameScreen = ({ gameManager }: IntegratedManagerProps) => {
+const NewGameScreen = () => {
   const [overlordFormData, setOverlordFormData] = useState({
     overlordName: "",
     pet: -1,
@@ -33,7 +33,7 @@ const NewGameScreen = ({ gameManager }: IntegratedManagerProps) => {
   });
 
   const onNewGame = () => {
-    newGame(gameManager, {
+    newGame({
       overlordName: overlordFormData.overlordName,
       pet: overlordFormData.pet > 0,
       takePrisoners: overlordFormData.takePrisoners === 1,

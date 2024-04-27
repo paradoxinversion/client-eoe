@@ -1,23 +1,22 @@
-import { Box, Divider, Stack, Tab, Typography } from "@mui/material";
+import { Box, Divider, Grid, Stack, Tab, Typography } from "@mui/material";
 
 import MetricNumber from "../../elements/MetricNumber/MetricNumber";
-import { buildings } from "empire-of-evil";
+import { GameManager, buildings } from "empire-of-evil";
 import ScienceProjects from "./ScienceProjects";
 import ScienceProgress from "./ScienceProgress";
-import { IntegratedManagerProps } from "../..";
+
 import ScienceOverview from "./ScienceOverview";
 import { useState } from "react";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import HeaderGridItem from "../../elements/HeaderGridItem";
+import { getPeople } from "empire-of-evil/src/actions/people";
 
-const ScienceScreen = ({ gameManager }: IntegratedManagerProps) => {
+const ScienceScreen = () => {
   const [currentTab, setCurrentTab] = useState("overview");
-  const { gameData } = gameManager;
-  const labs = buildings.getOrgLabs(
-    gameManager,
-    gameData.player.organizationId
-  );
+  const { gameData } = GameManager.getInstance();
+  const labs = buildings.getOrgLabs(gameData.player.organizationId);
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setCurrentTab(newValue);
   };
@@ -30,10 +29,18 @@ const ScienceScreen = ({ gameManager }: IntegratedManagerProps) => {
       <Divider />
 
       <Box padding="1rem" component={"section"}>
-        <Stack direction="row" spacing={"1rem"} justifyContent={"center"}>
-          <MetricNumber title="Total Labs" number={labs.length} />
-          <MetricNumber title="Scientists" number={9999} />
-        </Stack>
+        <Grid container spacing={"1rem"}>
+          <HeaderGridItem title="Labs" content={labs.length} />
+          <HeaderGridItem
+            title="Scientists"
+            content={
+              getPeople({
+                organizationId: gameData.player.organizationId,
+                agentFilter: { agentsOnly: true, department: 2 },
+              }).length
+            }
+          />
+        </Grid>
       </Box>
       <Divider />
 
@@ -47,13 +54,13 @@ const ScienceScreen = ({ gameManager }: IntegratedManagerProps) => {
             </TabList>
           </Box>
           <TabPanel value="overview">
-            <ScienceOverview gameManager={gameManager} />
+            <ScienceOverview />
           </TabPanel>
           <TabPanel value="projects">
-            <ScienceProjects gameManager={gameManager} />
+            <ScienceProjects />
           </TabPanel>
           <TabPanel value="progress">
-            <ScienceProgress gameManager={gameManager} />
+            <ScienceProgress />
           </TabPanel>
         </TabContext>
       </Box>

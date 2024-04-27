@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 import { getPeople } from "empire-of-evil/src/actions/people";
-import { IntegratedManagerProps } from "../..";
 import HeaderGridItem from "../../elements/HeaderGridItem";
 import {
   admitHospitalPatient,
@@ -17,12 +16,13 @@ import {
 } from "empire-of-evil/src/buildings";
 import { useState } from "react";
 import { updateGameData } from "../../actions/dataManagement";
+import { GameManager } from "empire-of-evil";
 // import DataGrid from "react-data-grid"
 
-const InfirmaryOverview = ({ gameManager }: IntegratedManagerProps) => {
+const InfirmaryOverview = () => {
   const [selectHospitalOpen, setSelectHospitalOpen] = useState(false);
-  const injuredPeople = getPeople(gameManager, {
-    organizationId: gameManager.gameData.player.organizationId,
+  const injuredPeople = getPeople({
+    organizationId: GameManager.getInstance().gameData.player.organizationId,
     injuredOnly: true,
     noHospitalized: true,
     agentFilter: {
@@ -35,8 +35,9 @@ const InfirmaryOverview = ({ gameManager }: IntegratedManagerProps) => {
       <Dialog open={selectHospitalOpen}>
         <DialogContent>
           <Typography>Select a hospital</Typography>
-          {getBuildings(gameManager, {
-            organizationId: gameManager.gameData.player.organizationId,
+          {getBuildings({
+            organizationId:
+              GameManager.getInstance().gameData.player.organizationId,
             type: "hospital",
           }).map((hospital) => {
             return (
@@ -44,12 +45,7 @@ const InfirmaryOverview = ({ gameManager }: IntegratedManagerProps) => {
                 <Typography>{hospital.name}</Typography>
                 <Button
                   onClick={() => {
-                    admitHospitalPatient(
-                      gameManager,
-                      hospital.id,
-                      injuredPeople[0].id
-                    );
-                    updateGameData(gameManager, gameManager.gameData);
+                    admitHospitalPatient(hospital.id, injuredPeople[0].id);
                     setSelectHospitalOpen(false);
                   }}
                 >

@@ -30,10 +30,7 @@ import { useState } from "react";
 import { getBuildings } from "empire-of-evil/src/buildings";
 import { getEvilEmpire } from "empire-of-evil/src/organization";
 
-interface ScienceProjectProps {
-  gameManager: GameManager;
-}
-const ScienceProjects = ({ gameManager }: ScienceProjectProps) => {
+const ScienceProjects = () => {
   const dispatch = useAppDispatch();
   const [selectLabOpen, setSelectLabOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ScienceProject>();
@@ -51,9 +48,10 @@ const ScienceProjects = ({ gameManager }: ScienceProjectProps) => {
             the project.
           </Typography>
           <List>
-            {getBuildings(gameManager, {
+            {getBuildings({
               type: "laboratory",
-              organizationId: gameManager.gameData.player.organizationId,
+              organizationId:
+                GameManager.getInstance().gameData.player.organizationId,
             }).map((lab) => {
               return (
                 <>
@@ -67,14 +65,14 @@ const ScienceProjects = ({ gameManager }: ScienceProjectProps) => {
                           onClick={() => {
                             setLab(lab.id);
                             setSelectLabOpen(false);
-                            gameManager.scienceManager.startProject(
-                              gameManager,
+                            GameManager.getInstance().scienceManager.startProject(
                               selectedProject,
                               lab.id
                             );
                             dispatch(
                               setProjects(
-                                gameManager.scienceManager.activeProjects
+                                GameManager.getInstance().scienceManager
+                                  .activeProjects
                               )
                             );
                           }}
@@ -103,14 +101,22 @@ const ScienceProjects = ({ gameManager }: ScienceProjectProps) => {
           </List>
         </DialogContent>
       </Dialog>
+      <Typography>
+        Science projects available for research can be selected below. Some
+        projects may require other projects to be completed before they can be
+        started.
+      </Typography>
       <Grid container spacing="1rem" padding="1rem">
-        {Object.values(gameManager.scienceManager.PROJECT_DEFINITIONS)
+        {Object.values(
+          GameManager.getInstance().scienceManager.PROJECT_DEFINITIONS
+        )
           .filter((project) => {
             const requirements = project.requirements;
 
             if (requirements.completedProjects.length > 0) {
               // Ensure all required projects are completed
-              const { completedProjects } = gameManager.scienceManager;
+              const { completedProjects } =
+                GameManager.getInstance().scienceManager;
               const projectsCompleted = requirements.completedProjects.every(
                 (requiredProject) => {
                   return completedProjects.find((cp) => cp === requiredProject);
@@ -122,7 +128,7 @@ const ScienceProjects = ({ gameManager }: ScienceProjectProps) => {
             }
 
             if (
-              gameManager.scienceManager.completedProjects.includes(
+              GameManager.getInstance().scienceManager.completedProjects.includes(
                 project.indexName as ScienceProject
               )
             ) {
@@ -159,9 +165,7 @@ const ScienceProjects = ({ gameManager }: ScienceProjectProps) => {
                   <Divider />
                   <CardActionArea>
                     <Button
-                      disabled={
-                        getEvilEmpire(gameManager).wealth < project.cost
-                      }
+                      disabled={getEvilEmpire().wealth < project.cost}
                       onClick={() => {
                         setSelectLabOpen(true);
                         setSelectedProject(project.indexName as ScienceProject);

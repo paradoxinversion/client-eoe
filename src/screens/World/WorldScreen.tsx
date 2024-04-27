@@ -4,9 +4,8 @@ import WorldNation from "./WorldNation";
 import WorldOverview from "./WorldOverview";
 import WorldZone from "./WorldZone";
 import WorldPerson from "./WorldPerson";
-import { IntegratedManagerProps } from "../..";
 
-const WorldScreen = ({ gameManager }: IntegratedManagerProps) => {
+const WorldScreen = () => {
   const selectedNation = useAppSelector((state) => state.selections.nation);
   const selectedZone = useAppSelector((state) => state.selections.zone);
   const selectedPerson = useAppSelector((state) => state.selections.person);
@@ -17,13 +16,13 @@ const WorldScreen = ({ gameManager }: IntegratedManagerProps) => {
       </Box>
       <Divider />
       {selectedNation ? (
-        <WorldNation gameManager={gameManager} />
+        <WorldNation />
       ) : selectedZone ? (
-        <WorldZone gameManager={gameManager} />
+        <WorldZone />
       ) : selectedPerson ? (
-        <WorldPerson gameManager={gameManager} />
+        <WorldPerson />
       ) : (
-        <WorldOverview gameManager={gameManager} />
+        <WorldOverview />
       )}
     </>
   );

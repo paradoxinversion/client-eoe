@@ -22,10 +22,9 @@ const agentDataGridColumns = [
 interface AgentDataGridProps {
   title: string;
   agents: Person[];
-  gameManager: GameManager;
 }
 
-const AgentDataGrid = ({ title, agents, gameManager }: AgentDataGridProps) => {
+const AgentDataGrid = ({ title, agents }: AgentDataGridProps) => {
   const peopleStore = useAppSelector((state) => state.people);
   const dispatch = useAppDispatch();
   const zoneStore = useAppSelector((state) => state.zones);

@@ -12,19 +12,15 @@ const scienceProgressDataGridColumns = [
 
 export interface ScienceProgressDataGridProps {
   title: string;
-  gameManager: GameManager;
 }
-const ScienceProgressDataGrid = ({
-  title,
-  gameManager,
-}: ScienceProgressDataGridProps) => {
+const ScienceProgressDataGrid = ({ title }: ScienceProgressDataGridProps) => {
   const projects = useAppSelector((state) => state.science.activeProjects);
   return (
     <DataGrid
       columns={scienceProgressDataGridColumns}
       rows={projects.map((projectProgress) => {
         const project =
-          gameManager.scienceManager.PROJECT_DEFINITIONS[
+          GameManager.getInstance().scienceManager.PROJECT_DEFINITIONS[
             projectProgress.indexName
           ];
         return {

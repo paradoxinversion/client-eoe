@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, Stack } from "@mui/material";
+import { Box, Divider, Grid, Stack, Tab } from "@mui/material";
 import MetricNumber from "../../elements/MetricNumber/MetricNumber";
 import { useAppSelector } from "../../app/hooks";
 import * as eoe from "empire-of-evil";
@@ -8,23 +8,22 @@ import PersonnelOverview from "./PersonnelOverview";
 import PersonnelProfile from "./PersonnelProfile";
 import PersonnelCaptives from "./PersonnelCaptives";
 import HeaderGridItem from "../../elements/HeaderGridItem";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { useState } from "react";
 
-interface PersonnelScreenProps {
-  gameManager: eoe.GameManager;
-}
-
-const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
+const PersonnelScreen = () => {
+  const [currentTab, setCurrentTab] = useState("overview");
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setCurrentTab(newValue);
+  };
   const selectedAgent = useAppSelector((state) => state.selections.person);
-  const { gameData } = gameManager;
-  const currentAgents = getPeople(gameManager, {
+  const { gameData } = eoe.GameManager.getInstance();
+  const currentAgents = getPeople({
     organizationId: gameData.player.organizationId,
     agentFilter: { agentsOnly: true },
   }).length;
 
-  const maxAgents = organizations.getMaxAgents(
-    gameManager,
-    gameData.player.organizationId
-  );
+  const maxAgents = organizations.getMaxAgents(gameData.player.organizationId);
 
   return (
     <>
@@ -33,7 +32,6 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
           <HeaderGridItem
             title="Payroll"
             content={`\$${organizations.getPayroll(
-              gameManager,
               gameData.player.organizationId
             )}`}
           />
@@ -45,7 +43,7 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
           <HeaderGridItem
             title="Henchmen"
             content={
-              getPeople(gameManager, {
+              getPeople({
                 organizationId: gameData.player.organizationId,
                 agentFilter: {
                   department: 0,
@@ -57,7 +55,7 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
           <HeaderGridItem
             title="Admins"
             content={
-              getPeople(gameManager, {
+              getPeople({
                 organizationId: gameData.player.organizationId,
                 agentFilter: {
                   department: 1,
@@ -69,7 +67,7 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
           <HeaderGridItem
             title="Scientists"
             content={
-              getPeople(gameManager, {
+              getPeople({
                 organizationId: gameData.player.organizationId,
                 agentFilter: {
                   department: 2,
@@ -81,7 +79,7 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
           <HeaderGridItem
             title="Deceased"
             content={
-              getPeople(gameManager, {
+              getPeople({
                 organizationId: gameData.player.organizationId,
                 deceasedOnly: true,
                 agentFilter: {
@@ -93,12 +91,20 @@ const PersonnelScreen = ({ gameManager }: PersonnelScreenProps) => {
         </Grid>
       </Box>
       <Divider />
-      {selectedAgent ? (
-        <PersonnelProfile gameManager={gameManager} />
-      ) : (
-        <PersonnelOverview gameManager={gameManager} />
-      )}
-      <PersonnelCaptives gameManager={gameManager} />
+      <TabContext value={currentTab}>
+        <Box>
+          <TabList onChange={handleChange}>
+            <Tab label="Overview" value="overview" />
+            <Tab label="Captives" value="captives" />
+          </TabList>
+        </Box>
+        <TabPanel value="overview">
+          {selectedAgent ? <PersonnelProfile /> : <PersonnelOverview />}
+        </TabPanel>
+        <TabPanel value="captives">
+          <PersonnelCaptives />
+        </TabPanel>
+      </TabContext>
     </>
   );
 };

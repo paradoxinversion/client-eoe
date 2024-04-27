@@ -12,16 +12,17 @@ import {
   Button,
   Typography,
   Divider,
+  Tooltip,
 } from "@mui/material";
-import { actions, organizations } from "empire-of-evil";
-import { IntegratedManagerProps } from "../..";
+import { GameManager, actions, organizations } from "empire-of-evil";
+
 import AgentProfile from "../../elements/profiles/AgentProfile";
 import { setPeople } from "../../features/personSlice";
 import { selectEntity, clearSelections } from "../../features/selectionSlice";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
-const PersonnelProfile = ({ gameManager }: IntegratedManagerProps) => {
+const PersonnelProfile = () => {
   const dispatch = useAppDispatch();
   const [changeDepartmentOpen, setChangeDepartmentOpen] = useState(false);
   const [fireAgentDialogOpen, setFireAgentDialogOpen] = useState(false);
@@ -76,7 +77,8 @@ const PersonnelProfile = ({ gameManager }: IntegratedManagerProps) => {
                 selectedAgent,
                 department
               );
-              const { people } = gameManager.updateGameData(update);
+              const { people } =
+                GameManager.getInstance().updateGameData(update);
               dispatch(setPeople(people));
               dispatch(
                 selectEntity({
@@ -115,7 +117,7 @@ const PersonnelProfile = ({ gameManager }: IntegratedManagerProps) => {
           <Button
             onClick={() => {
               const update = organizations.fireAgent(selectedAgent);
-              const ug = gameManager.updateGameData(update);
+              const ug = GameManager.getInstance().updateGameData(update);
               dispatch(clearSelections());
               dispatch(setPeople(ug.people));
               setFireAgentDialogOpen(false);
@@ -126,7 +128,7 @@ const PersonnelProfile = ({ gameManager }: IntegratedManagerProps) => {
           <Button
             onClick={() => {
               const update = organizations.terminateAgent(selectedAgent);
-              const ug = gameManager.updateGameData(update);
+              const ug = GameManager.getInstance().updateGameData(update);
               dispatch(clearSelections());
               dispatch(setPeople(ug.people));
               setFireAgentDialogOpen(false);
@@ -138,20 +140,24 @@ const PersonnelProfile = ({ gameManager }: IntegratedManagerProps) => {
       </Dialog>
       <Divider />
       <Box>
+        <Tooltip title="This agent is a personnel agent">
+          <Button
+            disabled={
+              selectedAgent.id ===
+                GameManager.getInstance().gameData.player.overlordId ||
+              selectedAgent.isPersonnel
+            }
+            onClick={() => {
+              setChangeDepartmentOpen(true);
+            }}
+          >
+            Change Department
+          </Button>
+        </Tooltip>
         <Button
           disabled={
-            selectedAgent.id === gameManager.gameData.player.overlordId ||
-            selectedAgent.isPersonnel
-          }
-          onClick={() => {
-            setChangeDepartmentOpen(true);
-          }}
-        >
-          Change Department
-        </Button>
-        <Button
-          disabled={
-            selectedAgent.id === gameManager.gameData.player.overlordId ||
+            selectedAgent.id ===
+              GameManager.getInstance().gameData.player.overlordId ||
             selectedAgent.isPersonnel
           }
           onClick={() => {
@@ -162,7 +168,7 @@ const PersonnelProfile = ({ gameManager }: IntegratedManagerProps) => {
         </Button>
       </Box>
       <Divider />
-      <AgentProfile gameManager={gameManager} />
+      <AgentProfile />
     </Box>
   );
 };

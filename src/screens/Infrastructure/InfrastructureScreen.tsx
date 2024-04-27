@@ -7,14 +7,14 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { buildings, organizations } from "empire-of-evil";
+import { GameManager, buildings, organizations } from "empire-of-evil";
 import MetricNumber from "../../elements/MetricNumber/MetricNumber";
 import { useAppSelector } from "../../app/hooks";
 import InfrastructureOverview from "./InfrastructureOverview";
-import { IntegratedManagerProps } from "../..";
+
 import InfrastructureBuildingProfile from "./InfrastructureBuildingProfile";
 
-const InfrastructureScreen = ({ gameManager }: IntegratedManagerProps) => {
+const InfrastructureScreen = () => {
   const selectedBuilding = useAppSelector((state) => state.selections.building);
   return (
     <Box>
@@ -30,8 +30,9 @@ const InfrastructureScreen = ({ gameManager }: IntegratedManagerProps) => {
             </Typography>
             <Typography variant="body2">
               {
-                buildings.getBuildings(gameManager, {
-                  organizationId: gameManager.gameData.player.organizationId,
+                buildings.getBuildings({
+                  organizationId:
+                    GameManager.getInstance().gameData.player.organizationId,
                 }).length
               }
             </Typography>
@@ -42,20 +43,18 @@ const InfrastructureScreen = ({ gameManager }: IntegratedManagerProps) => {
             </Typography>
             <Typography variant="body2">{` ${
               organizations.getOrgResources(
-                gameManager,
-                gameManager.gameData.player.organizationId
+                GameManager.getInstance().gameData.player.organizationId
               ).infrastructure
             }/${buildings.getInfrastructureLoad(
-              gameManager,
-              gameManager.gameData.player.organizationId
+              GameManager.getInstance().gameData.player.organizationId
             )}`}</Typography>
           </Grid>
         </Grid>
         <Divider />
         {selectedBuilding ? (
-          <InfrastructureBuildingProfile gameManager={gameManager} />
+          <InfrastructureBuildingProfile />
         ) : (
-          <InfrastructureOverview gameManager={gameManager} />
+          <InfrastructureOverview />
         )}
       </Box>
     </Box>

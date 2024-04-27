@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { IntegratedManagerProps } from "../..";
+
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { actions } from "empire-of-evil";
 import { selectEntity } from "../../features/selectionSlice";
@@ -20,7 +20,7 @@ import { setPeople } from "../../features/personSlice";
 import { getCodeName } from "empire-of-evil/src/generators/names";
 import HeaderGridItem from "../HeaderGridItem";
 
-const AgentProfile = ({ gameManager }: IntegratedManagerProps) => {
+const AgentProfile = () => {
   const selectedAgent = useAppSelector((state) => state.selections.person);
   const people = useAppSelector((state) => state.people);
   const dispatch = useAppDispatch();
@@ -39,7 +39,6 @@ const AgentProfile = ({ gameManager }: IntegratedManagerProps) => {
             onSubmit={(e) => {
               e.preventDefault();
               const update = setCodename(
-                gameManager,
                 selectedAgent.id,
                 codenameValue
               ).people;
@@ -166,13 +165,12 @@ const AgentProfile = ({ gameManager }: IntegratedManagerProps) => {
       <Divider />
       <Box>
         <PersonDataGrid
-          people={actions.people.getPeople(gameManager, {
+          people={actions.people.getPeople({
             agentFilter: {
               commander: selectedAgent.id,
               department: -1,
             },
           })}
-          gameManager={gameManager}
           title="Subordinate Agents"
         />
       </Box>

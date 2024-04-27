@@ -37,10 +37,10 @@ const PlotsScreen = ({ gameManager }) => {
               </TabList>
             </Box>
             <TabPanel value="plots">
-              <PlotsOverview gameManager={gameManager} />
+              <PlotsOverview />
             </TabPanel>
             <TabPanel value="activities">
-              <ActivitiesOverview gameManager={gameManager} />
+              <ActivitiesOverview />
             </TabPanel>
           </TabContext>
         </Box>

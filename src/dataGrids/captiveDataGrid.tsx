@@ -20,13 +20,12 @@ const captiveDataGridColumns = [
 
 interface CaptiveDataGridProps {
   people: Person[];
-  gameManager: GameManager;
 }
 
-const CaptiveDataGrid = ({ people, gameManager }: CaptiveDataGridProps) => {
+const CaptiveDataGrid = ({ people }: CaptiveDataGridProps) => {
   const peopleStore = useAppSelector((state) => state.people);
   const dispatch = useAppDispatch();
-  const { gameData } = gameManager;
+  const { gameData } = GameManager.getInstance();
   const personDataGridRows = people.map((person) => {
     const { name: zoneName } = gameData.zones[person.homeZoneId];
     const { id, name, agent } = person;

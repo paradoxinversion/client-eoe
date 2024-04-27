@@ -16,15 +16,15 @@ const columns = [
 ];
 
 const departments = ["Henchman", "Administrator", "Scientist", "Overlord"];
-const PersonPanel = ({ gameManager, title, people, cb }) => {
-  const { gameData } = gameManager;
+const PersonPanel = ({ title, people, cb }) => {
+  const { gameData } = GameManager.getInstance();
 
   const rows = people.map((person, index) => {
     return {
       name: person.name,
       health: `${person.currentHealth}/${person.health}`,
       department: departments[person.agent?.department] || "Citizen",
-      leadership: `${getAgentSubordinates(gameManager, person).length}/${
+      leadership: `${getAgentSubordinates(person).length}/${
         person.skills.leadership
       }`,
       location: gameData?.zones[person.homeZoneId]?.name,

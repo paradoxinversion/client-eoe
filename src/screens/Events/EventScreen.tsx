@@ -41,8 +41,8 @@ const eventScreenMap = {
   petEvent: EventScreenPetEvent,
 };
 
-const EventsScreen = ({ gameManager }: { gameManager: GameManager }) => {
-  const { gameData, eventManager: eventQueue } = gameManager;
+const EventsScreen = () => {
+  const { gameData, eventManager: eventQueue } = GameManager.getInstance();
 
   const [eventScreen, setEventScreen] = useState(
     eventQueue.getCurrentEvent().type
@@ -56,7 +56,7 @@ const EventsScreen = ({ gameManager }: { gameManager: GameManager }) => {
     eventScreenMap[eventQueue.getCurrentEvent().type];
 
   const resolveEvent = (resolveArgs) => {
-    eventQueue.resolveCurrentEvent(gameManager, resolveArgs);
+    eventQueue.resolveCurrentEvent(resolveArgs);
     const event = eventConfig[eventQueue.getCurrentEvent().type];
     if (event) {
       let color = "primary";
@@ -79,7 +79,7 @@ const EventsScreen = ({ gameManager }: { gameManager: GameManager }) => {
     ) {
       dispatch(setScreen("game-over"));
     }
-    updateGameData(gameManager, updatedGameData);
+    updateGameData(updatedGameData);
 
     if (eventQueue.eventIndex === eventQueue.events.length - 1) {
       eventQueue.clearEvents();
@@ -115,7 +115,6 @@ const EventsScreen = ({ gameManager }: { gameManager: GameManager }) => {
             currentGameEvent={ce}
             resolveEvent={resolveEvent}
             gameData={gameData}
-            gameManager={gameManager}
           />
         </DialogContent>
       </Dialog>

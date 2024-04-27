@@ -1,7 +1,4 @@
-import {
-  getAgents,
-  getAgentSubordinates,
-} from "empire-of-evil/src/organization";
+import { getAgentSubordinates } from "empire-of-evil/src/organization";
 import { useState } from "react";
 import { toDataArray } from "../utilities/dataHelpers";
 import {
@@ -24,6 +21,7 @@ import {
 import Datagrid from "react-data-grid";
 import { getPeople } from "empire-of-evil/src/actions/people";
 import HeaderGridItem from "./HeaderGridItem";
+import { GameManager } from "empire-of-evil";
 const recruitGridColumns = [
   { key: "attribute", name: "" },
   { key: "value", name: "" },
@@ -35,12 +33,8 @@ const recruitGridColumns = [
  * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
  * @returns
  */
-const EventScreenRecruit = ({
-  gameManager,
-  currentGameEvent,
-  resolveEvent,
-}) => {
-  const { gameData } = gameManager;
+const EventScreenRecruit = ({ currentGameEvent, resolveEvent }) => {
+  const { gameData } = GameManager.getInstance();
   const [department, setDepartment] = useState(null);
   const [commander, setCommander] = useState(null);
   const onChange = (event) => {
@@ -55,7 +49,7 @@ const EventScreenRecruit = ({
         <Box component="header">
           <Typography>Recruit Details</Typography>
         </Box>
-        <Box xs={{ height: 100 }}>
+        <Box sx={{ height: 100 }}>
           <Grid container padding="1rem" spacing="1rem">
             <HeaderGridItem
               title="Combat"
@@ -110,13 +104,13 @@ const EventScreenRecruit = ({
         </Box>
         <p className="text-lg border-b mb-4">Commander</p>
         <Paper sx={{ padding: "1rem" }}>
-          <FormControl name="recruit-commander" onChange={onCommanderSelect}>
+          <FormControl onChange={onCommanderSelect}>
             <RadioGroup row sx={{ overflowY: "scroll", height: "100px" }}>
-              {getPeople(gameManager, {
+              {getPeople({
                 organizationId: gameData.player.organizationId,
                 agentFilter: { agentsOnly: true },
               }).map((agent) => {
-                const subordinates = getAgentSubordinates(gameManager, agent);
+                const subordinates = getAgentSubordinates(agent);
                 return (
                   <FormControlLabel
                     value={agent.id}

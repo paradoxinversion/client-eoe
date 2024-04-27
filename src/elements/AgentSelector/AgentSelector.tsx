@@ -14,13 +14,8 @@ import { GameManager } from "empire-of-evil";
 interface AgentSelectorProps {
   agentsArray: Person[];
   cb: Function;
-  gameManager: GameManager;
 }
-const AgentSelector = ({
-  agentsArray,
-  cb,
-  gameManager,
-}: AgentSelectorProps) => {
+const AgentSelector = ({ agentsArray, cb }: AgentSelectorProps) => {
   const dispatch = useAppDispatch();
   const { selectedAgents, activity } = useAppSelector(
     (state) => state.activityParticipantSelector
@@ -49,8 +44,7 @@ const AgentSelector = ({
         {agentsArray
           .filter(
             (agent) =>
-              selectedAgents.includes(agent.id) ||
-              !isPersonParticipant(gameManager, agent)
+              selectedAgents.includes(agent.id) || !isPersonParticipant(agent)
           )
           .map((agent) => (
             <FormControlLabel

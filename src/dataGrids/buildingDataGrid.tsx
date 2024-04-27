@@ -19,17 +19,15 @@ const buildingDataGridColumns = [
 const BuildingDataGrid = ({
   title,
   buildings,
-  gameManager,
   gridHeight,
   cb,
 }: {
   title: string;
   buildings: Building[];
-  gameManager: GameManager;
   gridHeight?: string;
   cb?: Function;
 }) => {
-  const { gameData } = gameManager;
+  const { gameData } = GameManager.getInstance();
   const buildingDataGridRows = buildings.map((building) => {
     const { name: zoneName } = gameData.zones[building.zoneId];
     const { id, name, type, personnel } = building;

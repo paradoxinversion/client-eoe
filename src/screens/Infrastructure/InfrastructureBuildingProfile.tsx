@@ -14,13 +14,11 @@ import BuildingProfile from "../../elements/profiles/BuildingProfile";
 import { clearSelections, selectEntity } from "../../features/selectionSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useState } from "react";
-import { IntegratedManagerProps } from "../..";
-import { actions, buildings } from "empire-of-evil";
+
+import { GameManager, actions, buildings } from "empire-of-evil";
 import { updateGameData } from "../../actions/dataManagement";
 
-const InfrastructureBuildingProfile = ({
-  gameManager,
-}: IntegratedManagerProps) => {
+const InfrastructureBuildingProfile = () => {
   const dispatch = useAppDispatch();
   const selectedBuilding = useAppSelector((state) => state.selections.building);
   const [assignStaffOpen, setAssignStaffOpen] = useState(false);
@@ -41,7 +39,7 @@ const InfrastructureBuildingProfile = ({
           <Grid container spacing={1} columns={3}>
             {selectedBuilding &&
               actions.people
-                .getPeople(gameManager, {
+                .getPeople({
                   zoneId: selectedBuilding?.zoneId,
                   excludePersonnel: true,
                   agentFilter: {
@@ -49,6 +47,8 @@ const InfrastructureBuildingProfile = ({
                     agentsOnly: true,
                     department:
                       selectedBuilding.type === "bank"
+                        ? 1
+                        : selectedBuilding.type === "office"
                         ? 1
                         : selectedBuilding.type === "laboratory"
                         ? 2
@@ -97,7 +97,7 @@ const InfrastructureBuildingProfile = ({
                               selectedBuilding
                             );
 
-                            updateGameData(gameManager, update);
+                            updateGameData(update);
                           } else {
                             const update = buildings.addPersonnel(
                               person,
@@ -105,8 +105,7 @@ const InfrastructureBuildingProfile = ({
                             );
 
                             updateGameData(
-                              gameManager,
-                              gameManager.updateGameData(update)
+                              GameManager.getInstance().updateGameData(update)
                             );
                             dispatch(
                               selectEntity({
@@ -155,7 +154,7 @@ const InfrastructureBuildingProfile = ({
         Assign Staff
       </Button>
       <Divider />
-      <BuildingProfile gameManager={gameManager} />
+      <BuildingProfile />
     </>
   );
 };

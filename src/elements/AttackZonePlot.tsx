@@ -16,6 +16,7 @@ import Plot from "empire-of-evil/src/plots/Plot";
 import { getZones } from "empire-of-evil/src/actions/zones";
 import { useAppSelector } from "../app/hooks";
 import { getPeople } from "empire-of-evil/src/actions/people";
+import { GameManager } from "empire-of-evil";
 /**
  *
  * @param {Object} props
@@ -23,9 +24,9 @@ import { getPeople } from "empire-of-evil/src/actions/people";
  * @param {PlotManager} props.plotManager
  * @returns
  */
-const AttackZonePlot = ({ gameManager, cb }) => {
+const AttackZonePlot = ({ cb }) => {
   const people = useAppSelector((state) => state.people);
-  const { gameData, plotManager } = gameManager;
+  const { gameData, plotManager } = GameManager.getInstance();
   const [nation, setNation] = useState(null);
   const [zone, setZone] = useState(null);
   const nations = toDataArray(gameData.nations).filter(
@@ -90,7 +91,7 @@ const AttackZonePlot = ({ gameManager, cb }) => {
             </Box>
             <Divider />
             <Stack direction="row" spacing={1} padding={1}>
-              {getZones(gameManager, {
+              {getZones({
                 organizationId: nation.organizationId,
               }).map((selectdZone) => (
                 <Chip
@@ -119,7 +120,7 @@ const AttackZonePlot = ({ gameManager, cb }) => {
             </Box>
             <Divider />
             <Stack direction="row" spacing={1} padding={1}>
-              {getPeople(gameManager, {
+              {getPeople({
                 organizationId: gameData.player.organizationId,
                 agentFilter: { agentsOnly: true, excludeParticipants: true },
               })

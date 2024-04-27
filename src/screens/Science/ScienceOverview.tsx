@@ -1,7 +1,6 @@
 import { Box, Typography } from "@mui/material";
-import { IntegratedManagerProps } from "../..";
 
-const ScienceOverview = ({ gameManager }: IntegratedManagerProps) => {
+const ScienceOverview = () => {
   return (
     <>
       <Box component="header">

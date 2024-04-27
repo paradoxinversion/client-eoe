@@ -1,12 +1,12 @@
 import { Box, Typography, Stack, Grid } from "@mui/material";
 import { buildings } from "empire-of-evil";
-import { IntegratedManagerProps } from "../..";
+
 import PersonnelDataGrid from "../../dataGrids/personnelDataGrid";
 import { selectEntity } from "../../features/selectionSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { updateGameData } from "../../actions/dataManagement";
 
-const BuildingProfile = ({ gameManager }: IntegratedManagerProps) => {
+const BuildingProfile = () => {
   const dispatch = useAppDispatch();
   const selectedBuilding = useAppSelector((state) => state.selections.building);
   const peopleState = useAppSelector((state) => state.people);
@@ -32,7 +32,7 @@ const BuildingProfile = ({ gameManager }: IntegratedManagerProps) => {
             Science Output
           </Typography>
           <Typography variant="body2">
-            {buildings.getResourceOutput(gameManager, selectedBuilding).science}
+            {buildings.getResourceOutput(selectedBuilding).science}
           </Typography>
         </Grid>
 
@@ -41,7 +41,7 @@ const BuildingProfile = ({ gameManager }: IntegratedManagerProps) => {
             Wealth Output
           </Typography>
           <Typography variant="body2">
-            {buildings.getResourceOutput(gameManager, selectedBuilding).wealth}
+            {buildings.getResourceOutput(selectedBuilding).wealth}
           </Typography>
         </Grid>
 
@@ -50,7 +50,7 @@ const BuildingProfile = ({ gameManager }: IntegratedManagerProps) => {
             Housing
           </Typography>
           <Typography variant="body2">
-            {buildings.getResourceOutput(gameManager, selectedBuilding).housing}
+            {buildings.getResourceOutput(selectedBuilding).housing}
           </Typography>
         </Grid>
 
@@ -59,10 +59,7 @@ const BuildingProfile = ({ gameManager }: IntegratedManagerProps) => {
             Infrastructure Output
           </Typography>
           <Typography variant="body2">
-            {
-              buildings.getResourceOutput(gameManager, selectedBuilding)
-                .infrastructure
-            }
+            {buildings.getResourceOutput(selectedBuilding).infrastructure}
           </Typography>
         </Grid>
       </Grid>
@@ -70,7 +67,7 @@ const BuildingProfile = ({ gameManager }: IntegratedManagerProps) => {
       <PersonnelDataGrid
         fireFn={(person) => {
           const update = buildings.removePersonnel(person, selectedBuilding);
-          updateGameData(gameManager, update);
+          updateGameData(update);
           dispatch(
             selectEntity({
               type: "building",
@@ -80,7 +77,6 @@ const BuildingProfile = ({ gameManager }: IntegratedManagerProps) => {
         }}
         title="Personnel"
         personnel={selectedBuilding.personnel.map((id) => peopleState[id])}
-        gameManager={gameManager}
       />
     </Box>
   );

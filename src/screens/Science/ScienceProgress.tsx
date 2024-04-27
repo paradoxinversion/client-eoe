@@ -1,16 +1,14 @@
 import { Box, Typography } from "@mui/material";
 import ScienceProgressDataGrid from "../../dataGrids/scienceProgressDataGrid";
-import { IntegratedManagerProps } from "../..";
 
-const ScienceProgress = ({ gameManager }: IntegratedManagerProps) => {
+const ScienceProgress = () => {
   return (
     <>
       <Box component="header">
-        <Typography>Science Progress</Typography>
-        <ScienceProgressDataGrid
-          title="Science Progress"
-          gameManager={gameManager}
-        />
+        <Typography>
+          Progress on science projects can be viewed in the table below.
+        </Typography>
+        <ScienceProgressDataGrid title="Science Progress" />
       </Box>
     </>
   );

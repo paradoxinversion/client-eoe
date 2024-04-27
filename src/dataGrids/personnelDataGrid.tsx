@@ -18,18 +18,16 @@ const personnelDataGridColumns = [
 interface PersonnelDataGridProps {
   title: string;
   personnel: Person[];
-  gameManager: GameManager;
   fireFn: Function;
 }
 
 const PersonnelDataGrid = ({
   title,
   personnel,
-  gameManager,
   fireFn,
 }: PersonnelDataGridProps) => {
   const people = useAppSelector((state) => state.people);
-  const { gameData } = gameManager;
+  const { gameData } = GameManager.getInstance();
   const personnelDataGridRows = personnel.map((person) => {
     const { name: zoneName } = gameData.zones[person.homeZoneId];
     const {

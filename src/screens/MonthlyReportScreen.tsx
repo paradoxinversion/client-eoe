@@ -15,21 +15,21 @@ import { GameManager } from "empire-of-evil";
 import { people } from "empire-of-evil/src/actions";
 import { getPeople } from "empire-of-evil/src/actions/people";
 import { getBuildings, getUpkeep } from "empire-of-evil/src/buildings";
+import GameEvent from "empire-of-evil/src/events/GameEvent";
+import { MonthlyReportEventParams } from "empire-of-evil/src/events/eventFunctions/monthlyReport";
 import { getEvilEmpire, getPayroll } from "empire-of-evil/src/organization";
 import { useState } from "react";
 
 interface MonthlyReportScreenProps {
-  currentGameEvent: any;
+  currentGameEvent: GameEvent;
   resolveEvent: any;
-  gameManager: GameManager;
 }
 const MonthlyReportScreen = ({
   currentGameEvent,
   resolveEvent,
-  gameManager,
 }: MonthlyReportScreenProps) => {
-  const agents = getPeople(gameManager, {
-    organizationId: gameManager.gameData.player.organizationId,
+  const agents = getPeople({
+    organizationId: GameManager.getInstance().gameData.player.organizationId,
     agentFilter: {
       excludeDepartments: [3],
       agentsOnly: true,
@@ -44,8 +44,8 @@ const MonthlyReportScreen = ({
     }, {})
   );
   const [buildingUpkeep, setBuildingUpkeep] = useState(
-    getBuildings(gameManager, {
-      organizationId: gameManager.gameData.player.organizationId,
+    getBuildings({
+      organizationId: GameManager.getInstance().gameData.player.organizationId,
     }).reduce((acc, building) => {
       return {
         ...acc,
@@ -53,12 +53,11 @@ const MonthlyReportScreen = ({
       };
     }, {})
   );
-  const buildings = getBuildings(gameManager, {
-    organizationId: gameManager.gameData.player.organizationId,
+  const buildings = getBuildings({
+    organizationId: GameManager.getInstance().gameData.player.organizationId,
   });
   const upkeepTotal = getUpkeep(
-    gameManager,
-    gameManager.gameData.player.organizationId
+    GameManager.getInstance().gameData.player.organizationId
   );
   const getCommittedPayroll = () => {
     return Object.values(agentPayroll).reduce<number>(
@@ -83,31 +82,25 @@ const MonthlyReportScreen = ({
         <List disablePadding={true} dense={true}>
           <ListItem>
             <ListItemText
-              primary="New Liquid Income"
-              secondary={parseInt(
-                currentGameEvent.params.income.buildingWealth
-              )}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
               primary="Total Expenses"
               secondary={
-                currentGameEvent.params.expenses.payroll +
-                currentGameEvent.params.expenses.upkeep
+                (currentGameEvent.params as MonthlyReportEventParams).expenses
+                  .payroll +
+                (currentGameEvent.params as MonthlyReportEventParams).expenses
+                  .upkeep
               }
             />
           </ListItem>
-          <ListItem>
+          {/* <ListItem>
             <ListItemText
               primary="Net Income"
               secondary={
-                currentGameEvent.params.income.buildingWealth -
-                (currentGameEvent.params.expenses.payroll +
-                  currentGameEvent.params.expenses.upkeep)
+                (currentGameEvent.params as MonthlyReportEventParams).income.buildingWealth -
+                ((currentGameEvent.params as MonthlyReportEventParams).expenses.payroll +
+                  (currentGameEvent.params as MonthlyReportEventParams).expenses.upkeep)
               }
             />
-          </ListItem>
+          </ListItem> */}
         </List>
       </Box>
       <Accordion>
@@ -118,10 +111,9 @@ const MonthlyReportScreen = ({
         <AccordionDetails>
           <Button
             disabled={
-              getEvilEmpire(gameManager).wealth <
+              getEvilEmpire().wealth <
               getPayroll(
-                gameManager,
-                gameManager.gameData.player.organizationId
+                GameManager.getInstance().gameData.player.organizationId
               )
             }
             onClick={() => {
@@ -134,8 +126,7 @@ const MonthlyReportScreen = ({
           >
             Pay All{" "}
             {getPayroll(
-              gameManager,
-              gameManager.gameData.player.organizationId
+              GameManager.getInstance().gameData.player.organizationId
             )}
           </Button>
           <Button
@@ -164,7 +155,7 @@ const MonthlyReportScreen = ({
                     color={(agentPayroll[person.id] && "success") || "primary"}
                     disabled={
                       !agentPayroll[person.id] &&
-                      getEvilEmpire(gameManager).wealth <
+                      getEvilEmpire().wealth <
                         getCommittedPayroll() + person.agent.salary
                     }
                     onClick={() => {
@@ -195,10 +186,9 @@ const MonthlyReportScreen = ({
         <AccordionSummary>Upkeep</AccordionSummary>
         <Button
           disabled={
-            getEvilEmpire(gameManager).wealth <
+            getEvilEmpire().wealth <
               getUpkeep(
-                gameManager,
-                gameManager.gameData.player.organizationId
+                GameManager.getInstance().gameData.player.organizationId
               ) || getCommittedUpkeepTotal() === upkeepTotal
           }
           onClick={() => {
@@ -210,7 +200,7 @@ const MonthlyReportScreen = ({
           }}
         >
           Pay All{" "}
-          {getUpkeep(gameManager, gameManager.gameData.player.organizationId)}
+          {getUpkeep(GameManager.getInstance().gameData.player.organizationId)}
         </Button>
         <Button
           disabled={getCommittedUpkeepTotal() === 0}
@@ -225,8 +215,9 @@ const MonthlyReportScreen = ({
           Pay None{" "}
         </Button>
         <AccordionDetails sx={{ height: "100px", overflow: "scroll" }}>
-          {getBuildings(gameManager, {
-            organizationId: gameManager.gameData.player.organizationId,
+          {getBuildings({
+            organizationId:
+              GameManager.getInstance().gameData.player.organizationId,
           }).map((building) => {
             return (
               <ListItem key={building.id}>

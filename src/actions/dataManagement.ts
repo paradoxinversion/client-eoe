@@ -15,19 +15,21 @@ import { GameData, GameLog } from "empire-of-evil/src/GameManager";
 import {
   NewGameOptions,
   handleNewGame,
+  handleNewGameV2,
   hireStartingAgents,
 } from "empire-of-evil/src/gameSetup";
 import { updateSimActions } from "../features/gameLogSlice";
 
-export const saveGame = (gameManager: GameManager) => {
-  localStorage.setItem("eoe-save", serializeGameData(gameManager));
+export const saveGame = () => {
+  localStorage.setItem("eoe-save", serializeGameData());
 };
 
-export const loadGame = (gameManager: GameManager) => {
-  const { plotManager, activityManager, scienceManager } = gameManager;
+export const loadGame = () => {
+  const { plotManager, activityManager, scienceManager } =
+    GameManager.getInstance();
   const saveData = store.getState().gameManager.saveData;
-  populateActivities(gameManager);
-  populatePlots(gameManager);
+  populateActivities();
+  populatePlots();
   // recreate plots
   const oldPlots = saveData.plotData.plots.map((plot) => {
     return plotManager.addPlot(plot);
@@ -38,10 +40,10 @@ export const loadGame = (gameManager: GameManager) => {
     );
     currentActivity.setAgents(activity.agents);
   });
-  gameManager.setGameData(saveData.gameData);
-  gameManager.setInitialized(true);
+  GameManager.getInstance().setGameData(saveData.gameData);
+  GameManager.getInstance().setInitialized(true);
   const { governingOrganizations, nations, zones, buildings, people } =
-    gameManager.gameData;
+    GameManager.getInstance().gameData;
 
   // Update the redux store
   store.dispatch(setGoverningOrganizations(governingOrganizations));
@@ -58,14 +60,15 @@ export const deleteSavedGame = () => {
   localStorage.removeItem("eoe-save");
 };
 
-export const newGame = (gameManager: GameManager, options: NewGameOptions) => {
-  handleNewGame(gameManager, options);
-  hireStartingAgents(gameManager);
-  populateActivities(gameManager);
-  populatePlots(gameManager);
-  gameManager.setInitialized(true);
+export const newGame = (options: NewGameOptions) => {
+  // handleNewGame(options);
+  handleNewGameV2(options);
+  hireStartingAgents();
+  populateActivities();
+  populatePlots();
+  GameManager.getInstance().setInitialized(true);
   const { governingOrganizations, nations, zones, buildings, people } =
-    gameManager.gameData;
+    GameManager.getInstance().gameData;
 
   // Update the redux store
   store.dispatch(setGoverningOrganizations(governingOrganizations));
@@ -83,13 +86,12 @@ export const newGame = (gameManager: GameManager, options: NewGameOptions) => {
  * Update the game data and the redux store
  */
 export const updateGameData = (
-  gameManager: GameManager,
   updatedGameData: Partial<GameData>,
   updatedLog?: Partial<GameLog>
 ) => {
-  // gameManager.updateGameData(updatedGameData);
+  GameManager.getInstance().updateGameData(updatedGameData);
   const { governingOrganizations, nations, zones, buildings, people } =
-    gameManager.gameData;
+    GameManager.getInstance().gameData;
   store.dispatch(setGoverningOrganizations(governingOrganizations));
   store.dispatch(setNations(nations));
   store.dispatch(setZones(zones));

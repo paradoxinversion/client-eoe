@@ -5,20 +5,19 @@ import CaptiveDataGrid from "../../dataGrids/captiveDataGrid";
 import { useAppSelector } from "../../app/hooks";
 import CaptiveProfile from "../../elements/profiles/CaptiveProfile";
 
-const CaptivesScreen = ({ gameManager }) => {
+const CaptivesScreen = () => {
   const selectedPerson = useAppSelector((state) => state.selections.person);
   return (
     <Box>
       <CaptiveDataGrid
-        gameManager={gameManager}
-        people={getPeople(gameManager, {
+        people={getPeople({
           excludeDeceased: true,
           captive: {
-            capturedBy: getEvilEmpire(gameManager).id,
+            capturedBy: getEvilEmpire().id,
           },
         })}
       />
-      {selectedPerson && <CaptiveProfile gameManager={gameManager} />}
+      {selectedPerson && <CaptiveProfile />}
     </Box>
   );
 };

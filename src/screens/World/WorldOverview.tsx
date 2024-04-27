@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import { dataGridButton } from "../../datagridRenderers/dataGridButton";
 import { selectEntity } from "../../features/selectionSlice";
 import { actions, nations, organizations } from "empire-of-evil";
-import { IntegratedManagerProps } from "../..";
 
 const nationsTableColumns = [
   { key: "nation", name: "Nation" },
@@ -14,19 +13,18 @@ const nationsTableColumns = [
   { key: "agents", name: "Agents" },
   { key: "viewNation", name: "View Nation", renderCell: dataGridButton },
 ];
-const WorldOverview = ({ gameManager }: IntegratedManagerProps) => {
+const WorldOverview = () => {
   const dispatch = useDispatch();
 
-  const nationsArray = nations.getNations(gameManager, {});
+  const nationsArray = nations.getNations({});
   const nationsRows = nationsArray.map((nation) => ({
     nation: nation.name,
-    population: actions.people.getPeople(gameManager, { nationId: nation.id })
-      .length,
-    agents: actions.people.getPeople(gameManager, {
+    population: actions.people.getPeople({ nationId: nation.id }).length,
+    agents: actions.people.getPeople({
       organizationId: nation.organizationId,
       agentFilter: { agentsOnly: true },
     }).length,
-    zones: actions.zones.getZones(gameManager, { nationId: nation.id }).length,
+    zones: actions.zones.getZones({ nationId: nation.id }).length,
     viewNation: () => {
       dispatch(
         selectEntity({

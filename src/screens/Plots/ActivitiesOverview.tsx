@@ -7,12 +7,12 @@ import {
   Paper,
   Dialog,
 } from "@mui/material";
-import { IntegratedManagerProps } from "../..";
+
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { selectEntity } from "../../features/selectionSlice";
 import { useState } from "react";
 import Activity from "empire-of-evil/src/activities/Activity";
-import { plots, actions } from "empire-of-evil";
+import { plots, actions, GameManager } from "empire-of-evil";
 import DataGrid from "react-data-grid";
 import AgentSelector from "../../elements/AgentSelector/AgentSelector";
 import { updateGameData } from "../../actions/dataManagement";
@@ -22,15 +22,19 @@ import {
 } from "../../features/ActivityParticipantSelector/ActivityParticipantSelectorSlice";
 import { current } from "@reduxjs/toolkit";
 import { act } from "react-dom/test-utils";
+import activityConfig, {
+  ActivityConfig,
+} from "empire-of-evil/src/activities/activityConfig";
+import { getEvilEmpire } from "empire-of-evil/src/organization";
 
 const activitiesColumns = [
   { key: "agent", name: "Agent" },
   { key: "activity", name: "Activity" },
 ];
 
-const ActivitiesOverview = ({ gameManager }: IntegratedManagerProps) => {
+const ActivitiesOverview = () => {
   const dispatch = useAppDispatch();
-  const { gameData, activityManager } = gameManager;
+  const { gameData, activityManager } = GameManager.getInstance();
   const [currentActivity, setCurrentActivity] = useState<Activity | null>(null);
   const [activityOpen, setActivityOpen] = useState(false);
   const selectedAgents = useAppSelector(
@@ -57,7 +61,7 @@ const ActivitiesOverview = ({ gameManager }: IntegratedManagerProps) => {
   };
 
   const activityRows = plots
-    .getActivityParticipants(gameManager)
+    .getActivityParticipants()
     .map((participant, index) => ({
       agent: participant.participant.name,
       activity: participant.activity,
@@ -66,17 +70,15 @@ const ActivitiesOverview = ({ gameManager }: IntegratedManagerProps) => {
   const onUpdateActivityParticipant = (participantId: string, add: boolean) => {
     if (add) {
       const update = currentActivity.addAgent(
-        gameManager,
         gameData.people[participantId].id
       );
-      updateGameData(gameManager, update);
+      updateGameData(update);
     } else {
       const update = currentActivity.removeAgent(
-        gameManager,
         gameData.people[participantId].id
       );
 
-      updateGameData(gameManager, update);
+      updateGameData(update);
     }
   };
   return (
@@ -92,17 +94,35 @@ const ActivitiesOverview = ({ gameManager }: IntegratedManagerProps) => {
           <Divider />
           <Box padding="1rem">
             <Grid container>
-              {activityManager.activities.map((activity) => (
-                <Grid key={activity.name} item>
-                  <Button
-                    onClick={() => {
-                      onClickActivity(activity);
-                    }}
-                  >
-                    {activity.name}
-                  </Button>
-                </Grid>
-              ))}
+              {activityManager.activities
+                .filter((activity) => {
+                  const conf: ActivityConfig = activityConfig.find(
+                    (a) => a.type === activity.type
+                  );
+                  if (conf?.requirements?.orgStatusEffects.length > 0) {
+                    let failed = false;
+                    conf?.requirements?.orgStatusEffects.forEach((effect) => {
+                      if (!getEvilEmpire().statusEffects.includes(effect)) {
+                        failed = true;
+                      }
+                    });
+                    if (failed) {
+                      return false;
+                    }
+                  }
+                  return true;
+                })
+                .map((activity) => (
+                  <Grid key={activity.name} item>
+                    <Button
+                      onClick={() => {
+                        onClickActivity(activity);
+                      }}
+                    >
+                      {activity.name}
+                    </Button>
+                  </Grid>
+                ))}
             </Grid>
           </Box>
         </Box>
@@ -143,15 +163,15 @@ const ActivitiesOverview = ({ gameManager }: IntegratedManagerProps) => {
               </Typography>
             </Box>
             <AgentSelector
-              agentsArray={actions.people.getPeople(gameManager, {
-                organizationId: gameManager.gameData.player.organizationId,
+              agentsArray={actions.people.getPeople({
+                organizationId:
+                  GameManager.getInstance().gameData.player.organizationId,
                 excludePersonnel: true,
                 agentFilter: {
                   department: -1,
                 },
               })}
               cb={onUpdateActivityParticipant}
-              gameManager={gameManager}
             />
             <Button
               className="btn btn-primary"

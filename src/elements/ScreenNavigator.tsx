@@ -33,6 +33,7 @@ import TitleScreenOptions from "./ScreenNavigator/TitleScreenOptions";
 import { useState } from "react";
 import { clearSelections } from "../features/selectionSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { GameManager } from "empire-of-evil";
 
 const screens = [
   {
@@ -84,7 +85,7 @@ const screens = [
 
 export const screenNavigatorWidth = 250;
 
-function ScreenNavigator({ gameManager }) {
+function ScreenNavigator() {
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const dispatch = useAppDispatch();
   const gameInitialized = useAppSelector(
@@ -105,7 +106,8 @@ function ScreenNavigator({ gameManager }) {
       }}
     >
       <Toolbar />
-      {gameInitialized && Object.keys(gameManager.gameData).length > 0 ? (
+      {gameInitialized &&
+      Object.keys(GameManager.getInstance().gameData).length > 0 ? (
         <>
           <List sx={{ width: "inherit" }}>
             {screens.map((gameScreen) => (
@@ -145,7 +147,7 @@ function ScreenNavigator({ gameManager }) {
               <Button onClick={() => setSaveDialogOpen(false)}>Cancel</Button>
               <Button
                 onClick={() => {
-                  saveGame(gameManager);
+                  saveGame();
                   setSaveDialogOpen(false);
                 }}
                 autoFocus
@@ -156,7 +158,7 @@ function ScreenNavigator({ gameManager }) {
           </Dialog>
         </>
       ) : (
-        <TitleScreenOptions gameManager={gameManager} />
+        <TitleScreenOptions />
       )}
     </Drawer>
   );

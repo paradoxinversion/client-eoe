@@ -1,5 +1,5 @@
 import { Box, Divider, Grid, Tab, Typography } from "@mui/material";
-import { IntegratedManagerProps } from "../..";
+
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useState } from "react";
 import HeaderGridItem from "../../elements/HeaderGridItem";
@@ -7,7 +7,7 @@ import DataGrid from "react-data-grid";
 import { getPeople } from "empire-of-evil/src/actions/people";
 import InfirmaryOverview from "./InfirmaryOverview";
 import InfirmaryPatients from "./InfirmaryPatients";
-const InfirmaryScreen = ({ gameManager }: IntegratedManagerProps) => {
+const InfirmaryScreen = () => {
   const [currentTab, setCurrentTab] = useState("overview");
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setCurrentTab(newValue);
@@ -28,14 +28,14 @@ const InfirmaryScreen = ({ gameManager }: IntegratedManagerProps) => {
         </Box>
         <TabPanel value="overview">
           <Typography>Overview</Typography>
-          <InfirmaryOverview gameManager={gameManager} />
+          <InfirmaryOverview />
         </TabPanel>
         <TabPanel value="staff">
           <Typography>Staff</Typography>
         </TabPanel>
         <TabPanel value="patients">
           <Typography>Patients</Typography>
-          <InfirmaryPatients gameManager={gameManager} />
+          <InfirmaryPatients />
         </TabPanel>
       </TabContext>
     </Box>

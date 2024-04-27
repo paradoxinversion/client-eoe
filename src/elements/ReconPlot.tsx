@@ -21,13 +21,14 @@ import {
 import { people } from "empire-of-evil/src/actions";
 import Plot from "empire-of-evil/src/plots/Plot";
 import { getZones } from "empire-of-evil/src/actions/zones";
+import { GameManager } from "empire-of-evil";
 /**
  *
  * @param {Object} props
  * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
  */
-const ReconPlot = ({ gameManager, cb }) => {
-  const { gameData, plotManager } = gameManager;
+const ReconPlot = ({ cb }) => {
+  const { gameData, plotManager } = GameManager.getInstance();
   const [nation, setNation] = useState(null);
   const [zone, setZone] = useState(null);
   const [participants, setParticipants] = useState([]);
@@ -118,7 +119,7 @@ const ReconPlot = ({ gameManager, cb }) => {
               </Box>
               <Paper>
                 <Grid container spacing={1} padding={1}>
-                  {getZones(gameManager, {
+                  {getZones({
                     organizationId: nation.organizationId,
                   }).map((selectedZone) => (
                     <Grid item>
@@ -191,7 +192,7 @@ const ReconPlot = ({ gameManager, cb }) => {
                       }}
                     >
                       {people
-                        .getPeople(gameManager, {
+                        .getPeople({
                           excludeDeceased: true,
                           excludePersonnel: true,
                           excludeCaptured: true,

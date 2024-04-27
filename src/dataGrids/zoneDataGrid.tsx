@@ -19,10 +19,9 @@ const zoneDataGridColumns = [
 interface ZoneDataGridProps {
   title: string;
   zones: Zone[];
-  gameManager: GameManager;
 }
 
-const ZoneDataGrid = ({ title, zones, gameManager }: ZoneDataGridProps) => {
+const ZoneDataGrid = ({ title, zones }: ZoneDataGridProps) => {
   const dispatch = useAppDispatch();
   const zoneStore = useAppSelector((state) => state.zones);
   const agentDataGridRows = zones.map((zone) => {

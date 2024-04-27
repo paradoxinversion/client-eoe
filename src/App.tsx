@@ -42,7 +42,7 @@ const screens = {
   infirmary: InfirmaryScreen,
 };
 
-function App({ gameManager }) {
+function App() {
   const currentScreen = useAppSelector((state) => state.screen);
   const CurrentScreen = screens[currentScreen];
   return (
@@ -56,10 +56,10 @@ function App({ gameManager }) {
           <Typography>Empire of Evil</Typography>
         </Toolbar>
       </AppBar>
-      <ScreenNavigator gameManager={gameManager} />
+      <ScreenNavigator />
       <Box sx={{ flexGrow: 1 }}>
         <ScreenLayout>
-          <CurrentScreen gameManager={gameManager} />
+          <CurrentScreen />
         </ScreenLayout>
       </Box>
     </Box>
