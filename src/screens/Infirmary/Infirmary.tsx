@@ -7,6 +7,7 @@ import DataGrid from "react-data-grid";
 import { getPeople } from "empire-of-evil/src/actions/people";
 import InfirmaryOverview from "./InfirmaryOverview";
 import InfirmaryPatients from "./InfirmaryPatients";
+import InfirmaryStaff from "./InfirmaryStaff";
 const InfirmaryScreen = () => {
   const [currentTab, setCurrentTab] = useState("overview");
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -32,6 +33,7 @@ const InfirmaryScreen = () => {
         </TabPanel>
         <TabPanel value="staff">
           <Typography>Staff</Typography>
+          <InfirmaryStaff />
         </TabPanel>
         <TabPanel value="patients">
           <Typography>Patients</Typography>
