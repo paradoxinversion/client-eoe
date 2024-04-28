@@ -199,14 +199,13 @@ const ReconPlot = ({ cb }) => {
 
                           agentFilter: {
                             agentsOnly: true,
-                            department: -1,
                             excludeParticipants: true,
                           },
                         })
                         .filter(
                           (agent) =>
-                            agent.agent.department === 0 ||
-                            agent.agent.department === 3
+                            agent.agent.department === "troop" ||
+                            agent.agent.department === "overlord"
                         )
                         .map((selectedAgent) => (
                           <Grid item>

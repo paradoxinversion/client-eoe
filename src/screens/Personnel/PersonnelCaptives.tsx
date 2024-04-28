@@ -22,7 +22,7 @@ const PersonnelCaptives = () => {
               agents={actions.people.getPeople({
                 organizationId: organizationId,
                 capturedOnly: true,
-                agentFilter: { agentsOnly: true, department: -1 },
+                agentFilter: { agentsOnly: true },
               })}
             />
           </Grid>

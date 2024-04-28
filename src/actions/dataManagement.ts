@@ -14,7 +14,6 @@ import { setScreen } from "../features/screenSlice";
 import { GameData, GameLog } from "empire-of-evil/src/GameManager";
 import {
   NewGameOptions,
-  handleNewGame,
   handleNewGameV2,
   hireStartingAgents,
 } from "empire-of-evil/src/gameSetup";

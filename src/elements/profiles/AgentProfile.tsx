@@ -6,19 +6,35 @@ import {
   CardHeader,
   Divider,
   Grid,
+  IconButton,
   TextField,
   Typography,
 } from "@mui/material";
+import {
+  Shield as ShieldIcon,
+  ShieldOutlined as ShieldOutlinedIcon,
+  HomeWork as HomeWorkIcon,
+  HomeWorkOutlined as HomeWorkOutlinedIcon,
+  Science as ScienceIcon,
+  ScienceOutlined as ScienceOutlinedIcon,
+  LocalHospital as LocalHospitalIcon,
+  LocalHospitalOutlined as LocalHospitalOutlinedIcon,
+} from "@mui/icons-material";
 
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { actions } from "empire-of-evil";
+import { GameManager, actions } from "empire-of-evil";
 import { selectEntity } from "../../features/selectionSlice";
 import PersonDataGrid from "../../dataGrids/personDataGrid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { setCodename } from "empire-of-evil/src/actions/people";
 import { setPeople } from "../../features/personSlice";
 import { getCodeName } from "empire-of-evil/src/generators/names";
 import HeaderGridItem from "../HeaderGridItem";
+import { updateGameData } from "../../actions/dataManagement";
+import {
+  AgentDepartment,
+  Person,
+} from "empire-of-evil/src/types/interfaces/entities";
 
 const AgentProfile = () => {
   const selectedAgent = useAppSelector((state) => state.selections.person);
@@ -28,6 +44,20 @@ const AgentProfile = () => {
   const [codenameValue, setCodenameValue] = useState(
     selectedAgent.agent.codename || ""
   );
+
+  const setDepartment = (department: AgentDepartment) => {
+    actions.people.changeAgentDepartment(selectedAgent, department);
+    // updateGameData(GameManager.getInstance().gameData);
+    dispatch(setPeople(GameManager.getInstance().gameData.people));
+    dispatch(
+      selectEntity({
+        type: "person",
+        selection: GameManager.getInstance().gameData.people[selectedAgent.id],
+      })
+    );
+  };
+
+  useEffect(() => {}, [selectedAgent, people]);
   return (
     <Box padding="1rem">
       <Box>
@@ -91,8 +121,54 @@ const AgentProfile = () => {
           {selectedAgent.name} (
           {actions.people.getAgentDepartment(selectedAgent.agent)})
         </Typography>
+        <Box>
+          <IconButton
+            onClick={() => {
+              setDepartment("troop");
+            }}
+          >
+            {selectedAgent.agent.department === "troop" ? (
+              <ShieldIcon />
+            ) : (
+              <ShieldOutlinedIcon />
+            )}
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              setDepartment("administrator");
+            }}
+          >
+            {selectedAgent.agent.department === "administrator" ? (
+              <HomeWorkIcon />
+            ) : (
+              <HomeWorkOutlinedIcon />
+            )}
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              setDepartment("scientist");
+            }}
+          >
+            {selectedAgent.agent.department === "scientist" ? (
+              <ScienceIcon />
+            ) : (
+              <ScienceOutlinedIcon />
+            )}
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              setDepartment("doctor");
+            }}
+          >
+            {selectedAgent.agent.department === "doctor" ? (
+              <LocalHospitalIcon />
+            ) : (
+              <LocalHospitalOutlinedIcon />
+            )}
+          </IconButton>
+        </Box>
       </Box>
-      {selectedAgent.agent && selectedAgent.agent.department !== 3 && (
+      {selectedAgent.agent && selectedAgent.agent.department !== "overlord" && (
         <Box>
           <Typography>
             Commander: {people[selectedAgent.agent.commanderId].name}
@@ -168,7 +244,6 @@ const AgentProfile = () => {
           people={actions.people.getPeople({
             agentFilter: {
               commander: selectedAgent.id,
-              department: -1,
             },
           })}
           title="Subordinate Agents"

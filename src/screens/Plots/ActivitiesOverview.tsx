@@ -168,7 +168,7 @@ const ActivitiesOverview = () => {
                   GameManager.getInstance().gameData.player.organizationId,
                 excludePersonnel: true,
                 agentFilter: {
-                  department: -1,
+                  agentsOnly: true,
                 },
               })}
               cb={onUpdateActivityParticipant}

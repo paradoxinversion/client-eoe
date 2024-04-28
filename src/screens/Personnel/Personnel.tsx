@@ -46,7 +46,7 @@ const PersonnelScreen = () => {
               getPeople({
                 organizationId: gameData.player.organizationId,
                 agentFilter: {
-                  department: 0,
+                  department: "troop",
                 },
               }).length
             }
@@ -58,7 +58,7 @@ const PersonnelScreen = () => {
               getPeople({
                 organizationId: gameData.player.organizationId,
                 agentFilter: {
-                  department: 1,
+                  department: "administrator",
                 },
               }).length
             }
@@ -70,7 +70,7 @@ const PersonnelScreen = () => {
               getPeople({
                 organizationId: gameData.player.organizationId,
                 agentFilter: {
-                  department: 2,
+                  department: "scientist",
                 },
               }).length
             }
@@ -83,7 +83,7 @@ const PersonnelScreen = () => {
                 organizationId: gameData.player.organizationId,
                 deceasedOnly: true,
                 agentFilter: {
-                  department: 2,
+                  agentsOnly: true,
                 },
               }).length
             }

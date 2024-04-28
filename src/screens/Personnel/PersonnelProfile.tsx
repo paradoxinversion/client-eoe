@@ -21,12 +21,13 @@ import { setPeople } from "../../features/personSlice";
 import { selectEntity, clearSelections } from "../../features/selectionSlice";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { AgentDepartment } from "empire-of-evil/src/types/interfaces/entities";
 
 const PersonnelProfile = () => {
   const dispatch = useAppDispatch();
   const [changeDepartmentOpen, setChangeDepartmentOpen] = useState(false);
   const [fireAgentDialogOpen, setFireAgentDialogOpen] = useState(false);
-  const [department, setDepartment] = useState(0);
+  const [department, setDepartment] = useState<null | AgentDepartment>(null);
   const selectedAgent = useAppSelector((state) => state.selections.person);
   return (
     <Box>
@@ -40,7 +41,7 @@ const PersonnelProfile = () => {
               name="department-change-radio-group"
               onChange={(e) => {
                 console.log(e);
-                setDepartment(parseInt(e.target.value));
+                setDepartment(e.target.value as AgentDepartment);
               }}
             >
               <FormControlLabel
@@ -73,20 +74,22 @@ const PersonnelProfile = () => {
           <Button
             onClick={(e) => {
               console.log(e);
-              const update = actions.people.changeAgentDepartment(
-                selectedAgent,
-                department
-              );
-              const { people } =
-                GameManager.getInstance().updateGameData(update);
-              dispatch(setPeople(people));
-              dispatch(
-                selectEntity({
-                  type: "person",
-                  selection: people[selectedAgent.id],
-                })
-              );
-              setChangeDepartmentOpen(false);
+              if (department !== null) {
+                const update = actions.people.changeAgentDepartment(
+                  selectedAgent,
+                  department
+                );
+                const { people } =
+                  GameManager.getInstance().updateGameData(update);
+                dispatch(setPeople(people));
+                dispatch(
+                  selectEntity({
+                    type: "person",
+                    selection: people[selectedAgent.id],
+                  })
+                );
+                setChangeDepartmentOpen(false);
+              }
             }}
           >
             Confirm

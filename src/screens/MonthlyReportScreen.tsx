@@ -31,7 +31,7 @@ const MonthlyReportScreen = ({
   const agents = getPeople({
     organizationId: GameManager.getInstance().gameData.player.organizationId,
     agentFilter: {
-      excludeDepartments: [3],
+      excludeDepartments: ["overlord"],
       agentsOnly: true,
     },
   });

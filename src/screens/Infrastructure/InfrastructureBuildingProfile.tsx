@@ -47,14 +47,14 @@ const InfrastructureBuildingProfile = () => {
                     agentsOnly: true,
                     department:
                       selectedBuilding.type === "bank"
-                        ? 1
+                        ? "administrator"
                         : selectedBuilding.type === "office"
-                        ? 1
+                        ? "administrator"
                         : selectedBuilding.type === "laboratory"
-                        ? 2
+                        ? "scientist"
                         : selectedBuilding.type === "hospital"
-                        ? 4
-                        : -1,
+                        ? "doctor"
+                        : "any",
                   },
                 })
                 .map((person) => {

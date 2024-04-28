@@ -126,7 +126,8 @@ const AttackZonePlot = ({ cb }) => {
               })
                 .filter(
                   (agent) =>
-                    agent.agent.department === 0 || agent.agent.department === 3
+                    agent.agent.department === "troop" ||
+                    agent.agent.department === "overlord"
                 )
                 .map((agent) => (
                   <Chip
