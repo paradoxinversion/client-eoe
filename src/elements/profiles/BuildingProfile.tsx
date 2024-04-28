@@ -1,10 +1,11 @@
 import { Box, Typography, Stack, Grid } from "@mui/material";
-import { buildings } from "empire-of-evil";
+import { GameManager, buildings } from "empire-of-evil";
 
 import PersonnelDataGrid from "../../dataGrids/personnelDataGrid";
 import { selectEntity } from "../../features/selectionSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { updateGameData } from "../../actions/dataManagement";
+import PersonDataGrid from "../../dataGrids/personDataGrid";
 
 const BuildingProfile = () => {
   const dispatch = useAppDispatch();
@@ -78,6 +79,15 @@ const BuildingProfile = () => {
         title="Personnel"
         personnel={selectedBuilding.personnel.map((id) => peopleState[id])}
       />
+
+      {selectedBuilding.type === "apartment" && (
+        <PersonDataGrid
+          title="Residents"
+          people={selectedBuilding.inhabitants.map(
+            (p) => GameManager.getInstance().gameData.people[p]
+          )}
+        />
+      )}
     </Box>
   );
 };

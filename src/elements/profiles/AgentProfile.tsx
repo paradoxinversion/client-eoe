@@ -121,52 +121,62 @@ const AgentProfile = () => {
           {selectedAgent.name} (
           {actions.people.getAgentDepartment(selectedAgent.agent)})
         </Typography>
-        <Box>
-          <IconButton
-            onClick={() => {
-              setDepartment("troop");
-            }}
-          >
-            {selectedAgent.agent.department === "troop" ? (
-              <ShieldIcon />
-            ) : (
-              <ShieldOutlinedIcon />
-            )}
-          </IconButton>
-          <IconButton
-            onClick={() => {
-              setDepartment("administrator");
-            }}
-          >
-            {selectedAgent.agent.department === "administrator" ? (
-              <HomeWorkIcon />
-            ) : (
-              <HomeWorkOutlinedIcon />
-            )}
-          </IconButton>
-          <IconButton
-            onClick={() => {
-              setDepartment("scientist");
-            }}
-          >
-            {selectedAgent.agent.department === "scientist" ? (
-              <ScienceIcon />
-            ) : (
-              <ScienceOutlinedIcon />
-            )}
-          </IconButton>
-          <IconButton
-            onClick={() => {
-              setDepartment("doctor");
-            }}
-          >
-            {selectedAgent.agent.department === "doctor" ? (
-              <LocalHospitalIcon />
-            ) : (
-              <LocalHospitalOutlinedIcon />
-            )}
-          </IconButton>
-        </Box>
+        {selectedAgent.agent.department !== "overlord" && (
+          <Box>
+            <IconButton
+              onClick={() => {
+                setDepartment("troop");
+              }}
+            >
+              {selectedAgent.agent.department === "troop" ? (
+                <ShieldIcon />
+              ) : (
+                <ShieldOutlinedIcon />
+              )}
+            </IconButton>
+            <IconButton
+              onClick={() => {
+                setDepartment("administrator");
+              }}
+            >
+              {selectedAgent.agent.department === "administrator" ? (
+                <HomeWorkIcon />
+              ) : (
+                <HomeWorkOutlinedIcon />
+              )}
+            </IconButton>
+            <IconButton
+              onClick={() => {
+                setDepartment("scientist");
+              }}
+            >
+              {selectedAgent.agent.department === "scientist" ? (
+                <ScienceIcon />
+              ) : (
+                <ScienceOutlinedIcon />
+              )}
+            </IconButton>
+            <IconButton
+              onClick={() => {
+                setDepartment("doctor");
+              }}
+            >
+              {selectedAgent.agent.department === "doctor" ? (
+                <LocalHospitalIcon />
+              ) : (
+                <LocalHospitalOutlinedIcon />
+              )}
+            </IconButton>
+          </Box>
+        )}
+      </Box>
+      <Box>
+        <Typography>
+          {
+            GameManager.getInstance().gameData.zones[selectedAgent.homeZoneId]
+              .name
+          }
+        </Typography>
       </Box>
       {selectedAgent.agent && selectedAgent.agent.department !== "overlord" && (
         <Box>

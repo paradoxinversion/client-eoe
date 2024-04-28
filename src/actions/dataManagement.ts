@@ -1,5 +1,5 @@
 import { GameManager } from "empire-of-evil";
-import { serializeGameData } from "empire-of-evil/src/dataManagement";
+import { SaveData, serializeGameData } from "empire-of-evil/src/dataManagement";
 import { populateActivities, populatePlots } from "empire-of-evil/src/plots";
 import Activity from "empire-of-evil/src/activities/Activity";
 import { store } from "../app/store";
@@ -18,6 +18,8 @@ import {
   hireStartingAgents,
 } from "empire-of-evil/src/gameSetup";
 import { updateSimActions } from "../features/gameLogSlice";
+import PlayerManager from "empire-of-evil/src/managers/cpu/PlayerManager";
+import Player from "empire-of-evil/src/managers/cpu/Player";
 
 export const saveGame = () => {
   localStorage.setItem("eoe-save", serializeGameData());
@@ -26,9 +28,14 @@ export const saveGame = () => {
 export const loadGame = () => {
   const { plotManager, activityManager, scienceManager } =
     GameManager.getInstance();
-  const saveData = store.getState().gameManager.saveData;
+  const saveData: SaveData = store.getState().gameManager.saveData;
+  // load players
+  const players = saveData.playerData.map((player) => new Player(player));
+  PlayerManager.getInstance().setPlayers(players);
+
   populateActivities();
   populatePlots();
+
   // recreate plots
   const oldPlots = saveData.plotData.plots.map((plot) => {
     return plotManager.addPlot(plot);

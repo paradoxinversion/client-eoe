@@ -33,7 +33,18 @@ const InfrastructureBuildingProfile = () => {
 
           {selectedBuilding.type === "laboratory" && (
             <Typography variant="caption">
-              This facility must be staffed by scientists.
+              This facility must be staffed by scientists residing in the zone.
+            </Typography>
+          )}
+          {selectedBuilding.type === "bank" && (
+            <Typography variant="caption">
+              This facility must be staffed by administrators residing in the
+              zone.
+            </Typography>
+          )}
+          {selectedBuilding.type === "hospital" && (
+            <Typography variant="caption">
+              This facility must be staffed by doctors residing in the zone.
             </Typography>
           )}
           <Grid container spacing={1} columns={3}>
@@ -41,13 +52,16 @@ const InfrastructureBuildingProfile = () => {
               actions.people
                 .getPeople({
                   zoneId: selectedBuilding?.zoneId,
+                  zone: {
+                    zoneId: selectedBuilding?.zoneId,
+                  },
                   excludePersonnel: true,
                   agentFilter: {
                     excludeParticipants: true,
                     agentsOnly: true,
                     department:
                       selectedBuilding.type === "bank"
-                        ? "administrator"
+                        ? "any"
                         : selectedBuilding.type === "office"
                         ? "administrator"
                         : selectedBuilding.type === "laboratory"

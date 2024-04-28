@@ -25,77 +25,11 @@ import { AgentDepartment } from "empire-of-evil/src/types/interfaces/entities";
 
 const PersonnelProfile = () => {
   const dispatch = useAppDispatch();
-  const [changeDepartmentOpen, setChangeDepartmentOpen] = useState(false);
   const [fireAgentDialogOpen, setFireAgentDialogOpen] = useState(false);
   const [department, setDepartment] = useState<null | AgentDepartment>(null);
   const selectedAgent = useAppSelector((state) => state.selections.person);
   return (
     <Box>
-      <Dialog open={changeDepartmentOpen}>
-        <DialogTitle>Change Agent Department</DialogTitle>
-        <DialogContent>
-          <FormControl>
-            <FormLabel>Select a new department</FormLabel>
-            <RadioGroup
-              value={department}
-              name="department-change-radio-group"
-              onChange={(e) => {
-                console.log(e);
-                setDepartment(e.target.value as AgentDepartment);
-              }}
-            >
-              <FormControlLabel
-                value={0}
-                control={<Radio />}
-                label="Henchman"
-              />
-              <FormControlLabel
-                value={1}
-                control={<Radio />}
-                label="Administrator"
-              />
-              <FormControlLabel
-                value={2}
-                control={<Radio />}
-                label="Scientist"
-              />
-              <FormControlLabel value={4} control={<Radio />} label="Doctor" />
-            </RadioGroup>
-          </FormControl>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setChangeDepartmentOpen(false);
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={(e) => {
-              console.log(e);
-              if (department !== null) {
-                const update = actions.people.changeAgentDepartment(
-                  selectedAgent,
-                  department
-                );
-                const { people } =
-                  GameManager.getInstance().updateGameData(update);
-                dispatch(setPeople(people));
-                dispatch(
-                  selectEntity({
-                    type: "person",
-                    selection: people[selectedAgent.id],
-                  })
-                );
-                setChangeDepartmentOpen(false);
-              }
-            }}
-          >
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
       <Dialog open={fireAgentDialogOpen}>
         <DialogTitle>Fire Agent</DialogTitle>
         <DialogContent>
@@ -143,20 +77,6 @@ const PersonnelProfile = () => {
       </Dialog>
       <Divider />
       <Box>
-        <Tooltip title="This agent is a personnel agent">
-          <Button
-            disabled={
-              selectedAgent.id ===
-                GameManager.getInstance().gameData.player.overlordId ||
-              selectedAgent.isPersonnel
-            }
-            onClick={() => {
-              setChangeDepartmentOpen(true);
-            }}
-          >
-            Change Department
-          </Button>
-        </Tooltip>
         <Button
           disabled={
             selectedAgent.id ===
