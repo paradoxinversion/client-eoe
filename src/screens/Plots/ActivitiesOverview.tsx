@@ -164,9 +164,11 @@ const ActivitiesOverview = () => {
             </Box>
             <AgentSelector
               agentsArray={actions.people.getPeople({
-                organizationId:
-                  GameManager.getInstance().gameData.player.organizationId,
-                excludePersonnel: true,
+                personFilter: {
+                  organizationId:
+                    GameManager.getInstance().gameData.player.organizationId,
+                  excludePersonnel: true,
+                },
                 agentFilter: {
                   agentsOnly: true,
                 },

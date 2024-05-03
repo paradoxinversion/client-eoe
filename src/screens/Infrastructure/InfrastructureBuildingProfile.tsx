@@ -51,17 +51,18 @@ const InfrastructureBuildingProfile = () => {
             {selectedBuilding &&
               actions.people
                 .getPeople({
-                  zoneId: selectedBuilding?.zoneId,
                   zone: {
                     zoneId: selectedBuilding?.zoneId,
                   },
-                  excludePersonnel: true,
+                  personFilter: {
+                    excludePersonnel: true,
+                  },
                   agentFilter: {
                     excludeParticipants: true,
                     agentsOnly: true,
                     department:
                       selectedBuilding.type === "bank"
-                        ? "any"
+                        ? "administrator"
                         : selectedBuilding.type === "office"
                         ? "administrator"
                         : selectedBuilding.type === "laboratory"
@@ -69,6 +70,7 @@ const InfrastructureBuildingProfile = () => {
                         : selectedBuilding.type === "hospital"
                         ? "doctor"
                         : "any",
+                    excludeEmbedded: true,
                   },
                 })
                 .map((person) => {

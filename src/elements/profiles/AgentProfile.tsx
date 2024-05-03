@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Card,
+  CardActions,
   CardContent,
   CardHeader,
   Divider,
@@ -35,6 +36,7 @@ import {
   AgentDepartment,
   Person,
 } from "empire-of-evil/src/types/interfaces/entities";
+import { attributeLevelStr, skillLevelStr } from "empire-of-evil/src/utilities";
 
 const AgentProfile = () => {
   const selectedAgent = useAppSelector((state) => state.selections.person);
@@ -172,10 +174,16 @@ const AgentProfile = () => {
       </Box>
       <Box>
         <Typography>
-          {
-            GameManager.getInstance().gameData.zones[selectedAgent.homeZoneId]
-              .name
-          }
+          {GameManager.getInstance().gameData.zones[
+            selectedAgent.agent.embeddedAt
+          ].name
+            ? `Embedded at ${
+                GameManager.getInstance().gameData.zones[
+                  selectedAgent.agent.embeddedAt
+                ].name
+              }`
+            : GameManager.getInstance().gameData.zones[selectedAgent.homeZoneId]
+                .name}
         </Typography>
       </Box>
       {selectedAgent.agent && selectedAgent.agent.department !== "overlord" && (
@@ -205,59 +213,100 @@ const AgentProfile = () => {
       <Grid container spacing="1rem">
         <HeaderGridItem
           title="Agility"
-          content={selectedAgent.standardAttributes.agility}
+          content={attributeLevelStr(selectedAgent.standardAttributes.agility)}
         />
         <HeaderGridItem
           title="Constitution"
-          content={selectedAgent.standardAttributes.constitution}
+          content={attributeLevelStr(
+            selectedAgent.standardAttributes.constitution
+          )}
         />
         <HeaderGridItem
           title="Intelligence"
-          content={selectedAgent.standardAttributes.intelligence}
+          content={attributeLevelStr(
+            selectedAgent.standardAttributes.intelligence
+          )}
         />
         <HeaderGridItem
           title="Strength"
-          content={selectedAgent.standardAttributes.strength}
+          content={attributeLevelStr(selectedAgent.standardAttributes.strength)}
         />
       </Grid>
       <Typography variant="overline">Skills</Typography>
       <Grid container spacing="1rem" marginBottom={1}>
         <HeaderGridItem
           title="Administration"
-          content={selectedAgent.skills.administration}
+          content={skillLevelStr(selectedAgent.skills.administration)}
         />
-        <HeaderGridItem title="Combat" content={selectedAgent.skills.combat} />
+        <HeaderGridItem
+          title="Combat"
+          content={skillLevelStr(selectedAgent.skills.combat)}
+        />
         <HeaderGridItem
           title="Disguise"
-          content={selectedAgent.skills.disguise}
+          content={skillLevelStr(selectedAgent.skills.disguise)}
         />
         <HeaderGridItem
           title="Espionage"
-          content={selectedAgent.skills.espionage}
+          content={skillLevelStr(selectedAgent.skills.espionage)}
         />
         <HeaderGridItem
           title="Leadership"
-          content={selectedAgent.skills.leadership}
+          content={skillLevelStr(selectedAgent.skills.leadership)}
         />
         <HeaderGridItem
           title="Science"
-          content={selectedAgent.skills.science}
+          content={skillLevelStr(selectedAgent.skills.science)}
         />
         <HeaderGridItem
           title="Security"
-          content={selectedAgent.skills.security}
+          content={skillLevelStr(selectedAgent.skills.security)}
         />
       </Grid>
       <Divider />
       <Box>
-        <PersonDataGrid
+        <Typography variant="h5">Subordinate Agents</Typography>
+        <Grid container spacing="1rem" columns={5}>
+          {actions.people
+            .getPeople({
+              agentFilter: {
+                commander: selectedAgent.id,
+              },
+            })
+            .map((person: Person) => {
+              return (
+                <Grid item xs={1}>
+                  <Card>
+                    <CardContent>
+                      <Typography variant="body2">{person.name}</Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button
+                        onClick={() => {
+                          dispatch(
+                            selectEntity({
+                              type: "person",
+                              selection: person,
+                            })
+                          );
+                        }}
+                      >
+                        Select
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              );
+            })}
+        </Grid>
+        {/* <PersonDataGrid
           people={actions.people.getPeople({
             agentFilter: {
               commander: selectedAgent.id,
             },
           })}
           title="Subordinate Agents"
-        />
+        /> */}
       </Box>
     </Box>
   );

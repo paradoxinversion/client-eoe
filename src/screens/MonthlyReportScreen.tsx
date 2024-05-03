@@ -29,7 +29,9 @@ const MonthlyReportScreen = ({
   resolveEvent,
 }: MonthlyReportScreenProps) => {
   const agents = getPeople({
-    organizationId: GameManager.getInstance().gameData.player.organizationId,
+    personFilter: {
+      organizationId: GameManager.getInstance().gameData.player.organizationId,
+    },
     agentFilter: {
       excludeDepartments: ["overlord"],
       agentsOnly: true,

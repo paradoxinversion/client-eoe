@@ -84,17 +84,17 @@ const EventScreenRecruit = ({ currentGameEvent, resolveEvent }) => {
             <FormControl onChange={onChange}>
               <RadioGroup row name="recruit-department">
                 <FormControlLabel
-                  value={0}
+                  value={"troop"}
                   control={<Radio />}
                   label="Henchman"
                 />
                 <FormControlLabel
-                  value={1}
+                  value={"administrator"}
                   control={<Radio />}
                   label="Administrator"
                 />
                 <FormControlLabel
-                  value={2}
+                  value={"scientist"}
                   control={<Radio />}
                   label="Scientist"
                 />
@@ -107,7 +107,9 @@ const EventScreenRecruit = ({ currentGameEvent, resolveEvent }) => {
           <FormControl onChange={onCommanderSelect}>
             <RadioGroup row sx={{ overflowY: "scroll", height: "100px" }}>
               {getPeople({
-                organizationId: gameData.player.organizationId,
+                personFilter: {
+                  organizationId: gameData.player.organizationId,
+                },
                 agentFilter: { agentsOnly: true },
               }).map((agent) => {
                 const subordinates = getAgentSubordinates(agent);

@@ -35,7 +35,10 @@ const ScienceScreen = () => {
             title="Scientists"
             content={
               getPeople({
-                organizationId: gameData.player.organizationId,
+                personFilter: {
+                  organizationId:
+                    GameManager.getInstance().gameData.player.organizationId,
+                },
                 agentFilter: { agentsOnly: true, department: "scientist" },
               }).length
             }

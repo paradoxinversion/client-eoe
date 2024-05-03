@@ -20,6 +20,7 @@ import {
 import { updateSimActions } from "../features/gameLogSlice";
 import PlayerManager from "empire-of-evil/src/managers/cpu/PlayerManager";
 import Player from "empire-of-evil/src/managers/cpu/Player";
+import { ScienceManager } from "empire-of-evil/src/managers/science/science";
 
 export const saveGame = () => {
   localStorage.setItem("eoe-save", serializeGameData());
@@ -46,6 +47,8 @@ export const loadGame = () => {
     );
     currentActivity.setAgents(activity.agents);
   });
+  ScienceManager.getInstance().activeProjects =
+    saveData.scienceData.activeProjects;
   GameManager.getInstance().setGameData(saveData.gameData);
   GameManager.getInstance().setInitialized(true);
   const { governingOrganizations, nations, zones, buildings, people } =
@@ -58,7 +61,7 @@ export const loadGame = () => {
   store.dispatch(setBuildings(buildings));
   store.dispatch(setPeople(people));
   store.dispatch(setInitialized(true));
-  store.dispatch(setProjects(scienceManager.activeProjects));
+  store.dispatch(setProjects(ScienceManager.getInstance().activeProjects));
   store.dispatch(setScreen("main"));
 };
 

@@ -7,6 +7,7 @@ import { plotSetupRenderers } from "./PlotsScreen";
 import DataGrid from "react-data-grid";
 import { dataGridButton } from "../../datagridRenderers/dataGridButton";
 import { GameManager } from "empire-of-evil";
+import { getPeople } from "empire-of-evil/src/actions/people";
 
 const queuedPlotsColumns = [
   { key: "plot", name: "Plot" },
@@ -44,27 +45,43 @@ const PlotsOverview = () => {
             <Divider />
             <Box padding="1rem">
               <Grid container>
-                {plotManager.plots.map((plot) => (
-                  <Grid key={plot.name} item>
-                    <Button
-                      key={plot.name}
-                      onClick={() => {
-                        dispatch(
-                          selectEntity({
-                            type: "plot",
-                            selection: {
-                              name: plot.name,
-                              type: plot.type,
-                            },
-                          })
-                        );
-                        setPlotWidgetOpen(true);
-                      }}
-                    >
-                      {plot.name}
-                    </Button>
-                  </Grid>
-                ))}
+                {plotManager.plots
+                  .filter((plot) => {
+                    if (plot.requirements?.personnel?.embeddedAgents) {
+                      return !!getPeople({
+                        agentFilter: {
+                          embeddedOnly: true,
+                        },
+                        personFilter: {
+                          organizationId:
+                            GameManager.getInstance().gameData.player
+                              .organizationId,
+                        },
+                      }).length;
+                    }
+                    return true;
+                  })
+                  .map((plot) => (
+                    <Grid key={plot.name} item>
+                      <Button
+                        key={plot.name}
+                        onClick={() => {
+                          dispatch(
+                            selectEntity({
+                              type: "plot",
+                              selection: {
+                                name: plot.name,
+                                type: plot.type,
+                              },
+                            })
+                          );
+                          setPlotWidgetOpen(true);
+                        }}
+                      >
+                        {plot.name}
+                      </Button>
+                    </Grid>
+                  ))}
               </Grid>
             </Box>
             <Divider />

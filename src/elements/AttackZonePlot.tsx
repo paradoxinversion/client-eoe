@@ -121,7 +121,9 @@ const AttackZonePlot = ({ cb }) => {
             <Divider />
             <Stack direction="row" spacing={1} padding={1}>
               {getPeople({
-                organizationId: gameData.player.organizationId,
+                personFilter: {
+                  organizationId: gameData.player.organizationId,
+                },
                 agentFilter: { agentsOnly: true, excludeParticipants: true },
               })
                 .filter(

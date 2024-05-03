@@ -87,13 +87,18 @@ const WorldPerson = () => {
               <Box component="header">
                 <Typography variant="h6">Recent Activity</Typography>
               </Box>
-              <List>
+              {/* <List>
                 {personActivities.map((activity) => (
                   <ListItem>
                     <ListItemText primary={simActivities[activity].text} />
                   </ListItem>
                 ))}
-              </List>
+              </List> */}
+              <Box>
+                {personActivities.map((activity) => (
+                  <Typography>{simActivities[activity].text} </Typography>
+                ))}
+              </Box>
             </>
           )}
         </Paper>

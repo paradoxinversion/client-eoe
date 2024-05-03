@@ -22,6 +22,8 @@ import { addEventLog } from "../../features/gameLogSlice";
 import { eventConfig } from "empire-of-evil/src/gameEvents";
 import { GameManager } from "empire-of-evil";
 import EventScreenPetEvent from "../../elements/EventScreens/EventScreenPetEvent";
+import EmbedAgents from "../../elements/EventScreens/EmbedAgents";
+import RecallEmbeddedAgents from "../../elements/EventScreens/RecallEmbeddedAgents";
 export interface GameEventComponentProps {
   resolveEvent: () => void;
   currentGameEvent: GameEvent;
@@ -39,6 +41,8 @@ const eventScreenMap = {
   temperTantrum: EventScreenProceed,
   occupationalHazard: EventScreenProceed,
   petEvent: EventScreenPetEvent,
+  embedAgents: EmbedAgents,
+  recallEmbeddedAgents: RecallEmbeddedAgents,
 };
 
 const EventsScreen = () => {

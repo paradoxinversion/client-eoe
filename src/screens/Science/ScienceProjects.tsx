@@ -6,6 +6,7 @@ import {
   CardContent,
   CardHeader,
   Dialog,
+  DialogActions,
   DialogContent,
   Divider,
   Grid,
@@ -100,6 +101,9 @@ const ScienceProjects = () => {
             })}
           </List>
         </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setSelectLabOpen(false)}>Cancel</Button>
+        </DialogActions>
       </Dialog>
       <Typography>
         Science projects available for research can be selected below. Some

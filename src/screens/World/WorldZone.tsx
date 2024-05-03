@@ -1,24 +1,23 @@
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Box,
+  Button,
+  Card,
   Divider,
   Grid,
-  Stack,
   Tab,
   Typography,
 } from "@mui/material";
-import MetricNumber from "../../elements/MetricNumber/MetricNumber";
 import { actions, buildings } from "empire-of-evil";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import PersonDataGrid from "../../dataGrids/personDataGrid";
 import BuildingDataGrid from "../../dataGrids/buildingDataGrid";
 
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useState } from "react";
+import { selectEntity } from "../../features/selectionSlice";
 
 const WorldZone = () => {
+  const dispatch = useAppDispatch();
   const selectedZone = useAppSelector((state) => state.selections.zone);
   const [currentTab, setCurrentTab] = useState("people");
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -34,7 +33,9 @@ const WorldZone = () => {
           <Typography variant="body2">
             {
               actions.people.getPeople({
-                zoneId: selectedZone.id,
+                zone: {
+                  zoneId: selectedZone.id,
+                },
               }).length
             }
           </Typography>
@@ -64,27 +65,99 @@ const WorldZone = () => {
           <Tab label="Morgue" value="morgue" />
         </TabList>
         <TabPanel value="people">
-          <PersonDataGrid
+          {/* <PersonDataGrid
             title="people"
             people={actions.people.getPeople({
               zoneId: selectedZone.id,
             })}
-          />
+          /> */}
+          <Grid container columns={5} spacing={1}>
+            {actions.people
+              .getPeople({
+                zone: {
+                  zoneId: selectedZone.id,
+                },
+              })
+              .map((person) => {
+                return (
+                  <Grid item xs={1}>
+                    <Card sx={{ padding: 1 }}>
+                      <Typography>{person.name}</Typography>
+                      <Button
+                        onClick={() => {
+                          dispatch(
+                            selectEntity({
+                              type: "person",
+                              selection: person,
+                            })
+                          );
+                          dispatch(
+                            selectEntity({
+                              type: "zone",
+                              selection: null,
+                            })
+                          );
+                        }}
+                      >
+                        Surveillance
+                      </Button>
+                    </Card>
+                  </Grid>
+                );
+              })}
+          </Grid>
         </TabPanel>
         <TabPanel value="buildings">
-          <BuildingDataGrid
+          {/* <BuildingDataGrid
             title=""
             buildings={buildings.getBuildings({
               zoneId: selectedZone.id,
             })}
-          />
+          /> */}
+          <Grid container spacing={1} columns={5}>
+            {buildings
+              .getBuildings({
+                zoneId: selectedZone.id,
+              })
+              .map((building) => {
+                return (
+                  <Grid item xs={1}>
+                    <Card sx={{ padding: 1 }}>
+                      <Typography>{building.name}</Typography>
+                      <Button
+                        onClick={() => {
+                          dispatch(
+                            selectEntity({
+                              type: "building",
+                              selection: building,
+                            })
+                          );
+                          // dispatch(
+                          //   selectEntity({
+                          //     type: "zone",
+                          //     selection: null,
+                          //   })
+                          // );
+                        }}
+                      >
+                        Surveillance
+                      </Button>
+                    </Card>
+                  </Grid>
+                );
+              })}
+          </Grid>
         </TabPanel>
         <TabPanel value="morgue">
           <PersonDataGrid
             title="morgue"
             people={actions.people.getPeople({
-              zoneId: selectedZone.id,
-              deceasedOnly: true,
+              zone: {
+                zoneId: selectedZone.id,
+              },
+              personFilter: {
+                deceasedOnly: true,
+              },
             })}
           />
         </TabPanel>

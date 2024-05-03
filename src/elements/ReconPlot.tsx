@@ -193,10 +193,11 @@ const ReconPlot = ({ cb }) => {
                     >
                       {people
                         .getPeople({
-                          excludeDeceased: true,
-                          excludePersonnel: true,
-                          excludeCaptured: true,
-
+                          personFilter: {
+                            excludeDeceased: true,
+                            excludePersonnel: true,
+                            excludeCaptured: true,
+                          },
                           agentFilter: {
                             agentsOnly: true,
                             excludeParticipants: true,

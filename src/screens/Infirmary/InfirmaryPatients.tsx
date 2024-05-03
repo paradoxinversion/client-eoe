@@ -7,9 +7,11 @@ const InfirmaryPatients = () => {
   return (
     <Box>
       {getPeople({
-        organizationId:
-          GameManager.getInstance().gameData.player.organizationId,
-        hospitalizedOnly: true,
+        personFilter: {
+          organizationId:
+            GameManager.getInstance().gameData.player.organizationId,
+          hospitalizedOnly: true,
+        },
         agentFilter: {
           agentsOnly: true,
         },

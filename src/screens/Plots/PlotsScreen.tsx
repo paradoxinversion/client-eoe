@@ -7,13 +7,17 @@ import ActivitiesOverview from "./ActivitiesOverview";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import EmbedAgents from "../../elements/EmbedAgents";
+import RecallEmbeddedAgents from "../../elements/RecallEmbeddedAgents";
 
 export const plotSetupRenderers = {
   "attack-zone": AttackZonePlot,
   "recon-zone": ReconPlot,
+  "embed-agents": EmbedAgents,
+  "recall-embedded-agents": RecallEmbeddedAgents,
 };
 
-const PlotsScreen = ({ gameManager }) => {
+const PlotsScreen = () => {
   const [currentTab, setCurrentTab] = useState("plots");
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setCurrentTab(newValue);

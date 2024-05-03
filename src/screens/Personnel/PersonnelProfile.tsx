@@ -78,6 +78,13 @@ const PersonnelProfile = () => {
       <Divider />
       <Box>
         <Button
+          onClick={() => {
+            dispatch(selectEntity({ type: "person", selection: null }));
+          }}
+        >
+          Back
+        </Button>
+        <Button
           disabled={
             selectedAgent.id ===
               GameManager.getInstance().gameData.player.overlordId ||

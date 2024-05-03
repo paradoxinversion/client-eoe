@@ -7,7 +7,9 @@ const PersonnelCaptives = () => {
   const organizationId =
     GameManager.getInstance().gameData.player.organizationId;
   const currentAgents = actions.people.getPeople({
-    organizationId,
+    personFilter: {
+      organizationId,
+    },
     agentFilter: { agentsOnly: true },
   }).length;
 
@@ -20,8 +22,10 @@ const PersonnelCaptives = () => {
             <AgentDataGrid
               title="Captive Agents"
               agents={actions.people.getPeople({
-                organizationId: organizationId,
-                capturedOnly: true,
+                personFilter: {
+                  organizationId: organizationId,
+                  capturedOnly: true,
+                },
                 agentFilter: { agentsOnly: true },
               })}
             />

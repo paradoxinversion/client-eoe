@@ -19,7 +19,9 @@ const PersonnelScreen = () => {
   const selectedAgent = useAppSelector((state) => state.selections.person);
   const { gameData } = eoe.GameManager.getInstance();
   const currentAgents = getPeople({
-    organizationId: gameData.player.organizationId,
+    personFilter: {
+      organizationId: gameData.player.organizationId,
+    },
     agentFilter: { agentsOnly: true },
   }).length;
 
@@ -44,7 +46,9 @@ const PersonnelScreen = () => {
             title="Henchmen"
             content={
               getPeople({
-                organizationId: gameData.player.organizationId,
+                personFilter: {
+                  organizationId: gameData.player.organizationId,
+                },
                 agentFilter: {
                   department: "troop",
                 },
@@ -56,7 +60,9 @@ const PersonnelScreen = () => {
             title="Admins"
             content={
               getPeople({
-                organizationId: gameData.player.organizationId,
+                personFilter: {
+                  organizationId: gameData.player.organizationId,
+                },
                 agentFilter: {
                   department: "administrator",
                 },
@@ -68,7 +74,9 @@ const PersonnelScreen = () => {
             title="Scientists"
             content={
               getPeople({
-                organizationId: gameData.player.organizationId,
+                personFilter: {
+                  organizationId: gameData.player.organizationId,
+                },
                 agentFilter: {
                   department: "scientist",
                 },
@@ -80,8 +88,10 @@ const PersonnelScreen = () => {
             title="Deceased"
             content={
               getPeople({
-                organizationId: gameData.player.organizationId,
-                deceasedOnly: true,
+                personFilter: {
+                  organizationId: gameData.player.organizationId,
+                  deceasedOnly: true,
+                },
                 agentFilter: {
                   agentsOnly: true,
                 },

@@ -22,9 +22,11 @@ import { GameManager } from "empire-of-evil";
 const InfirmaryOverview = () => {
   const [selectHospitalOpen, setSelectHospitalOpen] = useState(false);
   const injuredPeople = getPeople({
-    organizationId: GameManager.getInstance().gameData.player.organizationId,
-    injuredOnly: true,
-    noHospitalized: true,
+    personFilter: {
+      organizationId: GameManager.getInstance().gameData.player.organizationId,
+      injuredOnly: true,
+      noHospitalized: true,
+    },
     agentFilter: {
       agentsOnly: true,
     },

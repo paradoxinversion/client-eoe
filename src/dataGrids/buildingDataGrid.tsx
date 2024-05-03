@@ -6,13 +6,13 @@ import { GameManager } from "empire-of-evil";
 
 const buildingDataGridColumns = [
   { key: "name", name: "Name" },
-  { key: "type", name: "Type" },
+  { key: "type", name: "Building" },
   { key: "zone", name: "Zone" },
   { key: "upkeep", name: "Upkeep/mo" },
   { key: "personnel", name: "Personnel" },
-  { key: "housingCapacity", name: "Housing" },
-  { key: "infrastructure", name: "Infrastructure" },
-  { key: "wealthBonus", name: "Wealth" },
+  // { key: "housingCapacity", name: "Housing" },
+  // { key: "infrastructure", name: "Infrastructure" },
+  // { key: "wealthBonus", name: "Wealth" },
   { key: "cb", name: "Select", renderCell: dataGridButton },
 ];
 

@@ -4,21 +4,13 @@ import {
   checkVictoryState,
 } from "empire-of-evil/src/utilities";
 import { useEffect } from "react";
-import MetricNumber from "../../elements/MetricNumber/MetricNumber";
-import {
-  Button,
-  Box,
-  Typography,
-  Divider,
-  Stack,
-  Paper,
-  List,
-  Grid,
-} from "@mui/material";
+import { Button, Box, Divider, List, Grid, Typography } from "@mui/material";
 import {
   NotificationImportant as NotificationImportantIcon,
   Done as DoneIcon,
 } from "@mui/icons-material";
+import { PieArcLabel, PieChart } from "@mui/x-charts/PieChart";
+
 import { setScreen } from "../../features/screenSlice";
 import * as eoe from "empire-of-evil";
 import {
@@ -29,19 +21,19 @@ import {
 } from "empire-of-evil/src/organization";
 import { getInfrastructureLoad } from "empire-of-evil/src/buildings";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { updateGameData } from "../../actions/dataManagement";
 import { updateSimActions } from "../../features/gameLogSlice";
 import EventLogItem from "../../elements/EventLogItem";
 import { advanceDays } from "empire-of-evil/src/actions/advanceDay";
 import HeaderGridItem from "../../elements/HeaderGridItem";
 import { setProjects } from "../../features/scienceSlice";
 import { getInfrastructurePercentage } from "empire-of-evil/src/actions/infrastructure";
+import { Gauge } from "@mui/x-charts";
 
 const currencyFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
 });
-
+const palette = ["blue", "black"];
 const MainScreen = () => {
   const dispatch = useAppDispatch();
   const { gameData } = eoe.GameManager.getInstance();
@@ -148,7 +140,9 @@ const MainScreen = () => {
               title="Agents"
               content={
                 eoe.actions.people.getPeople({
-                  organizationId: gameData.player.organizationId,
+                  personFilter: {
+                    organizationId: gameData.player.organizationId,
+                  },
                   agentFilter: { agentsOnly: true },
                 }).length
               }

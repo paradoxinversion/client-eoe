@@ -1,4 +1,4 @@
-import { Box, Card, Typography } from "@mui/material";
+import { Box, Button, Card, Grid, Typography } from "@mui/material";
 import { GameManager } from "empire-of-evil";
 import DataGrid from "react-data-grid";
 import { useDispatch } from "react-redux";
@@ -19,9 +19,12 @@ const WorldOverview = () => {
   const nationsArray = nations.getNations({});
   const nationsRows = nationsArray.map((nation) => ({
     nation: nation.name,
-    population: actions.people.getPeople({ nationId: nation.id }).length,
+    population: actions.people.getPeople({ nation: { nationId: nation.id } })
+      .length,
     agents: actions.people.getPeople({
-      organizationId: nation.organizationId,
+      personFilter: {
+        organizationId: nation.organizationId,
+      },
       agentFilter: { agentsOnly: true },
     }).length,
     zones: actions.zones.getZones({ nationId: nation.id }).length,
@@ -47,10 +50,31 @@ const WorldOverview = () => {
         <Box component="header">
           <Typography variant={"overline"}>World Nations</Typography>
         </Box>
-        <Card>
-          <DataGrid rows={nationsRows} columns={nationsTableColumns} />
-        </Card>
+        {/* <DataGrid rows={nationsRows} columns={nationsTableColumns} /> */}
       </Box>
+      <Grid container spacing={1}>
+        {nationsArray.map((nation) => {
+          return (
+            <Grid item key={nation.id}>
+              <Card>
+                <Typography>{nation.name}</Typography>
+                <Button
+                  onClick={() => {
+                    dispatch(
+                      selectEntity({
+                        type: "nation",
+                        selection: nation,
+                      })
+                    );
+                  }}
+                >
+                  Select
+                </Button>
+              </Card>
+            </Grid>
+          );
+        })}
+      </Grid>
     </Box>
   );
 };
