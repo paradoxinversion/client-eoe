@@ -14,8 +14,7 @@ import { setScreen } from "../features/screenSlice";
 import { GameData, GameLog } from "empire-of-evil/src/GameManager";
 import {
   NewGameOptions,
-  handleNewGameV2,
-  hireStartingAgents,
+  newGame as startNewGame,
 } from "empire-of-evil/src/gameSetup";
 import { updateSimActions } from "../features/gameLogSlice";
 import PlayerManager from "empire-of-evil/src/managers/cpu/PlayerManager";
@@ -70,12 +69,7 @@ export const deleteSavedGame = () => {
 };
 
 export const newGame = (options: NewGameOptions) => {
-  // handleNewGame(options);
-  handleNewGameV2(options);
-  hireStartingAgents();
-  populateActivities();
-  populatePlots();
-  GameManager.getInstance().setInitialized(true);
+  startNewGame(options);
   const { governingOrganizations, nations, zones, buildings, people } =
     GameManager.getInstance().gameData;
 

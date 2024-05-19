@@ -1,0 +1,2 @@
+- [ ] Disable department change buttons when an agent is assigned to a building
+- [ ] In staff assignment, skill number should be replaced with something else
