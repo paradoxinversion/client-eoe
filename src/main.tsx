@@ -7,7 +7,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const gameManager = gameSetup.createGameManager();
 
-const container = document.getElementById("app");
+const container = document.getElementById("root");
 const root = createRoot(container);
 
 // Enable navigation prompt
