@@ -32,7 +32,7 @@ import { useEffect, useState } from "react";
 import { setCodename } from "empire-of-evil/src/actions/people";
 import { setPeople } from "../../../features/personSlice";
 import { getCodeName } from "empire-of-evil/src/generators/names";
-import HeaderGridItem from "../HeaderGridItem";
+import HeaderGridItem from "../HeaderGridItem/HeaderGridItem";
 import { updateGameData } from "../../../actions/dataManagement";
 import {
   AgentDepartment,

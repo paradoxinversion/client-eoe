@@ -1,5 +1,5 @@
-import { saveGame } from "../../actions/dataManagement";
-import { setScreen } from "../../features/screenSlice";
+import { saveGame } from "../../../actions/dataManagement";
+import { setScreen } from "../../../features/screenSlice";
 import {
   Button,
   Drawer,
@@ -29,12 +29,13 @@ import {
   LocalHospital as LocalHospitalIcon,
   Groups2 as Groups2Icon,
 } from "@mui/icons-material";
-import TitleScreenOptions from "./ScreenNavigator/TitleScreenOptions";
-import { useState } from "react";
-import { clearSelections } from "../../features/selectionSlice";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import TitleScreenOptions from "./TitleScreenOptions";
+import { useEffect, useState } from "react";
+import { clearSelections } from "../../../features/selectionSlice";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { GameManager } from "empire-of-evil";
 
+// Each of these entries is a button in the sidebar
 const screens = [
   {
     screen: "main",
@@ -83,18 +84,23 @@ const screens = [
   },
 ];
 
+// The width of the sidebar
+// May need to be resized depending on screen size
 export const screenNavigatorWidth = 250;
 
 function ScreenNavigator() {
+  const sidebarOpen = useAppSelector((state) => state.sidebar.sidebarOpen);
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const dispatch = useAppDispatch();
+
   const gameInitialized = useAppSelector(
     (state) => state.gameManager
   ).initialized;
 
   return (
     <Drawer
-      variant="permanent"
+      variant="persistent"
+      open={sidebarOpen}
       anchor="left"
       sx={{
         width: screenNavigatorWidth,

@@ -7,7 +7,7 @@ import { getPeople } from "empire-of-evil/src/actions/people";
 import PersonnelOverview from "./PersonnelOverview";
 import PersonnelProfile from "./PersonnelProfile";
 import PersonnelCaptives from "./PersonnelCaptives";
-import HeaderGridItem from "../../elements/HeaderGridItem";
+import HeaderGridItem from "../../elements/HeaderGridItem/HeaderGridItem";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useState } from "react";
 

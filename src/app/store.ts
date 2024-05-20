@@ -11,6 +11,8 @@ import configReducer from "../features/configSlice";
 import scienceReducer from "../features/scienceSlice";
 import gameLogReducer from "../features/gameLogSlice";
 import ActivityParticipantSelectorReducer from "../features/ActivityParticipantSelector/ActivityParticipantSelectorSlice";
+import sidebarReducer from "../features/sidebarSlice";
+
 import { config } from "../config/config";
 const rootReducer = combineReducers({
   gameManager: gameManagerReducer,
@@ -24,6 +26,7 @@ const rootReducer = combineReducers({
   config: configReducer,
   science: scienceReducer,
   gameLog: gameLogReducer,
+  sidebar: sidebarReducer,
   activityParticipantSelector: ActivityParticipantSelectorReducer,
 });
 

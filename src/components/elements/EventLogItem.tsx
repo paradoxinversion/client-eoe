@@ -16,7 +16,14 @@ import {
   Warning as WarningIcon,
   Paid as PaidIcon,
 } from "@mui/icons-material";
-const EventLogItem = ({ text, color, icon }) => {
+
+type EventLogItemProps = {
+  text: string;
+  color: string;
+  icon: string;
+};
+const EventLogItem = (props: EventLogItemProps) => {
+  const { text, color, icon } = props;
   let Icon = null;
   switch (icon) {
     case "travel-explore":
@@ -34,7 +41,7 @@ const EventLogItem = ({ text, color, icon }) => {
     case "warning":
       Icon = WarningIcon;
       break;
-    case "paid":
+    case "payment":
       Icon = PaidIcon;
       break;
     default:
@@ -42,15 +49,17 @@ const EventLogItem = ({ text, color, icon }) => {
   }
   return (
     <>
-      <ListItem>
+      <ListItem divider>
         {Icon && (
           <ListItemIcon>
             <Icon />
           </ListItemIcon>
         )}
-        <ListItemText primary={text} />
+        <ListItemText
+          primary={text}
+          secondary={new Date(Date.now()).toDateString()}
+        />
       </ListItem>
-      <Divider />
     </>
   );
 };

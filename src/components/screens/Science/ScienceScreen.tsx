@@ -10,7 +10,7 @@ import { useState } from "react";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import HeaderGridItem from "../../elements/HeaderGridItem";
+import HeaderGridItem from "../../elements/HeaderGridItem/HeaderGridItem";
 import { getPeople } from "empire-of-evil/src/actions/people";
 
 const ScienceScreen = () => {

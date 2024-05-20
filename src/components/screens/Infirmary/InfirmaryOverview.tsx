@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { getPeople } from "empire-of-evil/src/actions/people";
-import HeaderGridItem from "../../elements/HeaderGridItem";
+import HeaderGridItem from "../../elements/HeaderGridItem/HeaderGridItem";
 import {
   admitHospitalPatient,
   getBuildings,

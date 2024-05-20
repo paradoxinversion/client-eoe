@@ -1,13 +1,13 @@
 import "./App.css";
 
-import ScreenNavigator from "./components/elements/ScreenNavigator";
+import ScreenNavigator from "./components/elements/ScreenNavigator/ScreenNavigator";
 import { Box, CssBaseline, AppBar, Toolbar, Typography } from "@mui/material";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { useAppSelector } from "./app/hooks";
-import ScreenLayout from "./components/elements/ScreenLayout";
+import ScreenLayout from "./components/elements/ScreenLayout/ScreenLayout";
 import TitleScreen from "./components/screens/Title/TitleScreen";
 import NewGameScreen from "./components/screens/NewGame/NewGameScreen";
 import MainScreen from "./components/screens/Main/MainScreen";
@@ -23,6 +23,8 @@ import InfrastructureScreen from "./components/screens/Infrastructure/Infrastruc
 import HelpScreen from "./components/screens/Help/HelpScreen";
 import CaptivesScreen from "./components/screens/Captives/CaptivesScreen";
 import InfirmaryScreen from "./components/screens/Infirmary/Infirmary";
+import TopBar from "./components/elements/TopBar/TopBar";
+import { GameManager } from "empire-of-evil";
 
 const screens = {
   title: TitleScreen,
@@ -48,14 +50,7 @@ function App() {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      >
-        <Toolbar>
-          <Typography>Empire of Evil</Typography>
-        </Toolbar>
-      </AppBar>
+      <TopBar gameSessionActive={GameManager.getInstance().initialized} />
       <ScreenNavigator />
       <Box sx={{ flexGrow: 1 }}>
         <ScreenLayout>

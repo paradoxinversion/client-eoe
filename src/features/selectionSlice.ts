@@ -10,13 +10,13 @@ import {
 } from "empire-of-evil/src/types/interfaces/entities";
 
 interface SelectionState {
-  governmentOrganization: GoverningOrganization;
-  zone: Zone;
-  nation: Nation;
-  person: Person;
-  building: Building;
-  plot: Plot;
-  activity: Activity;
+  governmentOrganization: GoverningOrganization | null;
+  zone: Zone | null;
+  nation: Nation | null;
+  person: Person | null;
+  building: Building | null;
+  plot: Plot | null;
+  activity: Activity | null;
 }
 
 const INITIAL_SELECTION_STATE: SelectionState = {
@@ -41,7 +41,7 @@ export const selectionSlice = createSlice({
      */
     selectEntity: (
       state,
-      action: PayloadAction<{ type: string; selection: Object }>
+      action: PayloadAction<{ type: string; selection: Object | null }>
     ) => {
       return {
         ...state,

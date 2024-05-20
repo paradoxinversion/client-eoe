@@ -24,10 +24,11 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { updateSimActions } from "../../../features/gameLogSlice";
 import EventLogItem from "../../elements/EventLogItem";
 import { advanceDays } from "empire-of-evil/src/actions/advanceDay";
-import HeaderGridItem from "../../elements/HeaderGridItem";
+import HeaderGridItem from "../../elements/HeaderGridItem/HeaderGridItem";
 import { setProjects } from "../../../features/scienceSlice";
 import { getInfrastructurePercentage } from "empire-of-evil/src/actions/infrastructure";
 import { Gauge } from "@mui/x-charts";
+import EventLogContainer from "../../elements/EventLog/EventLogContainer/EventLogContainer";
 
 const currencyFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -66,40 +67,13 @@ const MainScreen = () => {
   return (
     <>
       <Box>
-        <Box>
-          <Button
-            color="inherit"
-            onClick={() => {
-              advanceDay();
-              dispatch(
-                updateSimActions(eoe.GameManager.getInstance().gameData.gameLog)
-              );
-              dispatch(
-                setProjects(
-                  eoe.GameManager.getInstance().scienceManager.activeProjects
-                )
-              );
-              dispatch(setScreen("events"));
-            }}
-          >
-            {new Date(gameData.gameDate).toDateString()}
-          </Button>
-          <Button
-            color="inherit"
-            onClick={() => {
-              advanceDays(5);
-              dispatch(
-                updateSimActions(eoe.GameManager.getInstance().gameData.gameLog)
-              );
-              dispatch(setScreen("events"));
-            }}
-          >
-            5 Days
-          </Button>
-        </Box>
-        <Divider />
         <Box id="overview-cards" component="section">
-          <Grid container padding={"1rem"} spacing={"1rem"}>
+          <Grid container padding={"1rem"} spacing={"1rem"} columns={5}>
+            <HeaderGridItem
+              title="EVIL"
+              content={eoe.organizations.getEvilEmpire().totalEvil}
+              span={{ xs: 1 }}
+            />
             <HeaderGridItem
               title="Wealth"
               content={`${currencyFormatter.format(
@@ -108,10 +82,12 @@ const MainScreen = () => {
                 ].wealth
               )}
                   (+${currencyFormatter.format(Math.trunc(getOrgIncome()))})`}
+              span={{ xs: 1 }}
             />
             <HeaderGridItem
               title="Expenses"
               content={currencyFormatter.format(payroll + buildingUpkeep)}
+              span={{ xs: 1 }}
             />
             <HeaderGridItem
               title="Infrastructure"
@@ -122,18 +98,21 @@ const MainScreen = () => {
               }/${getInfrastructureLoad(
                 eoe.GameManager.getInstance().gameData.player.organizationId
               )}`}
+              span={{ xs: 1 }}
             />
             <HeaderGridItem
               title="Science"
               content={`${getEvilEmpire().science} (+${Math.trunc(
                 getOrgScienceOutput()
               )})`}
+              span={{ xs: 1 }}
             />
             <HeaderGridItem
               title="Zones"
               content={`${
                 eoe.zones.getZones(gameData.player.empireId).length
               }/${Object.keys(gameData.zones).length}`}
+              span={{ xs: 1 }}
             />
 
             <HeaderGridItem
@@ -146,26 +125,13 @@ const MainScreen = () => {
                   agentFilter: { agentsOnly: true },
                 }).length
               }
-            />
-
-            <HeaderGridItem
-              title="EVIL"
-              content={eoe.organizations.getEvilEmpire().totalEvil}
+              span={{ xs: 1 }}
             />
           </Grid>
         </Box>
         <Divider />
       </Box>
-      <List>
-        {reverseLog.map((event, index) => (
-          <EventLogItem
-            key={index}
-            text={event.text}
-            color={event.color}
-            icon={event.icon}
-          />
-        ))}
-      </List>
+      <EventLogContainer />
     </>
   );
 };

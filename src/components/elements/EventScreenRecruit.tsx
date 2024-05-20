@@ -20,7 +20,7 @@ import {
 } from "@mui/icons-material";
 import Datagrid from "react-data-grid";
 import { getPeople } from "empire-of-evil/src/actions/people";
-import HeaderGridItem from "./HeaderGridItem";
+import HeaderGridItem from "./HeaderGridItem/HeaderGridItem";
 import { GameManager } from "empire-of-evil";
 const recruitGridColumns = [
   { key: "attribute", name: "" },

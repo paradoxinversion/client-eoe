@@ -192,8 +192,8 @@ const NewGameScreen = () => {
             </FormControl>
           </Grid>
         </Grid>
+        <Button onClick={onNewGame}>Take Control</Button>
       </Box>
-      <Button onClick={onNewGame}>Take Control</Button>
     </>
   );
 };

@@ -13,11 +13,16 @@ export const gameLogSlice = createSlice({
   initialState: INITIAL_STATE,
   reducers: {
     addEventLog: (state, action) => {
-      const s = [...state.events];
-      s.push(action.payload);
-      return {
+      // const s = [...state.events];
+      // s.push(action.payload);
+      // return {
+      //   ...state,
+      //   events: s,
+      // };
+
+      state = {
         ...state,
-        events: s,
+        events: [...state.events, action.payload],
       };
     },
     updateSimActions: (state, action) => {

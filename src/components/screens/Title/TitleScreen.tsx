@@ -1,14 +1,14 @@
-import { useState } from "react";
 import Box from "@mui/material/Box";
 import {
   Card,
   CardContent,
   CardHeader,
+  Grid,
   Stack,
-  Toolbar,
   Typography,
 } from "@mui/material";
 import { useAppSelector } from "../../../app/hooks";
+import TitleScreenInfoCard from "./TitleScreenInfoCard";
 
 function TitleScreen() {
   // const [saveData, setSaveData] = useState(localStorage.getItem("eoe-save"));
@@ -19,34 +19,20 @@ function TitleScreen() {
         <Typography variant="h1">Empire of EVIL</Typography>
         <Typography>An Evil Overlord Simulator by Jedai Saboteur.</Typography>
       </Box>
-      <Stack
-        direction="row"
-        spacing="1rem"
-        padding="1rem"
-        alignItems={"center"}
-      >
-        <Card sx={{ maxWidth: 345, height: 300 }}>
-          <CardHeader title="Execute EVIL Plots" />
-          <CardContent>
-            Create an Empire capable of generating the resources you need to
-            unleash EVIL plots upon an unsuspecting world!
-          </CardContent>
-        </Card>
-        <Card sx={{ maxWidth: 345, height: 300 }}>
-          <CardHeader title="Recruit EVIL Agents" />
-          <CardContent>
-            Amass your own personal army of loyal EVIL Agents to carry out your
-            dastardly schemes!
-          </CardContent>
-        </Card>
-        <Card sx={{ maxWidth: 345, height: 300 }}>
-          <CardHeader title="Subjugate Exotic Locales" />
-          <CardContent>
-            Use your wit and careful planning to strategically take over the
-            world!
-          </CardContent>
-        </Card>
-      </Stack>
+      <Grid container spacing={1} columns={3} sx={{ padding: "1rem" }}>
+        <TitleScreenInfoCard
+          title="Execute EVIL Plots"
+          content="Create an Empire capable of generating the resources you need to unleash EVIL plots upon an unsuspecting world!"
+        />
+        <TitleScreenInfoCard
+          title="Recruit EVIL Agents"
+          content="Amass your own personal army of loyal EVIL Agents to carry out your dastardly schemes!"
+        />
+        <TitleScreenInfoCard
+          title="Subjugate Exotic Locales"
+          content="Use your wit and careful planning to strategically take over the world!"
+        />
+      </Grid>
       <Box padding="1rem">
         <Typography align="center">
           {saveData
