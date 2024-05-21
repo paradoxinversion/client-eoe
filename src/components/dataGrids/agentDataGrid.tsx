@@ -5,7 +5,6 @@ import { dataGridButton } from "../datagridRenderers/dataGridButton";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { selectEntity } from "../../features/selectionSlice";
 import { Person } from "empire-of-evil/src/types/interfaces/entities";
-import { GameManager } from "empire-of-evil";
 import "react-data-grid/lib/styles.css";
 
 const agentDataGridColumns = [
@@ -46,14 +45,14 @@ const AgentDataGrid = ({ title, agents }: AgentDataGridProps) => {
       id,
       aptitude: intelligence + administration + espionage + science,
       prowess: agility + combat + security,
-      codename: agent.codename,
+      codename: agent?.codename,
       zone: zoneName,
       health: `${currentHealth}/${health}`,
       intelligence,
       combat,
       administration,
       name,
-      loyalty: loyalties[person.agent.organizationId],
+      loyalty: loyalties[person.agent!.organizationId],
       intelLevel: intelligenceLevel,
       agent: !!agent ? <CheckIcon /> : <CloseIcon />,
       select: (row) => {

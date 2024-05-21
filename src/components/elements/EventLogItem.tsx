@@ -1,12 +1,4 @@
-import {
-  Divider,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import {
   Dangerous as DangerousIcon,
   Done as DoneIcon,

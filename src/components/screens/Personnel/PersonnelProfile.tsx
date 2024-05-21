@@ -14,7 +14,7 @@ import {
   Divider,
   Tooltip,
 } from "@mui/material";
-import { GameManager, actions, organizations } from "empire-of-evil";
+import { managers, actions } from "empire-of-evil";
 
 import AgentProfile from "../../elements/profiles/AgentProfile";
 import { setPeople } from "../../../features/personSlice";
@@ -56,8 +56,9 @@ const PersonnelProfile = () => {
           </Button>
           <Button
             onClick={() => {
-              const update = organizations.fireAgent(selectedAgent);
-              const ug = GameManager.getInstance().updateGameData(update);
+              const update = actions.organization.fireAgent(selectedAgent);
+              const ug =
+                managers.game.GameManager.getInstance().updateGameData(update);
               dispatch(clearSelections());
               dispatch(setPeople(ug.people));
               setFireAgentDialogOpen(false);
@@ -67,8 +68,9 @@ const PersonnelProfile = () => {
           </Button>
           <Button
             onClick={() => {
-              const update = organizations.terminateAgent(selectedAgent);
-              const ug = GameManager.getInstance().updateGameData(update);
+              const update = actions.organization.terminateAgent(selectedAgent);
+              const ug =
+                managers.game.GameManager.getInstance().updateGameData(update);
               dispatch(clearSelections());
               dispatch(setPeople(ug.people));
               setFireAgentDialogOpen(false);
@@ -90,8 +92,8 @@ const PersonnelProfile = () => {
         <Button
           disabled={
             selectedAgent.id ===
-              GameManager.getInstance().gameData.player.overlordId ||
-            selectedAgent.isPersonnel
+              managers.game.GameManager.getInstance().gameData.player
+                .overlordId || selectedAgent.isPersonnel
           }
           onClick={() => {
             setFireAgentDialogOpen(true);

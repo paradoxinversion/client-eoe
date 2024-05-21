@@ -17,8 +17,7 @@ import { useEffect, useState } from "react";
 import { plotSetupRenderers } from "./PlotsScreen";
 import DataGrid from "react-data-grid";
 import { dataGridButton } from "../../datagridRenderers/dataGridButton";
-import { GameManager } from "empire-of-evil";
-import { getPeople } from "empire-of-evil/src/actions/people";
+import { managers, actions } from "empire-of-evil";
 
 const queuedPlotsColumns = [
   { key: "plot", name: "Plot" },
@@ -30,18 +29,20 @@ const PlotsOverview = () => {
   const dispatch = useAppDispatch();
   const [plotWidgetOpen, setPlotWidgetOpen] = useState(false);
   const currentPlot = useAppSelector((state) => state.selections.plot);
-  const { plotManager, gameData } = GameManager.getInstance();
+  const { gameData } = managers.game.GameManager.getInstance();
   const PlotWidget = currentPlot && plotSetupRenderers[currentPlot.type];
-  const plotRows = plotManager.plotQueue.map((plot, index) => ({
-    index,
-    plot: plot.name,
-    agents: plot.standardParams.participants.length,
-    cancel: (row) => {
-      plotManager.removePlot(index);
-    },
-  }));
+  const plotRows = managers.plots.PlotManager.getInstance().plotQueue.map(
+    (plot, index) => ({
+      index,
+      plot: plot.name,
+      agents: plot.standardParams.participants.length,
+      cancel: (row) => {
+        managers.plots.PlotManager.getInstance().removePlot(index);
+      },
+    })
+  );
 
-  useEffect(() => {}, [plotManager.plots]);
+  useEffect(() => {}, [managers.plots.PlotManager.getInstance().plots]);
   return (
     <Box>
       <Box>
@@ -56,17 +57,17 @@ const PlotsOverview = () => {
             <Divider />
             <Box padding="1rem">
               <Grid container>
-                {plotManager.plots
-                  .filter((plot) => {
+                {managers.plots.PlotManager.getInstance()
+                  .plots.filter((plot) => {
                     if (plot.requirements?.personnel?.embeddedAgents) {
-                      return !!getPeople({
+                      return !!actions.people.getPeople({
                         agentFilter: {
                           embeddedOnly: true,
                         },
                         personFilter: {
                           organizationId:
-                            GameManager.getInstance().gameData.player
-                              .organizationId,
+                            managers.game.GameManager.getInstance().gameData
+                              .player.organizationId,
                         },
                       }).length;
                     }
@@ -106,22 +107,24 @@ const PlotsOverview = () => {
               <Typography variant="overline">Queued Plots</Typography>
             </Box>
             <Grid container>
-              {plotManager.plotQueue.map((plot, index) => (
-                <Grid item key={index}>
-                  <Card>
-                    <CardHeader title={plot.name} />
-                    <Divider />
-                    <CardContent>
-                      <Typography>
-                        Agents: {plot.standardParams.participants.length}
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button>Abort</Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))}
+              {managers.plots.PlotManager.getInstance().plotQueue.map(
+                (plot, index) => (
+                  <Grid item key={index}>
+                    <Card>
+                      <CardHeader title={plot.name} />
+                      <Divider />
+                      <CardContent>
+                        <Typography>
+                          Agents: {plot.standardParams.participants.length}
+                        </Typography>
+                      </CardContent>
+                      <CardActions>
+                        <Button>Abort</Button>
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                )
+              )}
             </Grid>
           </Box>
         </Box>
@@ -130,7 +133,7 @@ const PlotsOverview = () => {
         <Dialog open={plotWidgetOpen}>
           <PlotWidget
             gameData={gameData}
-            plotManager={plotManager}
+            plotManager={managers.plots.PlotManager.getInstance()}
             cb={() => {
               setPlotWidgetOpen(false);
               dispatch(

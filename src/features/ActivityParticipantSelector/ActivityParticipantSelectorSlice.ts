@@ -1,6 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import Activity from "empire-of-evil/src/activities/Activity";
-import { RootState } from "../../app/store";
+import Activity from "empire-of-evil/src/managers/activities/Activity";
 
 type ActivitySelection = Pick<
   Activity,

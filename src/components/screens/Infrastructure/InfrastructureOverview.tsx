@@ -14,7 +14,7 @@ import {
   CardContent,
 } from "@mui/material";
 import { Groups as GroupsIcon } from "@mui/icons-material";
-import { buildings, actions, GameManager } from "empire-of-evil";
+import { managers, actions } from "empire-of-evil";
 import BuildingDataGrid from "../../dataGrids/buildingDataGrid";
 import ZoneDataGrid from "../../dataGrids/zoneDataGrid";
 import { selectEntity } from "../../../features/selectionSlice";
@@ -24,7 +24,6 @@ import { useState } from "react";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import { getPeople } from "empire-of-evil/src/actions/people";
 import { Gauge } from "@mui/x-charts";
 import BuildingCard from "../../elements/BuildingCard/BuildingCard";
 
@@ -54,7 +53,9 @@ const InfrastructureOverview = () => {
               </Box>
               <ZoneDataGrid
                 zones={actions.zones.getZones({
-                  nationId: GameManager.getInstance().gameData.player.empireId,
+                  nationId:
+                    managers.game.GameManager.getInstance().gameData.player
+                      .empireId,
                 })}
                 title={"Zones"}
               />
@@ -93,11 +94,11 @@ const InfrastructureOverview = () => {
               </Box>
               <TabPanel value="hospitals">
                 <Grid container spacing={1}>
-                  {buildings
+                  {actions.buildings
                     .getBuildings({
                       type: "hospital",
                       organizationId:
-                        GameManager.getInstance().gameData.player
+                        managers.game.GameManager.getInstance().gameData.player
                           .organizationId,
                     })
                     .map((building) => {
@@ -111,11 +112,11 @@ const InfrastructureOverview = () => {
               </TabPanel>
               <TabPanel value="laboratories">
                 <Grid container spacing={1}>
-                  {buildings
+                  {actions.buildings
                     .getBuildings({
                       type: "laboratory",
                       organizationId:
-                        GameManager.getInstance().gameData.player
+                        managers.game.GameManager.getInstance().gameData.player
                           .organizationId,
                     })
                     .map((building) => {
@@ -129,11 +130,11 @@ const InfrastructureOverview = () => {
               </TabPanel>
               <TabPanel value="banks">
                 <Grid container spacing={1}>
-                  {buildings
+                  {actions.buildings
                     .getBuildings({
                       type: "bank",
                       organizationId:
-                        GameManager.getInstance().gameData.player
+                        managers.game.GameManager.getInstance().gameData.player
                           .organizationId,
                     })
                     .map((building) => {
@@ -152,37 +153,39 @@ const InfrastructureOverview = () => {
                     width={100}
                     height={100}
                     value={
-                      getPeople({
+                      actions.people.getPeople({
                         personFilter: {
                           residentsOnly: true,
                           excludeDeceased: true,
                         },
                         nation: {
                           nationId:
-                            GameManager.getInstance().gameData.player.empireId,
+                            managers.game.GameManager.getInstance().gameData
+                              .player.empireId,
                         },
                       }).length
                     }
                     valueMin={0}
                     valueMax={
-                      getPeople({
+                      actions.people.getPeople({
                         personFilter: {
                           excludeDeceased: true,
                         },
                         nation: {
                           nationId:
-                            GameManager.getInstance().gameData.player.empireId,
+                            managers.game.GameManager.getInstance().gameData
+                              .player.empireId,
                         },
                       }).length
                     }
                   />
                 </Box>
                 <Grid container spacing={1}>
-                  {buildings
+                  {actions.buildings
                     .getBuildings({
                       type: "apartment",
                       organizationId:
-                        GameManager.getInstance().gameData.player
+                        managers.game.GameManager.getInstance().gameData.player
                           .organizationId,
                     })
                     .map((building) => {
@@ -196,11 +199,11 @@ const InfrastructureOverview = () => {
               </TabPanel>
               <TabPanel value="offices">
                 <Grid container spacing={1}>
-                  {buildings
+                  {actions.buildings
                     .getBuildings({
                       type: "office",
                       organizationId:
-                        GameManager.getInstance().gameData.player
+                        managers.game.GameManager.getInstance().gameData.player
                           .organizationId,
                     })
                     .map((building) => {

@@ -1,9 +1,9 @@
 import { Box, Typography, Button } from "@mui/material";
-import { actions, GameManager } from "empire-of-evil";
+import { actions, managers } from "empire-of-evil";
 import { selectEntity } from "../../../features/selectionSlice";
 import AgentSelector from "../AgentSelector/AgentSelector";
-import Activity from "empire-of-evil/src/activities/Activity";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import Activity from "empire-of-evil/src/managers/activities/Activity";
 
 type ActivityParticipantSelectorProps = {
   currentActivity: Activity;
@@ -39,7 +39,8 @@ const ActivityParticipantSelector = (
         agentsArray={actions.people.getPeople({
           personFilter: {
             organizationId:
-              GameManager.getInstance().gameData.player.organizationId,
+              managers.game.GameManager.getInstance().gameData.player
+                .organizationId,
             excludePersonnel: true,
           },
           agentFilter: {

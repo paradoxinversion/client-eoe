@@ -12,16 +12,13 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
-import { GameManager, buildings } from "empire-of-evil";
 
 import PersonnelDataGrid from "../../dataGrids/personnelDataGrid";
 import { selectEntity } from "../../../features/selectionSlice";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { updateGameData } from "../../../actions/dataManagement";
-import PersonDataGrid from "../../dataGrids/personDataGrid";
 import { useState } from "react";
-import { addResident, removeResident } from "empire-of-evil/src/buildings";
-import { getPeople } from "empire-of-evil/src/actions/people";
+import { actions, managers } from "empire-of-evil";
 
 const BuildingProfile = () => {
   const dispatch = useAppDispatch();
@@ -35,23 +32,25 @@ const BuildingProfile = () => {
           <DialogContentText>
             Assign Residents to this building
           </DialogContentText>
-          {getPeople({
-            personFilter: {
-              excludeResidents: true,
-            },
-            zone: {
-              zoneId: selectedBuilding.zoneId,
-            },
-          }).map((person) => (
-            <Button
-              onClick={() => {
-                addResident(selectedBuilding.id, person.id);
-                setAddInhabitantOpen(false);
-              }}
-            >
-              {person.name}
-            </Button>
-          ))}
+          {actions.people
+            .getPeople({
+              personFilter: {
+                excludeResidents: true,
+              },
+              zone: {
+                zoneId: selectedBuilding.zoneId,
+              },
+            })
+            .map((person) => (
+              <Button
+                onClick={() => {
+                  actions.buildings.addResident(selectedBuilding.id, person.id);
+                  setAddInhabitantOpen(false);
+                }}
+              >
+                {person.name}
+              </Button>
+            ))}
         </DialogContent>
         <DialogActions>
           <Button
@@ -83,7 +82,7 @@ const BuildingProfile = () => {
             Science Output
           </Typography>
           <Typography variant="body2">
-            {buildings.getResourceOutput(selectedBuilding).science}
+            {actions.buildings.getResourceOutput(selectedBuilding).science}
           </Typography>
         </Grid>
 
@@ -92,7 +91,7 @@ const BuildingProfile = () => {
             Wealth Output
           </Typography>
           <Typography variant="body2">
-            {buildings.getResourceOutput(selectedBuilding).wealth}
+            {actions.buildings.getResourceOutput(selectedBuilding).wealth}
           </Typography>
         </Grid>
 
@@ -101,7 +100,7 @@ const BuildingProfile = () => {
             Housing
           </Typography>
           <Typography variant="body2">
-            {buildings.getResourceOutput(selectedBuilding).housing}
+            {actions.buildings.getResourceOutput(selectedBuilding).housing}
           </Typography>
         </Grid>
 
@@ -110,14 +109,20 @@ const BuildingProfile = () => {
             Infrastructure Output
           </Typography>
           <Typography variant="body2">
-            {buildings.getResourceOutput(selectedBuilding).infrastructure}
+            {
+              actions.buildings.getResourceOutput(selectedBuilding)
+                .infrastructure
+            }
           </Typography>
         </Grid>
       </Grid>
 
       <PersonnelDataGrid
         fireFn={(person) => {
-          const update = buildings.removePersonnel(person, selectedBuilding);
+          const update = actions.buildings.removePersonnel(
+            person,
+            selectedBuilding
+          );
           updateGameData(update);
           dispatch(
             selectEntity({
@@ -167,8 +172,13 @@ const BuildingProfile = () => {
                     <CardActionArea>
                       <Button
                         onClick={() => {
-                          removeResident(selectedBuilding.id, per.id);
-                          updateGameData(GameManager.getInstance().gameData);
+                          actions.buildings.removeResident(
+                            selectedBuilding.id,
+                            per.id
+                          );
+                          updateGameData(
+                            managers.game.GameManager.getInstance().gameData
+                          );
                           dispatch(
                             selectEntity({
                               type: "building",

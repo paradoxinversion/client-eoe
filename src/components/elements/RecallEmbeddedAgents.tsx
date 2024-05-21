@@ -7,10 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { getPeople } from "empire-of-evil/src/actions/people";
-import { GameManager } from "empire-of-evil";
-import Plot from "empire-of-evil/src/plots/Plot";
-import { PlotManager } from "empire-of-evil/src/plots/PlotManager";
+import { managers, actions } from "empire-of-evil";
 
 const RecallEmbeddedAgents = ({ cb }) => {
   const [selectedPeople, setSelectedPeople] = useState<string[]>([]);
@@ -19,7 +16,7 @@ const RecallEmbeddedAgents = ({ cb }) => {
     const plotParams = {
       agents: selectedPeople,
     };
-    const plot = new Plot(
+    const plot = new managers.plots.Plot(
       "Recall Embedded Agents",
       "recall-embedded-agents",
       {
@@ -27,7 +24,7 @@ const RecallEmbeddedAgents = ({ cb }) => {
       },
       {}
     );
-    PlotManager.getInstance().addPlot(plot);
+    managers.plots.PlotManager.getInstance().addPlot(plot);
     cb && cb();
   };
 
@@ -52,24 +49,27 @@ const RecallEmbeddedAgents = ({ cb }) => {
         agents will return to their home zones.
       </Typography>
       <FormGroup>
-        {getPeople({
-          personFilter: {
-            organizationId:
-              GameManager.getInstance().gameData.player.organizationId,
-          },
-          agentFilter: {
-            embeddedOnly: true,
-            agentsOnly: true,
-            excludeParticipants: true,
-          },
-        }).map((person) => {
-          return (
-            <FormControlLabel
-              control={<Checkbox name={person.id} onChange={onChange} />}
-              label={person.name}
-            />
-          );
-        })}
+        {actions.people
+          .getPeople({
+            personFilter: {
+              organizationId:
+                managers.game.GameManager.getInstance().gameData.player
+                  .organizationId,
+            },
+            agentFilter: {
+              embeddedOnly: true,
+              agentsOnly: true,
+              excludeParticipants: true,
+            },
+          })
+          .map((person) => {
+            return (
+              <FormControlLabel
+                control={<Checkbox name={person.id} onChange={onChange} />}
+                label={person.name}
+              />
+            );
+          })}
       </FormGroup>
       <Button
         disabled={!selectedPeople}

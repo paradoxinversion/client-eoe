@@ -14,7 +14,7 @@ import DataGrid from "react-data-grid";
 import { useDispatch } from "react-redux";
 import { dataGridButton } from "../../datagridRenderers/dataGridButton";
 import { selectEntity } from "../../../features/selectionSlice";
-import { actions, nations, organizations } from "empire-of-evil";
+import { actions } from "empire-of-evil";
 
 const nationsTableColumns = [
   { key: "nation", name: "Nation" },
@@ -26,7 +26,7 @@ const nationsTableColumns = [
 const WorldOverview = () => {
   const dispatch = useDispatch();
 
-  const nationsArray = nations.getNations({});
+  const nationsArray = actions.nations.getNations({});
   const nationsRows = nationsArray.map((nation) => ({
     nation: nation.name,
     population: actions.people.getPeople({ nation: { nationId: nation.id } })

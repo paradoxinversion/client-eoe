@@ -2,9 +2,6 @@ import { Box, Divider, Grid, Tab, Typography } from "@mui/material";
 
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useState } from "react";
-import HeaderGridItem from "../../elements/HeaderGridItem/HeaderGridItem";
-import DataGrid from "react-data-grid";
-import { getPeople } from "empire-of-evil/src/actions/people";
 import InfirmaryOverview from "./InfirmaryOverview";
 import InfirmaryPatients from "./InfirmaryPatients";
 import InfirmaryStaff from "./InfirmaryStaff";

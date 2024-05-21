@@ -1,8 +1,8 @@
 import { Box, Button, Divider, Typography } from "@mui/material";
 import { GameEventComponentProps } from "../../screens/Events/EventScreen";
-import { PlotResult } from "empire-of-evil/src/plots/Plot";
-import { CombatResult } from "empire-of-evil/src/combat";
-import { AttackZoneParams } from "empire-of-evil/src/events/eventFunctions/attackZone";
+import { PlotResult } from "empire-of-evil/src/managers/plots/Plot";
+import { CombatResult } from "empire-of-evil/src/combat/combat";
+import { AttackZoneParams } from "empire-of-evil/src/managers/events/eventFunctions/attackZone";
 
 const combatRoundSeconds = 3;
 

@@ -26,13 +26,11 @@ import {
   Science as ScienceIcon,
   Money as MoneyIcon,
 } from "@mui/icons-material";
-import { GameManager } from "empire-of-evil";
+import { managers, actions } from "empire-of-evil";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { setProjects } from "../../../features/scienceSlice";
 import { ScienceProject } from "empire-of-evil/src/managers/science/types";
 import { useState } from "react";
-import { getBuildings } from "empire-of-evil/src/buildings";
-import { getEvilEmpire } from "empire-of-evil/src/organization";
 
 const ScienceProjects = () => {
   const dispatch = useAppDispatch();
@@ -52,59 +50,67 @@ const ScienceProjects = () => {
             Scientists must work in the lab to complete the project.
           </Typography>
           <List>
-            {getBuildings({
-              type: "laboratory",
-              organizationId:
-                GameManager.getInstance().gameData.player.organizationId,
-            }).map((lab) => {
-              return (
-                <>
-                  <ListItem
-                    secondaryAction={
-                      <Tooltip title="Select Laboratory">
-                        <IconButton
-                          disabled={lab.personnel.length === 0}
-                          edge="end"
-                          aria-label="select-laboratory"
-                          size="small"
-                          onClick={() => {
-                            setLab(lab.id);
-                            setSelectLabOpen(false);
-                            GameManager.getInstance().scienceManager.startProject(
-                              selectedProject,
-                              lab.id
-                            );
-                            dispatch(
-                              setProjects(
-                                GameManager.getInstance().scienceManager
-                                  .activeProjects
-                              )
-                            );
-                          }}
-                        >
-                          <CheckIcon />
-                        </IconButton>
-                      </Tooltip>
-                    }
-                  >
-                    <Grid container direction="row" spacing="1rem" columns={2}>
-                      <Grid item xs={1}>
-                        <Typography>{lab.name}</Typography>
+            {actions.buildings
+              .getBuildings({
+                type: "laboratory",
+                organizationId:
+                  managers.game.GameManager.getInstance().gameData.player
+                    .organizationId,
+              })
+              .map((lab) => {
+                return (
+                  <>
+                    <ListItem
+                      secondaryAction={
+                        <Tooltip title="Select Laboratory">
+                          <IconButton
+                            disabled={lab.personnel.length === 0}
+                            edge="end"
+                            aria-label="select-laboratory"
+                            size="small"
+                            onClick={() => {
+                              setLab(lab.id);
+                              setSelectLabOpen(false);
+                              managers.science.ScienceManager.getInstance().startProject(
+                                selectedProject,
+                                lab.id
+                              );
+                              dispatch(
+                                setProjects(
+                                  managers.science.ScienceManager.getInstance()
+                                    .activeProjects
+                                )
+                              );
+                            }}
+                          >
+                            <CheckIcon />
+                          </IconButton>
+                        </Tooltip>
+                      }
+                    >
+                      <Grid
+                        container
+                        direction="row"
+                        spacing="1rem"
+                        columns={2}
+                      >
+                        <Grid item xs={1}>
+                          <Typography>{lab.name}</Typography>
+                        </Grid>
+                        <Grid item xs={1}>
+                          <Typography
+                            color={lab.personnel.length === 0 ? "red" : "green"}
+                          >
+                            Staff: {lab.personnel.length}/
+                            {lab.basicAttributes.maxPersonnel}
+                          </Typography>
+                        </Grid>
                       </Grid>
-                      <Grid item xs={1}>
-                        <Typography
-                          color={lab.personnel.length === 0 ? "red" : "green"}
-                        >
-                          Staff: {lab.personnel.length}/
-                          {lab.basicAttributes.maxPersonnel}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </ListItem>
-                  <Divider />
-                </>
-              );
-            })}
+                    </ListItem>
+                    <Divider />
+                  </>
+                );
+              })}
           </List>
         </DialogContent>
         <DialogActions>
@@ -118,7 +124,7 @@ const ScienceProjects = () => {
       </Typography>
       <Grid container spacing="1rem" padding="1rem">
         {Object.values(
-          GameManager.getInstance().scienceManager.PROJECT_DEFINITIONS
+          managers.science.ScienceManager.getInstance().PROJECT_DEFINITIONS
         )
           .filter((project) => {
             const requirements = project.requirements;
@@ -126,7 +132,7 @@ const ScienceProjects = () => {
             if (requirements.completedProjects.length > 0) {
               // Ensure all required projects are completed
               const { completedProjects } =
-                GameManager.getInstance().scienceManager;
+                managers.science.ScienceManager.getInstance();
               const projectsCompleted = requirements.completedProjects.every(
                 (requiredProject) => {
                   return completedProjects.find((cp) => cp === requiredProject);
@@ -138,7 +144,7 @@ const ScienceProjects = () => {
             }
 
             if (
-              GameManager.getInstance().scienceManager.completedProjects.includes(
+              managers.science.ScienceManager.getInstance().completedProjects.includes(
                 project.indexName as ScienceProject
               )
             ) {
@@ -194,7 +200,10 @@ const ScienceProjects = () => {
                   <Divider />
                   <CardActions>
                     <Button
-                      disabled={getEvilEmpire().wealth < project.cost}
+                      disabled={
+                        actions.organization.getEvilEmpire().wealth <
+                        project.cost
+                      }
                       onClick={() => {
                         setSelectLabOpen(true);
                         setSelectedProject(project.indexName as ScienceProject);

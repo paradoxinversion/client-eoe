@@ -1,7 +1,4 @@
-import { GameManager } from "empire-of-evil";
-import { SaveData, serializeGameData } from "empire-of-evil/src/dataManagement";
-import { populateActivities, populatePlots } from "empire-of-evil/src/plots";
-import Activity from "empire-of-evil/src/activities/Activity";
+import { managers, dataManagement, utils } from "empire-of-evil";
 import { store } from "../app/store";
 import { setGoverningOrganizations } from "../features/governingOrganizationSlice";
 import { setNations } from "../features/nationSlice";
@@ -11,44 +8,48 @@ import { setPeople } from "../features/personSlice";
 import { setInitialized } from "../features/gameManagerSlice";
 import { setProjects } from "../features/scienceSlice";
 import { setScreen } from "../features/screenSlice";
-import { GameData, GameLog } from "empire-of-evil/src/GameManager";
-import {
-  NewGameOptions,
-  newGame as startNewGame,
-} from "empire-of-evil/src/gameSetup";
 import { updateSimActions } from "../features/gameLogSlice";
 import PlayerManager from "empire-of-evil/src/managers/cpu/PlayerManager";
 import Player from "empire-of-evil/src/managers/cpu/Player";
-import { ScienceManager } from "empire-of-evil/src/managers/science/science";
+import { SaveData } from "empire-of-evil/src/dataManagement/dataManagement";
+import { NewGameOptions } from "empire-of-evil/src/gameSetup";
+import {
+  GameData,
+  GameLog,
+} from "empire-of-evil/src/managers/game/GameManager";
+import Activity from "empire-of-evil/src/managers/activities/Activity";
+
+const GameManager = managers.game.GameManager;
 
 export const saveGame = () => {
-  localStorage.setItem("eoe-save", serializeGameData());
+  localStorage.setItem("eoe-save", dataManagement.serializeGameData());
 };
 
-export const loadGame = () => {
-  const { plotManager, activityManager, scienceManager } =
-    GameManager.getInstance();
-  const saveData: SaveData = store.getState().gameManager.saveData;
+export const loadGame = (saveData: SaveData) => {
+  GameManager.getInstance();
+
   // load players
   const players = saveData.playerData.map((player) => new Player(player));
   PlayerManager.getInstance().setPlayers(players);
-
-  populateActivities();
-  populatePlots();
+  managers.activities.ActivityManager.getInstance().populateActivities();
+  managers.plots.PlotManager.getInstance().populatePlots();
 
   // recreate plots
   const oldPlots = saveData.plotData.plots.map((plot) => {
-    return plotManager.addPlot(plot);
+    return managers.plots.PlotManager.getInstance().addPlot(plot);
   });
-  Object.values(saveData.plotData.activities).forEach((activity: Activity) => {
-    const currentActivity = activityManager.activities.find(
-      (a) => a.name === activity.name
-    );
-    currentActivity.setAgents(activity.agents);
+  Object.values(saveData.plotData.activities).forEach((activity) => {
+    const currentActivity =
+      managers.activities.ActivityManager.getInstance().activities.find(
+        (a) => a.name === activity.name
+      );
+    if (currentActivity) {
+      currentActivity.setAgents(activity.agents);
+    }
   });
-  ScienceManager.getInstance().activeProjects =
+  managers.science.ScienceManager.getInstance().activeProjects =
     saveData.scienceData.activeProjects;
-  GameManager.getInstance().setGameData(saveData.gameData);
+  managers.game.GameManager.getInstance().setGameData(saveData.gameData);
   GameManager.getInstance().setInitialized(true);
   const { governingOrganizations, nations, zones, buildings, people } =
     GameManager.getInstance().gameData;
@@ -60,7 +61,9 @@ export const loadGame = () => {
   store.dispatch(setBuildings(buildings));
   store.dispatch(setPeople(people));
   store.dispatch(setInitialized(true));
-  store.dispatch(setProjects(ScienceManager.getInstance().activeProjects));
+  store.dispatch(
+    setProjects(managers.science.ScienceManager.getInstance().activeProjects)
+  );
   store.dispatch(setScreen("main"));
 };
 
@@ -69,7 +72,7 @@ export const deleteSavedGame = () => {
 };
 
 export const newGame = (options: NewGameOptions) => {
-  startNewGame(options);
+  utils.gameSetup.newGame(options);
   const { governingOrganizations, nations, zones, buildings, people } =
     GameManager.getInstance().gameData;
 

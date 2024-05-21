@@ -17,14 +17,13 @@ import { setScreen } from "../../../features/screenSlice";
 import EventScreenIntruder from "../../elements/EventScreens/Intruder";
 import ScienceProjectComplete from "../../elements/EventScreens/ScienceProjectComplete";
 import { updateGameData } from "../../../actions/dataManagement";
-import GameEvent from "empire-of-evil/src/events/GameEvent";
+import GameEvent from "empire-of-evil/src/managers/events/GameEvent";
 import { addEventLog } from "../../../features/gameLogSlice";
 import { eventConfig } from "empire-of-evil/src/gameEvents";
-import { GameManager } from "empire-of-evil";
+import { managers } from "empire-of-evil";
 import EventScreenPetEvent from "../../elements/EventScreens/EventScreenPetEvent";
 import EmbedAgents from "../../elements/EventScreens/EmbedAgents";
 import RecallEmbeddedAgents from "../../elements/EventScreens/RecallEmbeddedAgents";
-import GameEventQueue from "empire-of-evil/src/events/GameEventQueue";
 import DomesticCombatEncounter from "../../elements/EventScreens/DomesticCombatEncounter";
 import Raid from "../../elements/EventScreens/Raid";
 export interface GameEventComponentProps {
@@ -51,8 +50,8 @@ const eventScreenMap = {
 };
 
 const EventsScreen = () => {
-  const { gameData } = GameManager.getInstance();
-  const eventQueue = GameEventQueue.getInstance();
+  const { gameData } = managers.game.GameManager.getInstance();
+  const eventQueue = managers.events.GameEventQueue.getInstance();
   const [eventScreen, setEventScreen] = useState(
     eventQueue.getCurrentEvent().type
   );

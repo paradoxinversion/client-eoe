@@ -10,9 +10,9 @@ import {
 import { useSelector } from "react-redux";
 import { GameEventComponentProps } from "../screens/Events/EventScreen";
 import { useAppSelector } from "../../app/hooks";
-import { ReconZoneEventParams } from "empire-of-evil/src/events/eventFunctions/recon";
-import { PlotResult } from "empire-of-evil/src/plots/Plot";
-import { ReconPlotData } from "empire-of-evil/src/plots/plotFunctions/recon";
+import { ReconZoneEventParams } from "empire-of-evil/src/managers/events/eventFunctions/recon";
+import { PlotResult } from "empire-of-evil/src/managers/plots/Plot";
+import { ReconPlotData } from "empire-of-evil/src/managers/plots/plotFunctions/recon";
 import { MonitorHeart as MonitorHeartIcon } from "@mui/icons-material";
 /**
  * @param {object} props

@@ -33,7 +33,7 @@ import TitleScreenOptions from "./TitleScreenOptions";
 import { useEffect, useState } from "react";
 import { clearSelections } from "../../../features/selectionSlice";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { GameManager } from "empire-of-evil";
+import { managers } from "empire-of-evil";
 
 // Each of these entries is a button in the sidebar
 const screens = [
@@ -113,7 +113,8 @@ function ScreenNavigator() {
     >
       <Toolbar />
       {gameInitialized &&
-      Object.keys(GameManager.getInstance().gameData).length > 0 ? (
+      Object.keys(managers.game.GameManager.getInstance().gameData).length >
+        0 ? (
         <>
           <List sx={{ width: "inherit" }}>
             {screens.map((gameScreen) => (

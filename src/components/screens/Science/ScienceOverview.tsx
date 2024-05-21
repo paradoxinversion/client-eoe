@@ -7,11 +7,9 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { GameManager } from "empire-of-evil";
+import { managers } from "empire-of-evil";
 import { getBuildings } from "empire-of-evil/src/buildings";
 import { useAppSelector } from "../../../app/hooks";
-import { SCIENCE_PROJECTS } from "empire-of-evil/src/managers/science/scienceProjects";
-import { ScienceManager } from "empire-of-evil/src/managers/science/science";
 
 const ScienceOverview = () => {
   const activeProjects = useAppSelector(
@@ -25,7 +23,8 @@ const ScienceOverview = () => {
           {getBuildings({
             type: "laboratory",
             organizationId:
-              GameManager.getInstance().gameData.player.organizationId,
+              managers.game.GameManager.getInstance().gameData.player
+                .organizationId,
           }).map((lab) => {
             const project = activeProjects.find(
               (project) => project.laboratory === lab.id
@@ -37,7 +36,9 @@ const ScienceOverview = () => {
                     title={lab.name}
                     titleTypographyProps={{ variant: "body1" }}
                     subheader={
-                      GameManager.getInstance().gameData.zones[lab.zoneId].name
+                      managers.game.GameManager.getInstance().gameData.zones[
+                        lab.zoneId
+                      ].name
                     }
                     subheaderTypographyProps={{ variant: "body2" }}
                   />
@@ -52,7 +53,7 @@ const ScienceOverview = () => {
                       <strong>Researching</strong>{" "}
                     </Typography>
                     <Typography variant="body2">
-                      {SCIENCE_PROJECTS[project?.indexName]?.name ||
+                      {managers.science.projects[project?.indexName]?.name ||
                         "No Project"}
                     </Typography>
                   </CardContent>
@@ -61,13 +62,15 @@ const ScienceOverview = () => {
             );
           })}
         </Grid>
-        {ScienceManager.getInstance().completedProjects.map((project) => {
-          return (
-            <Typography key={project}>
-              {SCIENCE_PROJECTS[project].name} completed
-            </Typography>
-          );
-        })}
+        {managers.science.ScienceManager.getInstance().completedProjects.map(
+          (project) => {
+            return (
+              <Typography key={project}>
+                {managers.science.projects[project].name} completed
+              </Typography>
+            );
+          }
+        )}
       </Box>
     </>
   );

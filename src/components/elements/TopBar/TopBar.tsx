@@ -8,13 +8,11 @@ import {
   Typography,
 } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
-import { GameManager } from "empire-of-evil";
+import { managers, actions } from "empire-of-evil";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { advanceDay } from "empire-of-evil/src/actions";
 import { addEventLog, updateSimActions } from "../../../features/gameLogSlice";
 import { setProjects } from "../../../features/scienceSlice";
 import { setScreen } from "../../../features/screenSlice";
-import { advanceDays } from "empire-of-evil/src/actions/advanceDay";
 import { setSidebarOpen } from "../../../features/sidebarSlice";
 
 const TopBar = ({ gameSessionActive }: { gameSessionActive: boolean }) => {
@@ -43,7 +41,7 @@ const TopBar = ({ gameSessionActive }: { gameSessionActive: boolean }) => {
         {gameSessionActive && (
           <>
             <Typography variant="body2" flexGrow={1}>
-              {GameManager.getInstance().gameData.gameDate.toDateString()}
+              {managers.game.GameManager.getInstance().gameData.gameDate.toDateString()}
             </Typography>
             <Stack direction="row" spacing={1}>
               <Typography variant="body2" alignSelf="center">
@@ -52,14 +50,17 @@ const TopBar = ({ gameSessionActive }: { gameSessionActive: boolean }) => {
               <Button
                 size="small"
                 onClick={() => {
-                  advanceDay();
+                  actions.advanceDay.advanceDay();
                   dispatch(
-                    updateSimActions(GameManager.getInstance().gameData.gameLog)
+                    updateSimActions(
+                      managers.game.GameManager.getInstance().gameData.gameLog
+                    )
                   );
 
                   dispatch(
                     setProjects(
-                      GameManager.getInstance().scienceManager.activeProjects
+                      managers.science.ScienceManager.getInstance()
+                        .activeProjects
                     )
                   );
                   dispatch(setScreen("events"));
@@ -70,9 +71,11 @@ const TopBar = ({ gameSessionActive }: { gameSessionActive: boolean }) => {
               <Button
                 size="small"
                 onClick={() => {
-                  advanceDays(5);
+                  actions.advanceDay.advanceDays(5);
                   dispatch(
-                    updateSimActions(GameManager.getInstance().gameData.gameLog)
+                    updateSimActions(
+                      managers.game.GameManager.getInstance().gameData.gameLog
+                    )
                   );
                   dispatch(setScreen("events"));
                 }}

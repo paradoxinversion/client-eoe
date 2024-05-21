@@ -12,9 +12,7 @@ import {
 } from "@mui/material";
 import ScienceProgressDataGrid from "../../dataGrids/scienceProgressDataGrid";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { SCIENCE_PROJECTS } from "empire-of-evil/src/managers/science/scienceProjects";
-import { GameManager } from "empire-of-evil";
-import { ScienceManager } from "empire-of-evil/src/managers/science/science";
+import { managers } from "empire-of-evil";
 import { ScienceProject } from "empire-of-evil/src/managers/science/types";
 import { setProjects } from "../../../features/scienceSlice";
 
@@ -35,7 +33,7 @@ const ScienceProgress = () => {
                 <Card>
                   <CardContent>
                     <Typography variant="body2">
-                      {SCIENCE_PROJECTS[project.indexName].name}
+                      {managers.science.projects[project.indexName].name}
                     </Typography>
 
                     <Typography variant="body2">
@@ -43,9 +41,8 @@ const ScienceProgress = () => {
                     </Typography>
                     <Typography variant="body2">
                       {
-                        GameManager.getInstance().gameData.buildings[
-                          project.laboratory
-                        ].name
+                        managers.game.GameManager.getInstance().gameData
+                          .buildings[project.laboratory].name
                       }
                     </Typography>
                     <Typography variant="body2">
@@ -53,13 +50,14 @@ const ScienceProgress = () => {
                     </Typography>
                     <Typography variant="body2">
                       Science Goal:{" "}
-                      {SCIENCE_PROJECTS[project.indexName].science}{" "}
+                      {managers.science.projects[project.indexName].science}{" "}
                     </Typography>
                     <LinearProgress
                       variant="determinate"
                       value={
                         (project.accumulatedScience /
-                          SCIENCE_PROJECTS[project.indexName].science) *
+                          managers.science.projects[project.indexName]
+                            .science) *
                         100
                       }
                     />
@@ -68,12 +66,13 @@ const ScienceProgress = () => {
                     <Tooltip title="Cancel Project; All science will be lost.">
                       <Button
                         onClick={() => {
-                          ScienceManager.getInstance().cancelProject(
+                          managers.science.ScienceManager.getInstance().cancelProject(
                             project.indexName as ScienceProject
                           );
                           dispatch(
                             setProjects(
-                              ScienceManager.getInstance().activeProjects
+                              managers.science.ScienceManager.getInstance()
+                                .activeProjects
                             )
                           );
                         }}

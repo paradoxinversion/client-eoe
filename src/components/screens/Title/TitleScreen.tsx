@@ -1,12 +1,5 @@
 import Box from "@mui/material/Box";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Grid,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useAppSelector } from "../../../app/hooks";
 import TitleScreenInfoCard from "./TitleScreenInfoCard";
 

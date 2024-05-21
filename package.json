@@ -94,9 +94,12 @@
     "tailwindcss": "^3.2.6",
     "ts-loader": "^9.5.1",
     "type-fest": "^4.12.0",
-    "typescript": "^5.4.2",
+    "typescript": "^5.4.5",
     "webpack": "^5.90.3",
     "webpack-cli": "^5.1.4"
   },
-  "packageManager": "yarn@4.2.2"
+  "packageManager": "yarn@4.2.2",
+  "resolutions": {
+    "empire-of-evil": "portal:/Users/jedaisaboteur/Repositories/empire-of-evil"
+  }
 }

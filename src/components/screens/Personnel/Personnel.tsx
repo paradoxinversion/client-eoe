@@ -2,8 +2,7 @@ import { Box, Divider, Grid, Stack, Tab } from "@mui/material";
 import MetricNumber from "../../elements/MetricNumber/MetricNumber";
 import { useAppSelector } from "../../../app/hooks";
 import * as eoe from "empire-of-evil";
-import { organizations } from "empire-of-evil";
-import { getPeople } from "empire-of-evil/src/actions/people";
+import { managers, actions } from "empire-of-evil";
 import PersonnelOverview from "./PersonnelOverview";
 import PersonnelProfile from "./PersonnelProfile";
 import PersonnelCaptives from "./PersonnelCaptives";
@@ -17,15 +16,17 @@ const PersonnelScreen = () => {
     setCurrentTab(newValue);
   };
   const selectedAgent = useAppSelector((state) => state.selections.person);
-  const { gameData } = eoe.GameManager.getInstance();
-  const currentAgents = getPeople({
+  const { gameData } = managers.game.GameManager.getInstance();
+  const currentAgents = actions.people.getPeople({
     personFilter: {
       organizationId: gameData.player.organizationId,
     },
     agentFilter: { agentsOnly: true },
   }).length;
 
-  const maxAgents = organizations.getMaxAgents(gameData.player.organizationId);
+  const maxAgents = actions.organization.getMaxAgents(
+    gameData.player.organizationId
+  );
 
   return (
     <>
@@ -33,7 +34,7 @@ const PersonnelScreen = () => {
         <Grid container spacing="1rem">
           <HeaderGridItem
             title="Payroll"
-            content={`\$${organizations.getPayroll(
+            content={`\$${actions.organization.getPayroll(
               gameData.player.organizationId
             )}`}
           />
@@ -45,7 +46,7 @@ const PersonnelScreen = () => {
           <HeaderGridItem
             title="Henchmen"
             content={
-              getPeople({
+              actions.people.getPeople({
                 personFilter: {
                   organizationId: gameData.player.organizationId,
                 },
@@ -59,7 +60,7 @@ const PersonnelScreen = () => {
           <HeaderGridItem
             title="Admins"
             content={
-              getPeople({
+              actions.people.getPeople({
                 personFilter: {
                   organizationId: gameData.player.organizationId,
                 },
@@ -73,7 +74,7 @@ const PersonnelScreen = () => {
           <HeaderGridItem
             title="Scientists"
             content={
-              getPeople({
+              actions.people.getPeople({
                 personFilter: {
                   organizationId: gameData.player.organizationId,
                 },
@@ -87,7 +88,7 @@ const PersonnelScreen = () => {
           <HeaderGridItem
             title="Deceased"
             content={
-              getPeople({
+              actions.people.getPeople({
                 personFilter: {
                   organizationId: gameData.player.organizationId,
                   deceasedOnly: true,

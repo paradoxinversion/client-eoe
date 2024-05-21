@@ -1,4 +1,3 @@
-import { Check } from "@mui/icons-material";
 import {
   Box,
   Checkbox,
@@ -6,8 +5,7 @@ import {
   FormControlLabel,
   Typography,
 } from "@mui/material";
-import { GameManager } from "empire-of-evil";
-import { getPeople } from "empire-of-evil/src/actions/people";
+import { managers, actions } from "empire-of-evil";
 import { useState } from "react";
 
 const InciteProtest = () => {
@@ -29,23 +27,26 @@ const InciteProtest = () => {
         authorities, sow chaos, and create opportunities for other operations.
       </Typography>
       <FormControl>
-        {getPeople({
-          personFilter: {
-            organizationId:
-              GameManager.getInstance().gameData.player.organizationId,
-          },
-          agentFilter: {
-            agentsOnly: true,
-            embeddedOnly: true,
-          },
-        }).map((person) => {
-          return (
-            <FormControlLabel
-              control={<Checkbox name={person.id} onChange={handleChange} />}
-              label={person.name}
-            />
-          );
-        })}
+        {actions.people
+          .getPeople({
+            personFilter: {
+              organizationId:
+                managers.game.GameManager.getInstance().gameData.player
+                  .organizationId,
+            },
+            agentFilter: {
+              agentsOnly: true,
+              embeddedOnly: true,
+            },
+          })
+          .map((person) => {
+            return (
+              <FormControlLabel
+                control={<Checkbox name={person.id} onChange={handleChange} />}
+                label={person.name}
+              />
+            );
+          })}
       </FormControl>
     </Box>
   );

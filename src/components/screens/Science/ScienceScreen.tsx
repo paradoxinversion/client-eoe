@@ -1,7 +1,7 @@
 import { Box, Divider, Grid, Stack, Tab, Typography } from "@mui/material";
 
 import MetricNumber from "../../elements/MetricNumber/MetricNumber";
-import { GameManager, buildings } from "empire-of-evil";
+import { managers, actions } from "empire-of-evil";
 import ScienceProjects from "./ScienceProjects";
 import ScienceProgress from "./ScienceProgress";
 
@@ -11,12 +11,11 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import HeaderGridItem from "../../elements/HeaderGridItem/HeaderGridItem";
-import { getPeople } from "empire-of-evil/src/actions/people";
 
 const ScienceScreen = () => {
   const [currentTab, setCurrentTab] = useState("overview");
-  const { gameData } = GameManager.getInstance();
-  const labs = buildings.getOrgLabs(gameData.player.organizationId);
+  const { gameData } = managers.game.GameManager.getInstance();
+  const labs = actions.buildings.getOrgLabs(gameData.player.organizationId);
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setCurrentTab(newValue);
   };
@@ -34,10 +33,11 @@ const ScienceScreen = () => {
           <HeaderGridItem
             title="Scientists"
             content={
-              getPeople({
+              actions.people.getPeople({
                 personFilter: {
                   organizationId:
-                    GameManager.getInstance().gameData.player.organizationId,
+                    managers.game.GameManager.getInstance().gameData.player
+                      .organizationId,
                 },
                 agentFilter: { agentsOnly: true, department: "scientist" },
               }).length

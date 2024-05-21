@@ -9321,7 +9321,7 @@ __metadata:
     tailwindcss: "npm:^3.2.6"
     ts-loader: "npm:^9.5.1"
     type-fest: "npm:^4.12.0"
-    typescript: "npm:^5.4.2"
+    typescript: "npm:^5.4.5"
     vite: "npm:5.2.0"
     web-vitals: "npm:^2.1.4"
     webpack: "npm:^5.90.3"
@@ -9329,15 +9329,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"empire-of-evil@file:../empire-of-evil::locator=empire-of-evil-client%40workspace%3A.":
-  version: 1.0.0
-  resolution: "empire-of-evil@file:../empire-of-evil#../empire-of-evil::hash=b3a540&locator=empire-of-evil-client%40workspace%3A."
+"empire-of-evil@portal:/Users/jedaisaboteur/Repositories/empire-of-evil::locator=empire-of-evil-client%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "empire-of-evil@portal:/Users/jedaisaboteur/Repositories/empire-of-evil::locator=empire-of-evil-client%40workspace%3A."
   dependencies:
     typescript: "npm:^5.3.3"
     uuid: "npm:^9.0.0"
-  checksum: 10c0/5a7177ec64fd3bd465ccf3672d27603a1047df84f0d6a2624f03e8d3a6f9d3bbebc41540e3e17c8a3317353824067cc14afe1989fdcc00d6928c51a4494a04a5
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "encodeurl@npm:~1.0.2":
   version: 1.0.2
@@ -15789,43 +15788,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.3.3":
-  version: 5.4.3
-  resolution: "typescript@npm:5.4.3"
+"typescript@npm:^5.3.3, typescript@npm:^5.4.5":
+  version: 5.4.5
+  resolution: "typescript@npm:5.4.5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/22443a8760c3668e256c0b34b6b45c359ef6cecc10c42558806177a7d500ab1a7d7aac1f976d712e26989ddf6731d2fbdd3212b7c73290a45127c1c43ba2005a
+  checksum: 10c0/2954022ada340fd3d6a9e2b8e534f65d57c92d5f3989a263754a78aba549f7e6529acc1921913560a4b816c46dce7df4a4d29f9f11a3dc0d4213bb76d043251e
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.4.2":
-  version: 5.4.2
-  resolution: "typescript@npm:5.4.2"
+"typescript@patch:typescript@npm%3A^5.3.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.4.5#optional!builtin<compat/typescript>":
+  version: 5.4.5
+  resolution: "typescript@patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>::version=5.4.5&hash=5adc0c"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/583ff68cafb0c076695f72d61df6feee71689568179fb0d3a4834dac343df6b6ed7cf7b6f6c801fa52d43cd1d324e2f2d8ae4497b09f9e6cfe3d80a6d6c9ca52
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@npm%3A^5.3.3#optional!builtin<compat/typescript>":
-  version: 5.4.3
-  resolution: "typescript@patch:typescript@npm%3A5.4.3#optional!builtin<compat/typescript>::version=5.4.3&hash=5adc0c"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 10c0/6e51f8b7e6ec55b897b9e56b67e864fe8f44e30f4a14357aad5dc0f7432db2f01efc0522df0b6c36d361c51f2dc3dcac5c832efd96a404cfabf884e915d38828
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@npm%3A^5.4.2#optional!builtin<compat/typescript>":
-  version: 5.4.2
-  resolution: "typescript@patch:typescript@npm%3A5.4.2#optional!builtin<compat/typescript>::version=5.4.2&hash=5adc0c"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 10c0/fcf6658073d07283910d9a0e04b1d5d0ebc822c04dbb7abdd74c3151c7aa92fcddbac7d799404e358197222006ccdc4c0db219d223d2ee4ccd9e2b01333b49be
+  checksum: 10c0/db2ad2a16ca829f50427eeb1da155e7a45e598eec7b086d8b4e8ba44e5a235f758e606d681c66992230d3fc3b8995865e5fd0b22a2c95486d0b3200f83072ec9
   languageName: node
   linkType: hard
 

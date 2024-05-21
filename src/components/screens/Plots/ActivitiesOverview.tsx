@@ -11,8 +11,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { selectEntity } from "../../../features/selectionSlice";
 import { useState } from "react";
-import Activity from "empire-of-evil/src/activities/Activity";
-import { plots, actions, GameManager } from "empire-of-evil";
+import { managers, actions } from "empire-of-evil";
 import DataGrid from "react-data-grid";
 import AgentSelector from "../../elements/AgentSelector/AgentSelector";
 import { updateGameData } from "../../../actions/dataManagement";
@@ -20,13 +19,8 @@ import {
   setActivity,
   setSelectedAgents,
 } from "../../../features/ActivityParticipantSelector/ActivityParticipantSelectorSlice";
-import { current } from "@reduxjs/toolkit";
-import { act } from "react-dom/test-utils";
-import activityConfig, {
-  ActivityConfig,
-} from "empire-of-evil/src/activities/activityConfig";
-import { getEvilEmpire } from "empire-of-evil/src/organization";
-import ActivityManager from "empire-of-evil/src/activities/ActivityManager";
+import Activity from "empire-of-evil/src/managers/activities/Activity";
+import { ActivityConfig } from "empire-of-evil/src/managers/activities/activityConfig";
 
 const activitiesColumns = [
   { key: "agent", name: "Agent" },
@@ -35,7 +29,7 @@ const activitiesColumns = [
 
 const ActivitiesOverview = () => {
   const dispatch = useAppDispatch();
-  const { gameData, activityManager } = GameManager.getInstance();
+  const { gameData } = managers.game.GameManager.getInstance();
   const [currentActivity, setCurrentActivity] = useState<Activity | null>(null);
   const [activityOpen, setActivityOpen] = useState(false);
   const selectedAgents = useAppSelector(
@@ -61,7 +55,7 @@ const ActivitiesOverview = () => {
     console.log(activity);
   };
 
-  const activityRows = plots
+  const activityRows = managers.activities.ActivityManager.getInstance()
     .getActivityParticipants()
     .map((participant, index) => ({
       agent: participant.participant.name,
@@ -82,7 +76,6 @@ const ActivitiesOverview = () => {
       updateGameData(update);
     }
   };
-  console.log(ActivityManager.getInstance());
   return (
     <>
       <Box className="">
@@ -96,15 +89,20 @@ const ActivitiesOverview = () => {
           <Divider />
           <Box padding="1rem">
             <Grid container>
-              {ActivityManager.getInstance()
+              {managers.activities.ActivityManager.getInstance()
                 .activities.filter((activity) => {
-                  const conf: ActivityConfig = activityConfig.find(
-                    (a) => a.type === activity.type
-                  );
+                  const conf: ActivityConfig =
+                    managers.activities.activityConfig.find(
+                      (a) => a.type === activity.type
+                    );
                   if (conf?.requirements?.orgStatusEffects.length > 0) {
                     let failed = false;
                     conf?.requirements?.orgStatusEffects.forEach((effect) => {
-                      if (!getEvilEmpire().statusEffects.includes(effect)) {
+                      if (
+                        !actions.organization
+                          .getEvilEmpire()
+                          .statusEffects.includes(effect)
+                      ) {
                         failed = true;
                       }
                     });
@@ -168,7 +166,8 @@ const ActivitiesOverview = () => {
               agentsArray={actions.people.getPeople({
                 personFilter: {
                   organizationId:
-                    GameManager.getInstance().gameData.player.organizationId,
+                    managers.game.GameManager.getInstance().gameData.player
+                      .organizationId,
                   excludePersonnel: true,
                 },
                 agentFilter: {

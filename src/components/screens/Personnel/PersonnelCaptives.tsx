@@ -1,11 +1,11 @@
 import { Box, Grid } from "@mui/material";
 import AgentDataGrid from "../../dataGrids/agentDataGrid";
 
-import { organizations, actions, GameManager } from "empire-of-evil";
+import { managers, actions } from "empire-of-evil";
 
 const PersonnelCaptives = () => {
   const organizationId =
-    GameManager.getInstance().gameData.player.organizationId;
+    managers.game.GameManager.getInstance().gameData.player.organizationId;
   const currentAgents = actions.people.getPeople({
     personFilter: {
       organizationId,
@@ -13,7 +13,7 @@ const PersonnelCaptives = () => {
     agentFilter: { agentsOnly: true },
   }).length;
 
-  const maxAgents = organizations.getMaxAgents(organizationId);
+  const maxAgents = actions.organization.getMaxAgents(organizationId);
   return (
     <>
       <Box padding="1rem">

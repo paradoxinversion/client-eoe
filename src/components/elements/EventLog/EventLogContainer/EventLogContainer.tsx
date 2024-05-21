@@ -1,6 +1,5 @@
 import { Box, List, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import { GameManager } from "empire-of-evil";
 import EventLogItem from "../../EventLogItem";
 
 const EventLogContainer = () => {

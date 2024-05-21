@@ -9,7 +9,7 @@ import {
   Tab,
   Typography,
 } from "@mui/material";
-import { actions, buildings } from "empire-of-evil";
+import { actions } from "empire-of-evil";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import PersonDataGrid from "../../dataGrids/personDataGrid";
 import BuildingDataGrid from "../../dataGrids/buildingDataGrid";
@@ -48,7 +48,7 @@ const WorldZone = () => {
           </Typography>
           <Typography variant="body2">
             {
-              buildings.getBuildings({
+              actions.buildings.buildings.getBuildings({
                 zoneId: selectedZone.id,
               }).length
             }
@@ -123,7 +123,7 @@ const WorldZone = () => {
             })}
           /> */}
           <Grid container spacing={1} columns={5}>
-            {buildings
+            {actions.buildings
               .getBuildings({
                 zoneId: selectedZone.id,
               })

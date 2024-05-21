@@ -1,4 +1,4 @@
-import { Stack, SvgIconProps, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 const IconContent = ({
   Icon,

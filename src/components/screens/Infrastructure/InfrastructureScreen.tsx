@@ -7,7 +7,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { GameManager, buildings, organizations } from "empire-of-evil";
+import { managers, actions } from "empire-of-evil";
 import MetricNumber from "../../elements/MetricNumber/MetricNumber";
 import { useAppSelector } from "../../../app/hooks";
 import InfrastructureOverview from "./InfrastructureOverview";
@@ -30,9 +30,10 @@ const InfrastructureScreen = () => {
             </Typography>
             <Typography variant="body2">
               {
-                buildings.getBuildings({
+                actions.buildings.getBuildings({
                   organizationId:
-                    GameManager.getInstance().gameData.player.organizationId,
+                    managers.game.GameManager.getInstance().gameData.player
+                      .organizationId,
                 }).length
               }
             </Typography>
@@ -42,11 +43,13 @@ const InfrastructureScreen = () => {
               Infrastructure
             </Typography>
             <Typography variant="body2">{` ${
-              organizations.getOrgResources(
-                GameManager.getInstance().gameData.player.organizationId
+              actions.organization.getOrgResources(
+                managers.game.GameManager.getInstance().gameData.player
+                  .organizationId
               ).infrastructure
-            }/${buildings.getInfrastructureLoad(
-              GameManager.getInstance().gameData.player.organizationId
+            }/${actions.buildings.getInfrastructureLoad(
+              managers.game.GameManager.getInstance().gameData.player
+                .organizationId
             )}`}</Typography>
           </Grid>
         </Grid>

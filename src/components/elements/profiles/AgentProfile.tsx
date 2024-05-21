@@ -25,20 +25,16 @@ import {
 } from "@mui/icons-material";
 
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { GameManager, actions } from "empire-of-evil";
+import { managers, actions, utils } from "empire-of-evil";
 import { selectEntity } from "../../../features/selectionSlice";
-import PersonDataGrid from "../../dataGrids/personDataGrid";
 import { useEffect, useState } from "react";
-import { setCodename } from "empire-of-evil/src/actions/people";
 import { setPeople } from "../../../features/personSlice";
 import { getCodeName } from "empire-of-evil/src/generators/names";
 import HeaderGridItem from "../HeaderGridItem/HeaderGridItem";
-import { updateGameData } from "../../../actions/dataManagement";
 import {
   AgentDepartment,
   Person,
 } from "empire-of-evil/src/types/interfaces/entities";
-import { attributeLevelStr, skillLevelStr } from "empire-of-evil/src/utilities";
 
 const AgentProfile = () => {
   const selectedAgent = useAppSelector((state) => state.selections.person);
@@ -51,12 +47,16 @@ const AgentProfile = () => {
 
   const setDepartment = (department: AgentDepartment) => {
     actions.people.changeAgentDepartment(selectedAgent, department);
-    // updateGameData(GameManager.getInstance().gameData);
-    dispatch(setPeople(GameManager.getInstance().gameData.people));
+    dispatch(
+      setPeople(managers.game.GameManager.getInstance().gameData.people)
+    );
     dispatch(
       selectEntity({
         type: "person",
-        selection: GameManager.getInstance().gameData.people[selectedAgent.id],
+        selection:
+          managers.game.GameManager.getInstance().gameData.people[
+            selectedAgent.id
+          ],
       })
     );
   };
@@ -72,7 +72,7 @@ const AgentProfile = () => {
             component="form"
             onSubmit={(e) => {
               e.preventDefault();
-              const update = setCodename(
+              const update = actions.people.setCodename(
                 selectedAgent.id,
                 codenameValue
               ).people;
@@ -209,7 +209,7 @@ const AgentProfile = () => {
               title="Location"
               titleTypographyProps={{ variant: "body1" }}
               subheader={
-                GameManager.getInstance().gameData.zones[
+                managers.game.GameManager.getInstance().gameData.zones[
                   selectedAgent.homeZoneId
                 ].name
               }
@@ -219,7 +219,7 @@ const AgentProfile = () => {
               <Typography>
                 Embedded at{" "}
                 {
-                  GameManager.getInstance().gameData.zones[
+                  managers.game.GameManager.getInstance().gameData.zones[
                     selectedAgent.agent.embeddedAt
                   ].name
                 }
@@ -237,54 +237,64 @@ const AgentProfile = () => {
       <Grid container spacing="1rem">
         <HeaderGridItem
           title="Agility"
-          content={attributeLevelStr(selectedAgent.standardAttributes.agility)}
+          content={utils.utilities.attributeLevelStr(
+            selectedAgent.standardAttributes.agility
+          )}
         />
         <HeaderGridItem
           title="Constitution"
-          content={attributeLevelStr(
+          content={utils.utilities.attributeLevelStr(
             selectedAgent.standardAttributes.constitution
           )}
         />
         <HeaderGridItem
           title="Intelligence"
-          content={attributeLevelStr(
+          content={utils.utilities.attributeLevelStr(
             selectedAgent.standardAttributes.intelligence
           )}
         />
         <HeaderGridItem
           title="Strength"
-          content={attributeLevelStr(selectedAgent.standardAttributes.strength)}
+          content={utils.utilities.attributeLevelStr(
+            selectedAgent.standardAttributes.strength
+          )}
         />
       </Grid>
       <Typography variant="overline">Skills</Typography>
       <Grid container spacing="1rem" marginBottom={1}>
         <HeaderGridItem
           title="Administration"
-          content={skillLevelStr(selectedAgent.skills.administration)}
+          content={utils.utilities.skillLevelStr(
+            selectedAgent.skills.administration
+          )}
         />
         <HeaderGridItem
           title="Combat"
-          content={skillLevelStr(selectedAgent.skills.combat)}
+          content={utils.utilities.skillLevelStr(selectedAgent.skills.combat)}
         />
         <HeaderGridItem
           title="Disguise"
-          content={skillLevelStr(selectedAgent.skills.disguise)}
+          content={utils.utilities.skillLevelStr(selectedAgent.skills.disguise)}
         />
         <HeaderGridItem
           title="Espionage"
-          content={skillLevelStr(selectedAgent.skills.espionage)}
+          content={utils.utilities.skillLevelStr(
+            selectedAgent.skills.espionage
+          )}
         />
         <HeaderGridItem
           title="Leadership"
-          content={skillLevelStr(selectedAgent.skills.leadership)}
+          content={utils.utilities.skillLevelStr(
+            selectedAgent.skills.leadership
+          )}
         />
         <HeaderGridItem
           title="Science"
-          content={skillLevelStr(selectedAgent.skills.science)}
+          content={utils.utilities.skillLevelStr(selectedAgent.skills.science)}
         />
         <HeaderGridItem
           title="Security"
-          content={skillLevelStr(selectedAgent.skills.security)}
+          content={utils.utilities.skillLevelStr(selectedAgent.skills.security)}
         />
       </Grid>
       <Divider />

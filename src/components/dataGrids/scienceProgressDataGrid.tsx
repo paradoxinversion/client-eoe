@@ -1,7 +1,7 @@
 import DataGrid from "react-data-grid";
 import { dataGridButton } from "../datagridRenderers/dataGridButton";
 import { useAppSelector } from "../../app/hooks";
-import { GameManager } from "empire-of-evil";
+import { managers } from "empire-of-evil";
 
 const scienceProgressDataGridColumns = [
   { key: "name", name: "Name" },
@@ -20,9 +20,8 @@ const ScienceProgressDataGrid = ({ title }: ScienceProgressDataGridProps) => {
       columns={scienceProgressDataGridColumns}
       rows={projects.map((projectProgress) => {
         const project =
-          GameManager.getInstance().scienceManager.PROJECT_DEFINITIONS[
-            projectProgress.indexName
-          ];
+          managers.game.GameManager.getInstance().scienceManager
+            .PROJECT_DEFINITIONS[projectProgress.indexName];
         return {
           name: projectProgress.indexName,
           progress: projectProgress.accumulatedScience,

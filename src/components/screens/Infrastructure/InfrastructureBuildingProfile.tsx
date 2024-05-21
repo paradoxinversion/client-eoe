@@ -18,7 +18,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { useState } from "react";
 
-import { GameManager, actions, buildings } from "empire-of-evil";
+import { managers, actions } from "empire-of-evil";
 import { updateGameData } from "../../../actions/dataManagement";
 
 const InfrastructureBuildingProfile = () => {
@@ -111,20 +111,22 @@ const InfrastructureBuildingProfile = () => {
                         }
                         onClick={() => {
                           if (selectedBuilding.personnel.includes(person.id)) {
-                            const update = buildings.removePersonnel(
+                            const update = actions.buildings.removePersonnel(
                               person,
                               selectedBuilding
                             );
 
                             updateGameData(update);
                           } else {
-                            const update = buildings.addPersonnel(
+                            const update = actions.buildings.addPersonnel(
                               person,
                               selectedBuilding
                             );
 
                             updateGameData(
-                              GameManager.getInstance().updateGameData(update)
+                              managers.game.GameManager.getInstance().updateGameData(
+                                update
+                              )
                             );
                             dispatch(
                               selectEntity({

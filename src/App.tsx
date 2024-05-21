@@ -24,7 +24,7 @@ import HelpScreen from "./components/screens/Help/HelpScreen";
 import CaptivesScreen from "./components/screens/Captives/CaptivesScreen";
 import InfirmaryScreen from "./components/screens/Infirmary/Infirmary";
 import TopBar from "./components/elements/TopBar/TopBar";
-import { GameManager } from "empire-of-evil";
+import { managers } from "empire-of-evil";
 
 const screens = {
   title: TitleScreen,
@@ -50,7 +50,9 @@ function App() {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <TopBar gameSessionActive={GameManager.getInstance().initialized} />
+      <TopBar
+        gameSessionActive={managers.game.GameManager.getInstance().initialized}
+      />
       <ScreenNavigator />
       <Box sx={{ flexGrow: 1 }}>
         <ScreenLayout>

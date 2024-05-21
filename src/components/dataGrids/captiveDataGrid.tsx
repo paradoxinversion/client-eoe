@@ -4,11 +4,8 @@ import DataGrid from "react-data-grid";
 import { dataGridButton } from "../datagridRenderers/dataGridButton";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { clearSelections, selectEntity } from "../../features/selectionSlice";
-import {
-  GoverningOrganization,
-  Person,
-} from "empire-of-evil/src/types/interfaces/entities";
-import { GameManager } from "empire-of-evil";
+import { Person } from "empire-of-evil/src/types/interfaces/entities";
+import { managers } from "empire-of-evil";
 import "react-data-grid/lib/styles.css";
 const captiveDataGridColumns = [
   { key: "name", name: "Name" },
@@ -25,14 +22,13 @@ interface CaptiveDataGridProps {
 const CaptiveDataGrid = ({ people }: CaptiveDataGridProps) => {
   const peopleStore = useAppSelector((state) => state.people);
   const dispatch = useAppDispatch();
-  const { gameData } = GameManager.getInstance();
+  const { gameData } = managers.game.GameManager.getInstance();
   const personDataGridRows = people.map((person) => {
     const { name: zoneName } = gameData.zones[person.homeZoneId];
     const { id, name, agent } = person;
-    const { loyalty, intelligenceLevel } = person.intelAttributes;
     let org: string = "";
     if (agent) {
-      org = gameData.governingOrganizations[person.agent.organizationId].name;
+      org = gameData.governingOrganizations[person.agent!.organizationId].name;
     }
     return {
       id,

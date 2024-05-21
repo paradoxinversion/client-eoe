@@ -1,9 +1,8 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { killPerson } from "empire-of-evil/src/actions/people";
+import { actions } from "empire-of-evil/";
 import { updateGameData } from "../../../actions/dataManagement";
 import { clearSelections } from "../../../features/selectionSlice";
-import { getEvilEmpire, releaseCaptive } from "empire-of-evil/src/organization";
 
 const CaptiveProfile = () => {
   const captive = useAppSelector((state) => state.selections.person);
@@ -16,7 +15,12 @@ const CaptiveProfile = () => {
         <Paper sx={{ padding: 1 }}>
           <Button
             onClick={() => {
-              updateGameData(releaseCaptive(getEvilEmpire().id, captive));
+              updateGameData(
+                actions.organization.releaseCaptive(
+                  actions.organization.getEvilEmpire().id,
+                  captive
+                )
+              );
               dispatch(clearSelections());
             }}
           >
@@ -24,7 +28,7 @@ const CaptiveProfile = () => {
           </Button>
           <Button
             onClick={() => {
-              updateGameData(killPerson(captive));
+              updateGameData(actions.people.killPerson(captive));
               dispatch(clearSelections());
             }}
           >

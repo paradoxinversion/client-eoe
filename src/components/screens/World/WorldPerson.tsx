@@ -10,10 +10,9 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { GameManager } from "empire-of-evil";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 
-import { simActivities } from "empire-of-evil/src/sim/people";
+import { managers, sim } from "empire-of-evil";
 import { selectEntity } from "../../../features/selectionSlice";
 
 const WorldPerson = () => {
@@ -96,7 +95,9 @@ const WorldPerson = () => {
               </List> */}
               <Box>
                 {personActivities.map((activity) => (
-                  <Typography>{simActivities[activity].text} </Typography>
+                  <Typography>
+                    {sim.people.simActivities[activity].text}{" "}
+                  </Typography>
                 ))}
               </Box>
             </>

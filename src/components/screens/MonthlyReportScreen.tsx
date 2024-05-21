@@ -11,13 +11,9 @@ import {
   ListSubheader,
   Typography,
 } from "@mui/material";
-import { GameManager } from "empire-of-evil";
-import { people } from "empire-of-evil/src/actions";
-import { getPeople } from "empire-of-evil/src/actions/people";
-import { getBuildings, getUpkeep } from "empire-of-evil/src/buildings";
-import GameEvent from "empire-of-evil/src/events/GameEvent";
-import { MonthlyReportEventParams } from "empire-of-evil/src/events/eventFunctions/monthlyReport";
-import { getEvilEmpire, getPayroll } from "empire-of-evil/src/organization";
+import { managers, actions } from "empire-of-evil";
+import GameEvent from "empire-of-evil/src/managers/events/GameEvent";
+import { MonthlyReportEventParams } from "empire-of-evil/src/managers/events/eventFunctions/monthlyReport";
 import { useState } from "react";
 
 interface MonthlyReportScreenProps {
@@ -28,9 +24,10 @@ const MonthlyReportScreen = ({
   currentGameEvent,
   resolveEvent,
 }: MonthlyReportScreenProps) => {
-  const agents = getPeople({
+  const agents = actions.people.getPeople({
     personFilter: {
-      organizationId: GameManager.getInstance().gameData.player.organizationId,
+      organizationId:
+        managers.game.GameManager.getInstance().gameData.player.organizationId,
     },
     agentFilter: {
       excludeDepartments: ["overlord"],
@@ -46,20 +43,25 @@ const MonthlyReportScreen = ({
     }, {})
   );
   const [buildingUpkeep, setBuildingUpkeep] = useState(
-    getBuildings({
-      organizationId: GameManager.getInstance().gameData.player.organizationId,
-    }).reduce((acc, building) => {
-      return {
-        ...acc,
-        [building.id]: 0,
-      };
-    }, {})
+    actions.buildings
+      .getBuildings({
+        organizationId:
+          managers.game.GameManager.getInstance().gameData.player
+            .organizationId,
+      })
+      .reduce((acc, building) => {
+        return {
+          ...acc,
+          [building.id]: 0,
+        };
+      }, {})
   );
-  const buildings = getBuildings({
-    organizationId: GameManager.getInstance().gameData.player.organizationId,
+  const buildings = actions.buildings.getBuildings({
+    organizationId:
+      managers.game.GameManager.getInstance().gameData.player.organizationId,
   });
-  const upkeepTotal = getUpkeep(
-    GameManager.getInstance().gameData.player.organizationId
+  const upkeepTotal = actions.organization.getUpkeep(
+    managers.game.GameManager.getInstance().gameData.player.organizationId
   );
   const getCommittedPayroll = () => {
     return Object.values(agentPayroll).reduce<number>(
@@ -115,7 +117,8 @@ const MonthlyReportScreen = ({
             disabled={
               getEvilEmpire().wealth <
               getPayroll(
-                GameManager.getInstance().gameData.player.organizationId
+                managers.game.GameManager.getInstance().gameData.player
+                  .organizationId
               )
             }
             onClick={() => {
@@ -128,7 +131,8 @@ const MonthlyReportScreen = ({
           >
             Pay All{" "}
             {getPayroll(
-              GameManager.getInstance().gameData.player.organizationId
+              managers.game.GameManager.getInstance().gameData.player
+                .organizationId
             )}
           </Button>
           <Button
@@ -150,19 +154,20 @@ const MonthlyReportScreen = ({
               return (
                 <ListItem key={person.id}>
                   <ListItemText
-                    primary={people.getAgentDepartment(person.agent)}
+                    primary={actions.people.getAgentDepartment(person.agent)}
                   />
                   <ListItemText primary={person.name} />
                   <Button
                     color={(agentPayroll[person.id] && "success") || "primary"}
                     disabled={
                       !agentPayroll[person.id] &&
-                      getEvilEmpire().wealth <
-                        getCommittedPayroll() + person.agent.salary
+                      actions.organization.getEvilEmpire().wealth <
+                        actions.organization.getCommittedPayroll() +
+                          person.agent.salary
                     }
                     onClick={() => {
                       if (agentPayroll[person.id]) {
-                        setAgentPayroll({
+                        actions.organization.setAgentPayroll({
                           ...agentPayroll,
                           [person.id]: 0,
                         });
@@ -188,9 +193,10 @@ const MonthlyReportScreen = ({
         <AccordionSummary>Upkeep</AccordionSummary>
         <Button
           disabled={
-            getEvilEmpire().wealth <
-              getUpkeep(
-                GameManager.getInstance().gameData.player.organizationId
+            actions.organization.getEvilEmpire().wealth <
+              actions.buildings.getUpkeep(
+                managers.game.GameManager.getInstance().gameData.player
+                  .organizationId
               ) || getCommittedUpkeepTotal() === upkeepTotal
           }
           onClick={() => {
@@ -202,7 +208,10 @@ const MonthlyReportScreen = ({
           }}
         >
           Pay All{" "}
-          {getUpkeep(GameManager.getInstance().gameData.player.organizationId)}
+          {actions.buildings.getUpkeep(
+            managers.game.GameManager.getInstance().gameData.player
+              .organizationId
+          )}
         </Button>
         <Button
           disabled={getCommittedUpkeepTotal() === 0}
@@ -217,36 +226,39 @@ const MonthlyReportScreen = ({
           Pay None{" "}
         </Button>
         <AccordionDetails sx={{ height: "100px", overflow: "scroll" }}>
-          {getBuildings({
-            organizationId:
-              GameManager.getInstance().gameData.player.organizationId,
-          }).map((building) => {
-            return (
-              <ListItem key={building.id}>
-                <ListItemText primary={building.name} />
-                <Button
-                  color={buildingUpkeep[building.id] ? "success" : "primary"}
-                  onClick={() => {
-                    if (buildingUpkeep[building.id]) {
+          {actions.buildings
+            .getBuildings({
+              organizationId:
+                managers.game.GameManager.getInstance().gameData.player
+                  .organizationId,
+            })
+            .map((building) => {
+              return (
+                <ListItem key={building.id}>
+                  <ListItemText primary={building.name} />
+                  <Button
+                    color={buildingUpkeep[building.id] ? "success" : "primary"}
+                    onClick={() => {
+                      if (buildingUpkeep[building.id]) {
+                        setBuildingUpkeep({
+                          ...buildingUpkeep,
+                          [building.id]: 0,
+                        });
+                        return;
+                      }
                       setBuildingUpkeep({
                         ...buildingUpkeep,
-                        [building.id]: 0,
+                        [building.id]: building.basicAttributes.upkeepCost,
                       });
-                      return;
-                    }
-                    setBuildingUpkeep({
-                      ...buildingUpkeep,
-                      [building.id]: building.basicAttributes.upkeepCost,
-                    });
-                  }}
-                >
-                  {!buildingUpkeep[building.id]
-                    ? `Pay (\$${building.basicAttributes.upkeepCost})`
-                    : `PAID (\$${building.basicAttributes.upkeepCost})`}
-                </Button>
-              </ListItem>
-            );
-          })}
+                    }}
+                  >
+                    {!buildingUpkeep[building.id]
+                      ? `Pay (\$${building.basicAttributes.upkeepCost})`
+                      : `PAID (\$${building.basicAttributes.upkeepCost})`}
+                  </Button>
+                </ListItem>
+              );
+            })}
         </AccordionDetails>
       </Accordion>
       <Button

@@ -1,13 +1,8 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getNations } from "empire-of-evil/src/nations";
-import { getZones } from "empire-of-evil/src/actions/zones";
 import { Person, Zone } from "empire-of-evil/src/types/interfaces/entities";
 import { useState } from "react";
-import { getPeople } from "empire-of-evil/src/actions/people";
-import { GameManager } from "empire-of-evil";
-import Plot from "empire-of-evil/src/plots/Plot";
-import { PlotManager } from "empire-of-evil/src/plots/PlotManager";
+import { managers, actions } from "empire-of-evil";
 
 const EmbedAgents = ({ cb }) => {
   const dispatch = useAppDispatch();
@@ -30,7 +25,7 @@ const EmbedAgents = ({ cb }) => {
       },
       {}
     );
-    PlotManager.getInstance().addPlot(plot);
+    managers.plots.PlotManager.getInstance().addPlot(plot);
     cb && cb();
   };
   return (
@@ -40,11 +35,11 @@ const EmbedAgents = ({ cb }) => {
         Embed agents in a foreign nation's zone. From there, they will be able
         to launch further operations.
       </Typography>
-      {getNations({ isEvilEmpire: false }).map((nation) => {
+      {actions.nations.getNations({ isEvilEmpire: false }).map((nation) => {
         return (
           <Box>
             <Typography>{nation.name}</Typography>
-            {getZones({ nationId: nation.id }).map((zone) => {
+            {actions.zones.getZones({ nationId: nation.id }).map((zone) => {
               return (
                 <Box>
                   <Typography>{zone.name}</Typography>
@@ -61,29 +56,32 @@ const EmbedAgents = ({ cb }) => {
           </Box>
         );
       })}
-      {getPeople({
-        personFilter: {
-          organizationId:
-            GameManager.getInstance().gameData.player.organizationId,
-        },
-        agentFilter: {
-          agentsOnly: true,
-          excludeParticipants: true,
-        },
-      }).map((person) => {
-        return (
-          <Box>
-            <Typography>{person.name}</Typography>
-            <Button
-              onClick={() => {
-                setSelectedPerson(person);
-              }}
-            >
-              Select Agent
-            </Button>
-          </Box>
-        );
-      })}
+      {actions.people
+        .getPeople({
+          personFilter: {
+            organizationId:
+              managers.game.GameManager.getInstance().gameData.player
+                .organizationId,
+          },
+          agentFilter: {
+            agentsOnly: true,
+            excludeParticipants: true,
+          },
+        })
+        .map((person) => {
+          return (
+            <Box>
+              <Typography>{person.name}</Typography>
+              <Button
+                onClick={() => {
+                  setSelectedPerson(person);
+                }}
+              >
+                Select Agent
+              </Button>
+            </Box>
+          );
+        })}
       <Button
         disabled={!selectedZone || !selectedPerson}
         onClick={() => {

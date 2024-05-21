@@ -1,11 +1,11 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
-import { GameManager, gameSetup } from "empire-of-evil";
+import { utils } from "empire-of-evil";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
-const gameManager = gameSetup.createGameManager();
+const gameManager = utils.gameSetup.createGameManager();
 
 const container = document.getElementById("root");
 const root = createRoot(container);

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { GameLog } from "empire-of-evil/src/GameManager";
+import { GameLog } from "empire-of-evil/src/managers/game/GameManager";
 
 const INITIAL_STATE: GameLog = {
   simActions: {

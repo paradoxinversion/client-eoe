@@ -8,22 +8,17 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { getPeople } from "empire-of-evil/src/actions/people";
-import HeaderGridItem from "../../elements/HeaderGridItem/HeaderGridItem";
-import {
-  admitHospitalPatient,
-  getBuildings,
-} from "empire-of-evil/src/buildings";
+
 import { useState } from "react";
-import { updateGameData } from "../../../actions/dataManagement";
-import { GameManager } from "empire-of-evil";
+import { managers, actions } from "empire-of-evil";
 // import DataGrid from "react-data-grid"
 
 const InfirmaryOverview = () => {
   const [selectHospitalOpen, setSelectHospitalOpen] = useState(false);
-  const injuredPeople = getPeople({
+  const injuredPeople = actions.people.getPeople({
     personFilter: {
-      organizationId: GameManager.getInstance().gameData.player.organizationId,
+      organizationId:
+        managers.game.GameManager.getInstance().gameData.player.organizationId,
       injuredOnly: true,
       noHospitalized: true,
     },
@@ -37,25 +32,31 @@ const InfirmaryOverview = () => {
       <Dialog open={selectHospitalOpen}>
         <DialogContent>
           <Typography>Select a hospital</Typography>
-          {getBuildings({
-            organizationId:
-              GameManager.getInstance().gameData.player.organizationId,
-            type: "hospital",
-          }).map((hospital) => {
-            return (
-              <Box>
-                <Typography>{hospital.name}</Typography>
-                <Button
-                  onClick={() => {
-                    admitHospitalPatient(hospital.id, injuredPeople[0].id);
-                    setSelectHospitalOpen(false);
-                  }}
-                >
-                  Admit Agent
-                </Button>
-              </Box>
-            );
-          })}
+          {actions.buildings
+            .getBuildings({
+              organizationId:
+                managers.game.GameManager.getInstance().gameData.player
+                  .organizationId,
+              type: "hospital",
+            })
+            .map((hospital) => {
+              return (
+                <Box>
+                  <Typography>{hospital.name}</Typography>
+                  <Button
+                    onClick={() => {
+                      actions.buildings.admitHospitalPatient(
+                        hospital.id,
+                        injuredPeople[0].id
+                      );
+                      setSelectHospitalOpen(false);
+                    }}
+                  >
+                    Admit Agent
+                  </Button>
+                </Box>
+              );
+            })}
           <Button
             onClick={() => {
               setSelectHospitalOpen(false);

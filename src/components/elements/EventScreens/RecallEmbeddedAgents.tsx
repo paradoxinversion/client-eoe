@@ -1,11 +1,13 @@
 import { Box, Button, List, ListItem, Typography } from "@mui/material";
-import { GameManager } from "empire-of-evil";
+import { managers } from "empire-of-evil";
 
 const RecallEmbeddedAgents = ({ currentGameEvent, resolveEvent }) => {
   const participants =
     currentGameEvent.params.plot.standardParams.participants.map(
       (participantId) => {
-        return GameManager.getInstance().gameData.people[participantId];
+        return managers.game.GameManager.getInstance().gameData.people[
+          participantId
+        ];
       }
     );
   return (

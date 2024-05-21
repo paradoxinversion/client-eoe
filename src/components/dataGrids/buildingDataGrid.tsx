@@ -2,8 +2,8 @@ import { Box, Typography, Paper } from "@mui/material";
 import DataGrid from "react-data-grid";
 import { dataGridButton } from "../datagridRenderers/dataGridButton";
 import { Building } from "empire-of-evil/src/types/interfaces/entities";
-import { GameManager } from "empire-of-evil";
-
+import { managers } from "empire-of-evil";
+const GameManager = managers.game.GameManager;
 const buildingDataGridColumns = [
   { key: "name", name: "Name" },
   { key: "type", name: "Building" },

@@ -2,8 +2,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { Grid } from "@mui/material";
 import ActivityParticipantSelector from "./ActivityParticipantSelector";
 import MockStore from "../../../stories/helpers/MockState";
-import { GameManager } from "empire-of-evil";
-import activityConfig from "empire-of-evil/src/activities/activityConfig";
+import { managers } from "empire-of-evil";
 
 const meta = {
   title: "ActivityParticipantSelector",
@@ -21,11 +20,11 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-console.log(GameManager.getInstance().gameData);
+console.log(managers.game.GameManager.getInstance().gameData);
 
 export const StringContent = {
   args: {
-    currentActivity: activityConfig[0],
+    currentActivity: managers.activities.activityConfig[0],
   },
   decorators: [
     (story: Story) => (

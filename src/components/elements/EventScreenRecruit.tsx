@@ -1,6 +1,5 @@
 import { getAgentSubordinates } from "empire-of-evil/src/organization";
 import { useState } from "react";
-import { toDataArray } from "../../utilities/dataHelpers";
 import {
   Box,
   Button,
@@ -14,14 +13,9 @@ import {
   Chip,
   Paper,
 } from "@mui/material";
-import {
-  LocalPolice as LocalPoliceIcon,
-  Business as BusinessIcon,
-} from "@mui/icons-material";
-import Datagrid from "react-data-grid";
-import { getPeople } from "empire-of-evil/src/actions/people";
 import HeaderGridItem from "./HeaderGridItem/HeaderGridItem";
-import { GameManager } from "empire-of-evil";
+import { managers, actions } from "empire-of-evil";
+
 const recruitGridColumns = [
   { key: "attribute", name: "" },
   { key: "value", name: "" },
@@ -34,7 +28,7 @@ const recruitGridColumns = [
  * @returns
  */
 const EventScreenRecruit = ({ currentGameEvent, resolveEvent }) => {
-  const { gameData } = GameManager.getInstance();
+  const { gameData } = managers.game.GameManager.getInstance();
   const [department, setDepartment] = useState(null);
   const [commander, setCommander] = useState(null);
   const onChange = (event) => {
@@ -106,22 +100,24 @@ const EventScreenRecruit = ({ currentGameEvent, resolveEvent }) => {
         <Paper sx={{ padding: "1rem" }}>
           <FormControl onChange={onCommanderSelect}>
             <RadioGroup row sx={{ overflowY: "scroll", height: "100px" }}>
-              {getPeople({
-                personFilter: {
-                  organizationId: gameData.player.organizationId,
-                },
-                agentFilter: { agentsOnly: true },
-              }).map((agent) => {
-                const subordinates = getAgentSubordinates(agent);
-                return (
-                  <FormControlLabel
-                    value={agent.id}
-                    control={<Radio />}
-                    label={`${agent.name} (${subordinates.length}/${agent.skills.leadership})`}
-                    disabled={subordinates.length === agent.skills.leadership}
-                  />
-                );
-              })}
+              {actions.people
+                .getPeople({
+                  personFilter: {
+                    organizationId: gameData.player.organizationId,
+                  },
+                  agentFilter: { agentsOnly: true },
+                })
+                .map((agent) => {
+                  const subordinates = getAgentSubordinates(agent);
+                  return (
+                    <FormControlLabel
+                      value={agent.id}
+                      control={<Radio />}
+                      label={`${agent.name} (${subordinates.length}/${agent.skills.leadership})`}
+                      disabled={subordinates.length === agent.skills.leadership}
+                    />
+                  );
+                })}
             </RadioGroup>
           </FormControl>
         </Paper>

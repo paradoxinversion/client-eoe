@@ -5,7 +5,7 @@ import { dataGridButton } from "../datagridRenderers/dataGridButton";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { clearSelections, selectEntity } from "../../features/selectionSlice";
 import { Person } from "empire-of-evil/src/types/interfaces/entities";
-import { GameManager } from "empire-of-evil";
+import { managers } from "empire-of-evil";
 import "react-data-grid/lib/styles.css";
 const personDataGridColumns = [
   { key: "name", name: "Name" },
@@ -25,7 +25,7 @@ interface PersonDataGridProps {
 const PersonDataGrid = ({ title, people }: PersonDataGridProps) => {
   const peopleStore = useAppSelector((state) => state.people);
   const dispatch = useAppDispatch();
-  const { gameData } = GameManager.getInstance();
+  const { gameData } = managers.game.GameManager.getInstance();
   const personDataGridRows = people.map((person) => {
     const { name: zoneName } = gameData.zones[person.homeZoneId];
     const { id, name, agent } = person;

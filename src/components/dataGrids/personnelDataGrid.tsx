@@ -2,7 +2,7 @@ import { Box, Paper, Typography } from "@mui/material";
 import { Check as CheckIcon, Close as CloseIcon } from "@mui/icons-material";
 import DataGrid from "react-data-grid";
 import { Person } from "empire-of-evil/src/types/interfaces/entities";
-import { GameManager } from "empire-of-evil/src/GameManager";
+import { managers } from "empire-of-evil";
 import { dataGridButton } from "../datagridRenderers/dataGridButton";
 import { useAppSelector } from "../../app/hooks";
 const personnelDataGridColumns = [
@@ -27,7 +27,7 @@ const PersonnelDataGrid = ({
   fireFn,
 }: PersonnelDataGridProps) => {
   const people = useAppSelector((state) => state.people);
-  const { gameData } = GameManager.getInstance();
+  const { gameData } = managers.game.GameManager.getInstance();
   const personnelDataGridRows = personnel.map((person) => {
     const { name: zoneName } = gameData.zones[person.homeZoneId];
     const {

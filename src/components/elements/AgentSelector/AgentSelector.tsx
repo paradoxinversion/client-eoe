@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { setSelectedAgents } from "../../../features/ActivityParticipantSelector/ActivityParticipantSelectorSlice";
 import { isPersonParticipant } from "empire-of-evil/src/activities/activityUtilities";
-import { GameManager } from "empire-of-evil";
+import { managers } from "empire-of-evil";
 interface AgentSelectorProps {
   agentsArray: Person[];
   cb: Function;
@@ -35,8 +35,9 @@ const AgentSelector = ({ agentsArray, cb }: AgentSelectorProps) => {
     cb && cb(agentId, checked);
   };
   useEffect(() => {
-    console.log(activity.agents);
-    dispatch(setSelectedAgents(activity.agents.map((agent) => agent)));
+    if (activity !== null) {
+      dispatch(setSelectedAgents(activity.agents.map((agent) => agent)));
+    }
   }, []);
   return (
     <Box padding="1rem">
@@ -44,7 +45,8 @@ const AgentSelector = ({ agentsArray, cb }: AgentSelectorProps) => {
         {agentsArray
           .filter(
             (agent) =>
-              selectedAgents.includes(agent.id) || !isPersonParticipant(agent)
+              selectedAgents.includes(agent.id) ||
+              !managers.activities.activityUtilities.isPersonParticipant(agent)
           )
           .map((agent) => (
             <FormControlLabel

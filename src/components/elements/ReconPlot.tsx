@@ -18,17 +18,14 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { people } from "empire-of-evil/src/actions";
-import Plot from "empire-of-evil/src/plots/Plot";
-import { getZones } from "empire-of-evil/src/actions/zones";
-import { GameManager } from "empire-of-evil";
+import { managers, actions } from "empire-of-evil";
 /**
  *
  * @param {Object} props
  * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
  */
 const ReconPlot = ({ cb }) => {
-  const { gameData, plotManager } = GameManager.getInstance();
+  const { gameData } = managers.game.GameManager.getInstance();
   const [nation, setNation] = useState(null);
   const [zone, setZone] = useState(null);
   const [participants, setParticipants] = useState([]);
@@ -36,11 +33,11 @@ const ReconPlot = ({ cb }) => {
     surrender: true,
     useDrones: false,
   });
-  const nations = toDataArray(gameData.nations).filter(
+  const nations = Object.values(gameData.nations).filter(
     (nation) => nation.organizationId !== gameData.player.organizationId
   );
   const preparePlot = () => {
-    const plot = new Plot(
+    const plot = new managers.plots.Plot(
       "Recon Zone",
       "recon-zone",
       {
@@ -49,7 +46,7 @@ const ReconPlot = ({ cb }) => {
       },
       plotParams
     );
-    plotManager.addPlot(plot);
+    managers.plots.PlotManager.getInstance().addPlot(plot);
   };
   const onUpdateParticipants = (e, agent) => {
     if (!participants.includes(agent.id)) {
@@ -119,24 +116,26 @@ const ReconPlot = ({ cb }) => {
               </Box>
               <Paper>
                 <Grid container spacing={1} padding={1}>
-                  {getZones({
-                    organizationId: nation.organizationId,
-                  }).map((selectedZone) => (
-                    <Grid item>
-                      <Chip
-                        component={"button"}
-                        label={selectedZone.name}
-                        name="zone-select"
-                        id={`zone-select-${selectedZone.id}`}
-                        variant={
-                          zone?.id === selectedZone.id ? "outlined" : "filled"
-                        }
-                        onClick={(e) => {
-                          setZone(selectedZone);
-                        }}
-                      />
-                    </Grid>
-                  ))}
+                  {actions.zones
+                    .getZones({
+                      organizationId: nation.organizationId,
+                    })
+                    .map((selectedZone) => (
+                      <Grid item>
+                        <Chip
+                          component={"button"}
+                          label={selectedZone.name}
+                          name="zone-select"
+                          id={`zone-select-${selectedZone.id}`}
+                          variant={
+                            zone?.id === selectedZone.id ? "outlined" : "filled"
+                          }
+                          onClick={(e) => {
+                            setZone(selectedZone);
+                          }}
+                        />
+                      </Grid>
+                    ))}
                 </Grid>
               </Paper>
             </Box>
@@ -191,7 +190,7 @@ const ReconPlot = ({ cb }) => {
                         maxHeight: "150px",
                       }}
                     >
-                      {people
+                      {actions.people
                         .getPeople({
                           personFilter: {
                             excludeDeceased: true,

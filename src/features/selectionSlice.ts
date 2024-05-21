@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import Plot from "empire-of-evil/src/plots/Plot";
-import Activity from "empire-of-evil/src/activities/Activity";
+import Plot from "empire-of-evil/src/managers/plots/Plot";
+import Activity from "empire-of-evil/src/managers/activities/Activity";
 import {
   Building,
   GoverningOrganization,

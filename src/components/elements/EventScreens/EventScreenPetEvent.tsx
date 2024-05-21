@@ -1,4 +1,4 @@
-import { Box, Button, Divider, CardContent, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 const EventScreenPetEvent = ({ currentGameEvent, resolveEvent }) => {
   console.log(currentGameEvent);

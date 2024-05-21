@@ -13,7 +13,6 @@ import {
 import { setScreen } from "../../../features/screenSlice";
 import { deleteSavedGame, loadGame } from "../../../actions/dataManagement";
 import { useState } from "react";
-import { GameManager } from "empire-of-evil";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 
 const TitleScreenOptions = () => {

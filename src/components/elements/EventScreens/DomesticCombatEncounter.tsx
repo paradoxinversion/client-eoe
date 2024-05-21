@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Typography } from "@mui/material";
-import { GameManager } from "empire-of-evil/src/GameManager";
+import { managers } from "empire-of-evil";
 
 const DomesticCombatEncounter = ({ currentGameEvent, resolveEvent }) => {
   const { attackers, defenders } =
@@ -21,7 +21,7 @@ const DomesticCombatEncounter = ({ currentGameEvent, resolveEvent }) => {
           {attackers.length > 1 ? "citizens have" : "citizen has"} engaged{" "}
           {defenders.length} agents in combat in{" "}
           {
-            GameManager.getInstance().gameData.zones[
+            managers.game.GameManager.getInstance().gameData.zones[
               currentGameEvent.params.zoneId
             ].name
           }

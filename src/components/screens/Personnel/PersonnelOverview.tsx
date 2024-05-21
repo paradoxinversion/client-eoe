@@ -12,15 +12,14 @@ import {
 import AgentDataGrid from "../../dataGrids/agentDataGrid";
 import { PieArcLabel, PieChart } from "@mui/x-charts/PieChart";
 
-import { organizations, actions, GameManager } from "empire-of-evil";
+import { managers, actions } from "empire-of-evil";
 import { useAppDispatch } from "../../../app/hooks";
 import { selectEntity } from "../../../features/selectionSlice";
-import { getPeople } from "empire-of-evil/src/actions/people";
 
 const PersonnelOverview = () => {
   const dispatch = useAppDispatch();
   const organizationId =
-    GameManager.getInstance().gameData.player.organizationId;
+    managers.game.GameManager.getInstance().gameData.player.organizationId;
   const currentAgents = actions.people.getPeople({
     personFilter: {
       organizationId,
@@ -28,15 +27,16 @@ const PersonnelOverview = () => {
     agentFilter: { agentsOnly: true },
   }).length;
 
-  const maxAgents = organizations.getMaxAgents(organizationId);
+  const maxAgents = actions.organization.getMaxAgents(organizationId);
 
   const data = [
     {
       label: "Administrators",
-      value: getPeople({
+      value: actions.people.getPeople({
         personFilter: {
           organizationId:
-            GameManager.getInstance().gameData.player.organizationId,
+            managers.game.GameManager.getInstance().gameData.player
+              .organizationId,
         },
         agentFilter: {
           department: "administrator",
@@ -46,10 +46,11 @@ const PersonnelOverview = () => {
     },
     {
       label: "Henchmen",
-      value: getPeople({
+      value: actions.people.getPeople({
         personFilter: {
           organizationId:
-            GameManager.getInstance().gameData.player.organizationId,
+            managers.game.GameManager.getInstance().gameData.player
+              .organizationId,
         },
         agentFilter: {
           department: "troop",
@@ -59,10 +60,11 @@ const PersonnelOverview = () => {
     },
     {
       label: "Doctors",
-      value: getPeople({
+      value: actions.people.getPeople({
         personFilter: {
           organizationId:
-            GameManager.getInstance().gameData.player.organizationId,
+            managers.game.GameManager.getInstance().gameData.player
+              .organizationId,
         },
         agentFilter: {
           department: "doctor",
@@ -72,10 +74,11 @@ const PersonnelOverview = () => {
     },
     {
       label: "Scientists",
-      value: getPeople({
+      value: actions.people.getPeople({
         personFilter: {
           organizationId:
-            GameManager.getInstance().gameData.player.organizationId,
+            managers.game.GameManager.getInstance().gameData.player
+              .organizationId,
         },
         agentFilter: {
           department: "scientist",
@@ -149,28 +152,24 @@ const PersonnelOverview = () => {
                         Salary: ${agent.agent.salary}
                       </Typography> */}
                       <Typography variant="body2">
-                        {GameManager.getInstance().gameData.zones[
+                        {managers.game.GameManager.getInstance().gameData.zones[
                           agent.agent.embeddedAt
                         ]
                           ? `[${
-                              GameManager.getInstance().gameData.zones[
-                                agent.agent.embeddedAt
-                              ].name
+                              managers.game.GameManager.getInstance().gameData
+                                .zones[agent.agent.embeddedAt].name
                             }]`
-                          : GameManager.getInstance().gameData.zones[
-                              agent.homeZoneId
-                            ].name}
+                          : managers.game.GameManager.getInstance().gameData
+                              .zones[agent.homeZoneId].name}
                       </Typography>
                       <Typography variant="body2">
                         {agent.personnelAt
                           ? `${
-                              GameManager.getInstance().gameData.buildings[
-                                agent.personnelAt
-                              ].name
+                              managers.game.GameManager.getInstance().gameData
+                                .buildings[agent.personnelAt].name
                             } (${
-                              GameManager.getInstance().gameData.buildings[
-                                agent.personnelAt
-                              ].type
+                              managers.game.GameManager.getInstance().gameData
+                                .buildings[agent.personnelAt].type
                             })`
                           : "No work assignment"}
                       </Typography>

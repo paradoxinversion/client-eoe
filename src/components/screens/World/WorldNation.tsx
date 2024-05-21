@@ -9,8 +9,6 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import MetricNumber from "../../elements/MetricNumber/MetricNumber";
-import ZoneDataGrid from "../../dataGrids/zoneDataGrid";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { actions } from "empire-of-evil";
 import { selectEntity } from "../../../features/selectionSlice";
