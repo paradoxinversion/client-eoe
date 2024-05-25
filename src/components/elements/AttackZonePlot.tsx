@@ -12,28 +12,36 @@ import {
 } from "@mui/material";
 import { useAppSelector } from "../../app/hooks";
 import { managers, actions } from "empire-of-evil";
-import { Nation } from "empire-of-evil/src/types/interfaces/entities";
-
-const AttackZonePlot = ({ cb }) => {
-  const people = useAppSelector((state) => state.people);
-  const { gameData, plotManager } = GameManager.getInstance();
+import { Nation, Zone } from "empire-of-evil/src/types/interfaces/entities";
+type AttackZonePlotProps = {
+  onClose: () => void;
+};
+const AttackZonePlot = ({ onClose }: AttackZonePlotProps) => {
+  const people = managers.game.GameManager.getInstance().gameData.people;
+  const { gameData } = managers.game.GameManager.getInstance();
   const [nation, setNation] = useState(null);
-  const [zone, setZone] = useState(null);
+  const [zone, setZone] = useState<Zone | null>(null);
   const nations = Object.values<Nation>(gameData.nations).filter(
     (nation) => nation.organizationId !== gameData.player.organizationId
   );
   const [attackers, setAttackers] = useState([]);
 
   const preparePlot = () => {
-    const plotParams = {
-      zone: {
-        id: zone.id,
-        organizationId: zone.organizationId,
-      },
-      participants: attackers,
-    };
-    const plot = new Plot("Attack Zone", "attack-zone", plotParams, {});
-    plotManager.addPlot(plot);
+    if (zone) {
+      const plotParams = {
+        zone: {
+          id: zone.id,
+          organizationId: zone.organizationId,
+        },
+        participants: attackers,
+      };
+      const plot = new managers.plots.Plot(
+        "Attack Zone",
+        "attack-zone",
+        plotParams
+      );
+      managers.plots.PlotManager.getInstance().addPlot(plot);
+    }
   };
 
   /**
@@ -55,7 +63,7 @@ const AttackZonePlot = ({ cb }) => {
     <>
       {/* <Typography variant="h4">Attack Zone</Typography> */}
       <DialogTitle sx={{ width: "500px" }}>Attack Zone</DialogTitle>
-      <DialogContent>
+      <DialogContent sx={{ height: screen.height * 0.5 }}>
         <Box>
           <Typography>Select a Nation</Typography>
         </Box>
@@ -121,8 +129,8 @@ const AttackZonePlot = ({ cb }) => {
                 })
                 .filter(
                   (agent) =>
-                    agent.agent.department === "troop" ||
-                    agent.agent.department === "overlord"
+                    agent.agent?.department === "troop" ||
+                    agent.agent?.department === "overlord"
                 )
                 .map((agent) => (
                   <Chip
@@ -131,7 +139,7 @@ const AttackZonePlot = ({ cb }) => {
                       onUpdateAttackers(e, agent);
                     }}
                     variant={
-                      attackers.includes(agent.id) ? "outlined" : "filled"
+                      attackers.includes(agent?.id) ? "outlined" : "filled"
                     }
                   />
                 ))}
@@ -155,7 +163,7 @@ const AttackZonePlot = ({ cb }) => {
           onClick={(e) => {
             e.preventDefault();
             preparePlot();
-            cb();
+            onClose();
           }}
         >
           Done
@@ -163,7 +171,7 @@ const AttackZonePlot = ({ cb }) => {
         <Button
           onClick={(e) => {
             e.preventDefault();
-            cb();
+            onClose();
           }}
         >
           Cancel

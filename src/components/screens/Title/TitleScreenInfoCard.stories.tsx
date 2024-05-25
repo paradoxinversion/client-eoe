@@ -3,7 +3,7 @@ import TitleScreenInfoCard from "./TitleScreenInfoCard";
 import { Grid } from "@mui/material";
 
 const meta = {
-  title: "TitleScreenInfoCard",
+  title: "Cars/Title Screen Info",
   component: TitleScreenInfoCard,
   decorators: [
     (Story) => (

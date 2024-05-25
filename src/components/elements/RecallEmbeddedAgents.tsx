@@ -13,18 +13,11 @@ const RecallEmbeddedAgents = ({ cb }) => {
   const [selectedPeople, setSelectedPeople] = useState<string[]>([]);
 
   const preparePlot = () => {
-    const plotParams = {
-      agents: selectedPeople,
-    };
-    const plot = new managers.plots.Plot(
-      "Recall Embedded Agents",
-      "recall-embedded-agents",
+    managers.plots.plotFunctions.recallEmbeddedAgents.generateRecallEmbeddedAgentsPlot(
       {
         participants: selectedPeople,
-      },
-      {}
+      }
     );
-    managers.plots.PlotManager.getInstance().addPlot(plot);
     cb && cb();
   };
 

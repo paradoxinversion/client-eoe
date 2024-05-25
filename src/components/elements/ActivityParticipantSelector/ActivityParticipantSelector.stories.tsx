@@ -7,15 +7,6 @@ import { managers } from "empire-of-evil";
 const meta = {
   title: "ActivityParticipantSelector",
   component: ActivityParticipantSelector,
-  decorators: [
-    (Story) => (
-      <Grid container spacing={1}>
-        <Story />
-        <Story />
-        <Story />
-      </Grid>
-    ),
-  ],
 } satisfies Meta<typeof ActivityParticipantSelector>;
 
 export default meta;

@@ -1,10 +1,12 @@
 import { Box, List, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import EventLogItem from "../../EventLogItem";
-
-const EventLogContainer = () => {
+import { GameLogEvent } from "empire-of-evil/src/managers/game/GameManager";
+type EventLogContainerProps = {
+  events: GameLogEvent[];
+};
+const EventLogContainer = ({ events }: EventLogContainerProps) => {
   // Reverse the events so the most recent is at the top
-  const events = useAppSelector((state) => state.gameLog.events.reverse());
 
   return (
     <Box>
@@ -20,6 +22,7 @@ const EventLogContainer = () => {
                 text={event.text}
                 color={event.color}
                 icon={event.icon}
+                date={event.date}
               />
             );
           })

@@ -7,7 +7,7 @@ import ScreenLayout from "../ScreenLayout/ScreenLayout";
 import MockStore from "../../../stories/helpers/MockState";
 
 const meta = {
-  title: "ScreenNavigator",
+  title: "Layout Elements/Screen Navigator",
   component: ScreenNavigator,
   decorators: [
     (story) => (

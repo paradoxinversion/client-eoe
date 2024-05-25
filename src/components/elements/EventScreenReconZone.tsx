@@ -7,43 +7,34 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useSelector } from "react-redux";
 import { GameEventComponentProps } from "../screens/Events/EventScreen";
 import { useAppSelector } from "../../app/hooks";
 import { ReconZoneEventParams } from "empire-of-evil/src/managers/events/eventFunctions/recon";
-import { PlotResult } from "empire-of-evil/src/managers/plots/Plot";
-import { ReconPlotData } from "empire-of-evil/src/managers/plots/plotFunctions/recon";
 import { MonitorHeart as MonitorHeartIcon } from "@mui/icons-material";
-/**
- * @param {object} props
- * @param {object} props.currentGameEvent
- * @param {Function} props.resolveEvent
- * @returns
- */
+
 const EventScreenReconZone = ({
   resolveEvent,
   currentGameEvent,
 }: GameEventComponentProps) => {
-  const params = currentGameEvent?.params as ReconZoneEventParams;
+  const params = currentGameEvent.params as ReconZoneEventParams;
   const zone = useAppSelector(
-    (state) => state.zones[params.plot?.standardParams?.targetZone]
+    (state) => state.zones[params.plotParams.targetZone]
   );
   const people = useAppSelector((state) => state.people);
-  const resolution = params.plot.resolution as PlotResult;
-  const resolutionData = resolution.resolutionData as ReconPlotData;
   const { intelligenceModifier, capturedAgentIds, combatResult } =
-    resolutionData;
+    params.plotResolution;
+
   return (
     <>
       <Box>
         <Typography variant="h4">OPERATION DEBRIEF</Typography>
         <Typography variant="h5">
-          Mission {resolution.success ? "Success" : "Failure"}
+          Mission {params.plotResolution.success ? "Success" : "Failure"}
         </Typography>
         <Typography>
           The recon mission in {zone.name} has{" "}
-          {resolution.success ? "succeeded" : "failed"}. As a result, our
-          knowledge of the Zone has increased by a factor of approximately{" "}
+          {params.plotResolution.success ? "succeeded" : "failed"}. As a result,
+          our knowledge of the Zone has increased by a factor of approximately{" "}
           <strong>{intelligenceModifier}.</strong>
         </Typography>
         {capturedAgentIds.length > 0 && (
@@ -96,7 +87,7 @@ const EventScreenReconZone = ({
             resolveEvent();
           }}
         >
-          {resolution.success ? "Excellent" : "...Damnit"}
+          {params.plotResolution.success ? "Excellent" : "...Damnit"}
         </Button>
       </DialogActions>
     </>

@@ -13,7 +13,7 @@ const span = {
 };
 
 const meta = {
-  title: "HeaderGridItem",
+  title: "Display Elements/Header Grid Item",
   component: HeaderGridItem,
   decorators: [
     (Story) => (

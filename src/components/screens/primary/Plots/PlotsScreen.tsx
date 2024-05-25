@@ -1,0 +1,64 @@
+import { useEffect, useState } from "react";
+import AttackZonePlot from "../../../elements/AttackZonePlot";
+import ReconPlot from "../../../elements/ReconPlot";
+import { Box, Divider, Typography, Tab } from "@mui/material";
+import PlotsOverview from "./PlotsOverview";
+import ActivitiesOverview from "./ActivitiesOverview";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import EmbedAgents from "../../../elements/PlotPreparation/EmbedAgents/EmbedAgents";
+import RecallEmbeddedAgents from "../../../elements/RecallEmbeddedAgents";
+import InciteProtest from "../../../elements/PlotPreparation/InciteProtest";
+import { useAppSelector } from "../../../../app/hooks";
+
+export const plotSetupRenderers = {
+  "attack-zone": AttackZonePlot,
+  "recon-zone": ReconPlot,
+  "embed-agents": EmbedAgents,
+  "recall-embedded-agents": RecallEmbeddedAgents,
+  "incite-protest": InciteProtest,
+};
+
+const PlotsScreen = () => {
+  const [currentTab, setCurrentTab] = useState("plots");
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setCurrentTab(newValue);
+  };
+  const currentPlot = useAppSelector((state) => state.selections.plot);
+  const selectedAgents = useAppSelector(
+    (state) => state.activityParticipantSelector.selectedAgents
+  );
+  useEffect(() => {}, [selectedAgents]);
+  return (
+    <Box component="section">
+      <Box>
+        <Box component="header" padding="1rem">
+          <Typography variant="h3">EVIL Plots & Activities</Typography>
+        </Box>
+        <Divider />
+        <Box sx={{ typography: "body1" }}>
+          <TabContext value={currentTab}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              <TabList
+                onChange={handleChange}
+                aria-label="lab API tabs example"
+              >
+                <Tab label="Plots" value="plots" />
+                <Tab label="Activities" value="activities" />
+              </TabList>
+            </Box>
+            <TabPanel value="plots">
+              <PlotsOverview currentPlot={currentPlot} />
+            </TabPanel>
+            <TabPanel value="activities">
+              <ActivitiesOverview selectedAgents={selectedAgents} />
+            </TabPanel>
+          </TabContext>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
+export default PlotsScreen;

@@ -10,10 +10,7 @@ import {
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { darkTheme } from "../src/themes/themes";
 import { themes, ensure } from "@storybook/theming";
-import {
-  NewGameOptions,
-  newGame as startNewGame,
-} from "empire-of-evil/src/gameSetup";
+import { utils } from "empire-of-evil";
 import React from "react";
 const preview: Preview = {
   parameters: {
@@ -27,7 +24,6 @@ const preview: Preview = {
       theme: themes.dark,
     },
   },
-
   decorators: [
     withThemeFromJSXProvider({
       themes: {
@@ -45,6 +41,6 @@ const preview: Preview = {
   ],
 };
 
-startNewGame({} as NewGameOptions);
+utils.gameSetup.newGame();
 
 export default preview;

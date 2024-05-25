@@ -2,7 +2,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import TopBar from "./TopBar";
 
 const meta = {
-  title: "TopBar",
+  title: "Layout Elements/Top Bar",
   component: TopBar,
 } satisfies Meta<typeof TopBar>;
 

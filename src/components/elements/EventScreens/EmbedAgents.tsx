@@ -1,18 +1,28 @@
 import { Box, Button, List, ListItem, Typography } from "@mui/material";
 import { managers } from "empire-of-evil";
+import GameEvent from "empire-of-evil/src/managers/events/GameEvent";
+import { EmbedAgentsParams } from "empire-of-evil/src/managers/events/eventFunctions/embedAgents";
+import { PlotParamsEmbedAgents } from "empire-of-evil/src/managers/plots/plotFunctions/embedAgents";
+import { Person } from "empire-of-evil/src/types/interfaces/entities";
 
-const EmbedAgents = ({ currentGameEvent, resolveEvent }) => {
-  const participants =
-    currentGameEvent.params.plot.standardParams.participants.map(
-      (participantId) => {
-        return managers.game.GameManager.getInstance().gameData.people[
-          participantId
-        ];
-      }
-    );
+type EmbedAgentsProps = {
+  currentGameEvent: GameEvent;
+  resolveEvent: () => void;
+};
+
+const EmbedAgents = ({ currentGameEvent, resolveEvent }: EmbedAgentsProps) => {
+  const params = currentGameEvent.params as EmbedAgentsParams;
+
+  const participants: Person[] = params.plotParams.participants.map(
+    (participantId) => {
+      return managers.game.GameManager.getInstance().gameData.people[
+        participantId
+      ];
+    }
+  );
   const zone =
     managers.game.GameManager.getInstance().gameData.zones[
-      currentGameEvent.params.plot.standardParams.targetZone
+      params.plotParams.targetZone
     ];
   return (
     <Box>

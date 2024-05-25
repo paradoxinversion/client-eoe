@@ -95,7 +95,7 @@ export const updateGameData = (
   updatedGameData: Partial<GameData>,
   updatedLog?: Partial<GameLog>
 ) => {
-  GameManager.getInstance().updateGameData(updatedGameData);
+  // GameManager.getInstance().updateGameData(updatedGameData);
   const { governingOrganizations, nations, zones, buildings, people } =
     GameManager.getInstance().gameData;
   store.dispatch(setGoverningOrganizations(governingOrganizations));

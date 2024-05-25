@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  Grid,
-  Divider,
-  CardActions,
-} from "@mui/material";
+import { Card, CardHeader, CardContent, Grid, Divider } from "@mui/material";
 
 type TitleScreenInfoCardProps = {
   title: string;

@@ -4,7 +4,7 @@ import Activity from "empire-of-evil/src/managers/activities/Activity";
 type ActivitySelection = Pick<
   Activity,
   "agents" | "name" | "type" | "costPerParticipant"
->;
+> | null;
 
 export interface ActivityParticipantSelectorState {
   activity: ActivitySelection | null;

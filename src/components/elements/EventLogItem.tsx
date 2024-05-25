@@ -8,14 +8,12 @@ import {
   Warning as WarningIcon,
   Paid as PaidIcon,
 } from "@mui/icons-material";
+import { GameLogEvent } from "empire-of-evil/src/managers/game/GameManager";
 
-type EventLogItemProps = {
-  text: string;
-  color: string;
-  icon: string;
-};
+type EventLogItemProps = GameLogEvent;
 const EventLogItem = (props: EventLogItemProps) => {
-  const { text, color, icon } = props;
+  console.log(props);
+  const { text, color, icon, date } = props;
   let Icon = null;
   switch (icon) {
     case "travel-explore":
@@ -47,10 +45,7 @@ const EventLogItem = (props: EventLogItemProps) => {
             <Icon />
           </ListItemIcon>
         )}
-        <ListItemText
-          primary={text}
-          secondary={new Date(Date.now()).toDateString()}
-        />
+        <ListItemText primary={text} secondary={date} />
       </ListItem>
     </>
   );

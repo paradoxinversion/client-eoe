@@ -58,7 +58,6 @@ const EventsScreen = () => {
   const [open, setOpen] = useState(true);
 
   const dispatch = useDispatch();
-  console.log(eventQueue.getCurrentEvent().type, eventScreen);
   // Select the component we need for the ecurrent event
   const CurrentEventComponent =
     eventScreenMap[eventQueue.getCurrentEvent().type];
@@ -119,10 +118,6 @@ const EventsScreen = () => {
         <DialogTitle sx={{ minWidth: "500px" }}>{ce.eventName}</DialogTitle>
         <Divider />
         <DialogContent>
-          <Box>
-            <Typography>{ce.eventText}</Typography>
-          </Box>
-
           <CurrentEventComponent
             currentGameEvent={ce}
             resolveEvent={resolveEvent}

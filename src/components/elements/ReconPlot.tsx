@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { toDataArray } from "../../utilities/dataHelpers";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -7,11 +6,10 @@ import {
   Checkbox,
   Chip,
   DialogActions,
+  DialogContent,
   DialogTitle,
   FormControl,
   FormControlLabel,
-  Grid,
-  Paper,
   Radio,
   RadioGroup,
   Stack,
@@ -19,16 +17,23 @@ import {
   Typography,
 } from "@mui/material";
 import { managers, actions } from "empire-of-evil";
-/**
- *
- * @param {Object} props
- * @param {import("empire-of-evil/src/typedef").GameData} props.gameData
- */
-const ReconPlot = ({ cb }) => {
+import {
+  Nation,
+  Person,
+  Zone,
+} from "empire-of-evil/src/types/interfaces/entities";
+import NationSelector from "./Selectors/NationSelector/NationSelector";
+import ZoneSelector from "./Selectors/ZoneSelector/ZoneSelector";
+import AgentSelector from "./Selectors/AgentSelector/AgentSelector";
+
+export type ReconPlotProps = {
+  onClose: () => void;
+};
+const ReconPlot = ({ onClose }: ReconPlotProps) => {
   const { gameData } = managers.game.GameManager.getInstance();
-  const [nation, setNation] = useState(null);
-  const [zone, setZone] = useState(null);
-  const [participants, setParticipants] = useState([]);
+  const [nation, setNation] = useState<Nation | null>(null);
+  const [zone, setZone] = useState<Zone | null>(null);
+  const [participants, setParticipants] = useState<string[]>([]);
   const [plotParams, setPlotParams] = useState({
     surrender: true,
     useDrones: false,
@@ -37,18 +42,15 @@ const ReconPlot = ({ cb }) => {
     (nation) => nation.organizationId !== gameData.player.organizationId
   );
   const preparePlot = () => {
-    const plot = new managers.plots.Plot(
-      "Recon Zone",
-      "recon-zone",
-      {
-        targetZone: zone.id,
+    if (zone) {
+      managers.plots.plotFunctions.recon.generateReconPlot({
         participants,
-      },
-      plotParams
-    );
-    managers.plots.PlotManager.getInstance().addPlot(plot);
+        targetZone: zone.id,
+        ...plotParams,
+      });
+    }
   };
-  const onUpdateParticipants = (e, agent) => {
+  const onUpdateParticipants = (agent: Person) => {
     if (!participants.includes(agent.id)) {
       const updatedParticipants = [...participants];
       updatedParticipants.push(agent.id);
@@ -63,82 +65,47 @@ const ReconPlot = ({ cb }) => {
     }
   };
 
-  const handleParams = (e) => {
+  const handleParams = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name } = e.target;
     let value = e.target.value;
-    if (value === "true") {
-      value = true;
-    } else if (value === "false") {
-      value = false;
-    }
+    const boolVal = value === "true" ? true : false;
 
     setPlotParams({
       ...plotParams,
-      [name]: value,
+      [name]: boolVal,
     });
     console.log(plotParams);
   };
+
   return (
     <>
       <DialogTitle>Execute Reconnaisance Operation</DialogTitle>
-      <CardContent sx={{ height: "500px", overflowY: "scroll" }}>
+      <DialogContent
+        sx={{
+          height: screen.height * 0.5,
+          overflowY: "scroll",
+          padding: "1rem",
+        }}
+      >
         <Typography>
           Send agents for covert intelligence-gathering in a foreign zone.
         </Typography>
-        <Box padding="1" marginBottom="1rem">
-          <Box marginBottom="1rem">
-            <Typography>Select a Nation</Typography>
-          </Box>
-          <Paper sx={{ marginBottom: "1rem" }}>
-            <Grid container spacing={1} padding={1}>
-              {nations.map((n) => {
-                return (
-                  <Grid item>
-                    <Chip
-                      label={n.name}
-                      // type={"radio"}
-                      // name="nation-select"
-                      // id={`nation-select-${n.id}`}
-                      variant={nation?.id === n.id ? "outlined" : "filled"}
-                      onClick={() => {
-                        setNation(n);
-                      }}
-                    />
-                  </Grid>
-                );
-              })}
-            </Grid>
-          </Paper>
+        <Box padding="1">
+          <NationSelector
+            nations={nations}
+            onSelectNation={setNation}
+            selectedNation={nation}
+            headerText="Select the nation for this mission"
+          />
           {nation && (
-            <Box>
-              <Box component={"header"}>
-                <Typography>Select the zone for this mission</Typography>
-              </Box>
-              <Paper>
-                <Grid container spacing={1} padding={1}>
-                  {actions.zones
-                    .getZones({
-                      organizationId: nation.organizationId,
-                    })
-                    .map((selectedZone) => (
-                      <Grid item>
-                        <Chip
-                          component={"button"}
-                          label={selectedZone.name}
-                          name="zone-select"
-                          id={`zone-select-${selectedZone.id}`}
-                          variant={
-                            zone?.id === selectedZone.id ? "outlined" : "filled"
-                          }
-                          onClick={(e) => {
-                            setZone(selectedZone);
-                          }}
-                        />
-                      </Grid>
-                    ))}
-                </Grid>
-              </Paper>
-            </Box>
+            <ZoneSelector
+              zones={actions.zones.getZones({
+                organizationId: nation.organizationId,
+              })}
+              onSelectZone={setZone}
+              selectedZone={zone}
+              headerText="Select the zone for this mission"
+            />
           )}
           {zone && (
             <Box>
@@ -150,15 +117,18 @@ const ReconPlot = ({ cb }) => {
                   <FormControlLabel
                     name="useDrones"
                     value={plotParams.useDrones}
-                    control={<Checkbox />}
+                    control={
+                      <Checkbox
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          e.target.checked = !plotParams.useDrones;
+                          setPlotParams({
+                            ...plotParams,
+                            useDrones: !plotParams.useDrones,
+                          });
+                        }}
+                      />
+                    }
                     label="Use Drones"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      e.target.checked = !plotParams.useDrones;
-                      setPlotParams({
-                        ...plotParams,
-                        useDrones: !plotParams.useDrones,
-                      });
-                    }}
                   />
                 </Tooltip>
               </FormControl>
@@ -174,59 +144,25 @@ const ReconPlot = ({ cb }) => {
                 </Box>
               ) : (
                 <>
+                  <AgentSelector
+                    agents={actions.people.getPeople({
+                      personFilter: {
+                        excludeDeceased: true,
+                        excludePersonnel: true,
+                        excludeCaptured: true,
+                      },
+                      agentFilter: {
+                        agentsOnly: true,
+                        excludeParticipants: true,
+                      },
+                    })}
+                    selectedAgents={participants}
+                    onSelectAgent={onUpdateParticipants}
+                    headerText="Select agents for this mission"
+                  />
+
                   <Box>
-                    <Typography>
-                      Select the Agents attending this mission.
-                    </Typography>
-                  </Box>
-                  <Paper>
-                    <Grid
-                      container
-                      spacing={1}
-                      rowSpacing={1}
-                      sx={{
-                        overflowY: "scroll",
-                        padding: "0.5rem",
-                        maxHeight: "150px",
-                      }}
-                    >
-                      {actions.people
-                        .getPeople({
-                          personFilter: {
-                            excludeDeceased: true,
-                            excludePersonnel: true,
-                            excludeCaptured: true,
-                          },
-                          agentFilter: {
-                            agentsOnly: true,
-                            excludeParticipants: true,
-                          },
-                        })
-                        .filter(
-                          (agent) =>
-                            agent.agent.department === "troop" ||
-                            agent.agent.department === "overlord"
-                        )
-                        .map((selectedAgent) => (
-                          <Grid item>
-                            <Chip
-                              label={selectedAgent.name}
-                              id={`agent-select-${selectedAgent.id}`}
-                              variant={
-                                participants.includes(selectedAgent.id)
-                                  ? "outlined"
-                                  : "filled"
-                              }
-                              onClick={(e) => {
-                                onUpdateParticipants(e, selectedAgent);
-                              }}
-                            />
-                          </Grid>
-                        ))}
-                    </Grid>
-                  </Paper>
-                  <div>
-                    <p className="text-lg border-b mb-4">Selected Agents</p>
+                    <Typography>Selected Agents</Typography>
                     <Stack direction="row" spacing={1} padding={1}>
                       {participants.map((agent) => (
                         <Chip
@@ -236,7 +172,7 @@ const ReconPlot = ({ cb }) => {
                         />
                       ))}
                     </Stack>
-                  </div>
+                  </Box>
                   <Box>
                     <Typography>
                       There is a possibility agents on this mission will be
@@ -282,23 +218,22 @@ const ReconPlot = ({ cb }) => {
             </Box>
           )}
         </Box>
-      </CardContent>
+      </DialogContent>
       <DialogActions>
         <Button
-          disabled={!nation || !zone}
+          disabled={!nation || !zone || participants.length === 0}
           onClick={(e) => {
             e.preventDefault();
             preparePlot();
-            cb();
+            onClose();
           }}
         >
           Done
         </Button>
         <Button
-          disabled={!nation || !zone}
           onClick={(e) => {
             e.preventDefault();
-            cb();
+            onClose();
           }}
         >
           Cancel
