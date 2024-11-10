@@ -110,7 +110,11 @@ const PersonnelScreen = () => {
           </TabList>
         </Box>
         <TabPanel value="overview">
-          {selectedAgent ? <PersonnelProfile /> : <PersonnelOverview />}
+          {selectedAgent ? (
+            <PersonnelProfile selectedAgent={selectedAgent} />
+          ) : (
+            <PersonnelOverview />
+          )}
         </TabPanel>
         <TabPanel value="captives">
           <PersonnelCaptives />
