@@ -20,7 +20,7 @@
     "@typescript-eslint/eslint-plugin": "7.2.0",
     "@vitejs/plugin-react": "4.2.1",
     "cross-env": "^7.0.3",
-    "empire-of-evil": "../empire-of-evil",
+    "empire-of-evil": "../lib-eoe",
     "eslint": "8.57.0",
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-react-refresh": "0.4.6",
@@ -98,8 +98,5 @@
     "webpack": "^5.90.3",
     "webpack-cli": "^5.1.4"
   },
-  "packageManager": "yarn@4.2.2",
-  "resolutions": {
-    "empire-of-evil": "portal:/Users/jedaisaboteur/Repositories/empire-of-evil"
-  }
+  "packageManager": "yarn@4.2.2"
 }

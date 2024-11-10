@@ -9296,7 +9296,7 @@ __metadata:
     babel-loader: "npm:^9.1.3"
     cross-env: "npm:^7.0.3"
     css-loader: "npm:^6.10.0"
-    empire-of-evil: ../empire-of-evil
+    empire-of-evil: ../lib-eoe
     eslint: "npm:8.57.0"
     eslint-plugin-react-hooks: "npm:4.6.0"
     eslint-plugin-react-refresh: "npm:0.4.6"
@@ -9329,14 +9329,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"empire-of-evil@portal:/Users/jedaisaboteur/Repositories/empire-of-evil::locator=empire-of-evil-client%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "empire-of-evil@portal:/Users/jedaisaboteur/Repositories/empire-of-evil::locator=empire-of-evil-client%40workspace%3A."
+"empire-of-evil@file:../lib-eoe::locator=empire-of-evil-client%40workspace%3A.":
+  version: 1.0.0
+  resolution: "empire-of-evil@file:../lib-eoe#../lib-eoe::hash=7aa764&locator=empire-of-evil-client%40workspace%3A."
   dependencies:
     typescript: "npm:^5.3.3"
     uuid: "npm:^9.0.0"
+  checksum: 10c0/9dd5822c9c3be31a530a9be8ffa497d33b0dc906e78037eb4b5e3fb7bce1aa7219c79dec1cc3e7f2367792d7fc38762b88382a2ede9d2320bebbd55e19f2489f
   languageName: node
-  linkType: soft
+  linkType: hard
 
 "encodeurl@npm:~1.0.2":
   version: 1.0.2
