@@ -36,7 +36,7 @@ const TitleScreenOptions = () => {
           <ListItem>
             <ListItemButton
               onClick={() => {
-                loadGame();
+                loadGame(saveData);
               }}
             >
               <ListItemText primary={"Load Session"} />
