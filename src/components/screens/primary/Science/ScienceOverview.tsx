@@ -54,7 +54,10 @@ const ScienceOverview = ({ activeProjects }: ScienceOverviewProps) => {
                     </Typography>
                     {project ? (
                       <Typography variant="body2">
-                        {managers.science.projects[project?.indexName].name}
+                        {
+                          managers.science.projectConfig[project?.indexName]
+                            .name
+                        }
                       </Typography>
                     ) : (
                       <Typography variant="body2">No Project</Typography>
