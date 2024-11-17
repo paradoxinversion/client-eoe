@@ -46,7 +46,7 @@ const InfrastructureScreen = () => {
         </Grid>
         <Divider />
         {selectedBuilding ? (
-          <InfrastructureBuildingProfile />
+          <InfrastructureBuildingProfile selectedBuilding={selectedBuilding} />
         ) : (
           <InfrastructureOverview />
         )}

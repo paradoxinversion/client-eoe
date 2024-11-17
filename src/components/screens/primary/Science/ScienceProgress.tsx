@@ -33,13 +33,13 @@ const ScienceProgress = ({ activeProjects }: ScienceProgressProps) => {
         <Grid container>
           {activeProjects.map((project) => {
             console.log(project);
+            const projectIndex = project.indexName;
+            const projectData = managers.science.projectConfig[projectIndex];
             return (
               <Grid item key={project.indexName}>
                 <Card>
                   <CardContent>
-                    <Typography variant="body2">
-                      {managers.science.projects[project.indexName].name}
-                    </Typography>
+                    <Typography variant="body2">{projectData.name}</Typography>
 
                     <Typography variant="body2">
                       <strong>Research Lab</strong>
@@ -54,16 +54,12 @@ const ScienceProgress = ({ activeProjects }: ScienceProgressProps) => {
                       <strong>Progress</strong>
                     </Typography>
                     <Typography variant="body2">
-                      Science Goal:{" "}
-                      {managers.science.projects[project.indexName].science}{" "}
+                      Science Goal: {projectData.science}{" "}
                     </Typography>
                     <LinearProgress
                       variant="determinate"
                       value={
-                        (project.accumulatedScience /
-                          managers.science.projects[project.indexName]
-                            .science) *
-                        100
+                        (project.accumulatedScience / projectData.science) * 100
                       }
                     />
                   </CardContent>
