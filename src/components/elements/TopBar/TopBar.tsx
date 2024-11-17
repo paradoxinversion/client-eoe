@@ -41,7 +41,9 @@ const TopBar = ({ gameSessionActive }: { gameSessionActive: boolean }) => {
         {gameSessionActive && (
           <>
             <Typography variant="body2" flexGrow={1}>
-              {managers.game.GameManager.getInstance().gameData.gameDate.toDateString()}
+              {new Date(
+                managers.game.GameManager.getInstance().gameData.gameDate
+              ).toDateString()}
             </Typography>
             <Stack direction="row" spacing={1}>
               <Typography variant="body2" alignSelf="center">
