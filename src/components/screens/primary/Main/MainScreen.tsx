@@ -97,7 +97,7 @@ const MainScreen = () => {
               content={`${
                 actions.zones.getZones({
                   nationId: actions.organization.getEvilEmpire()?.nationId,
-                  organizationId: gameData.player.empireId,
+                  organizationId: actions.organization.getEvilEmpire()?.id,
                 }).length
               }/${Object.keys(gameData.zones).length}`}
               span={{ xs: 1 }}
