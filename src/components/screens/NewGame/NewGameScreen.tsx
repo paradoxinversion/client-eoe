@@ -17,13 +17,13 @@ import {
 } from "@mui/material";
 import { newGame } from "../../../actions/dataManagement";
 
-import { generateName, getCodeName } from "empire-of-evil/src/generators/names";
+import { generators } from "empire-of-evil";
 
 const NewGameScreen = () => {
   const [overlordFormData, setOverlordFormData] = useState({
-    overlordName: generateName(),
+    overlordName: generators.nameGenerators.generateName(),
     pet: -1,
-    codename: getCodeName(),
+    codename: generators.nameGenerators.getCodeName(),
     empireName: "EVIL Empire",
     empireColor: "",
     takePrisoners: "1",

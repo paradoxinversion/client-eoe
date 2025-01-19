@@ -1,15 +1,12 @@
 import { Dialog, Box, Typography, Button } from "@mui/material";
-import actions from "empire-of-evil/src/actions";
-import managers from "empire-of-evil/src/managers";
+import { actions, managers } from "empire-of-evil";
 import {
   setActivity,
   setSelectedAgents,
 } from "../../../../../features/ActivityParticipantSelector/ActivityParticipantSelectorSlice";
 import { selectEntity } from "../../../../../features/selectionSlice";
-import { ActivityConfig } from "empire-of-evil/src/managers/activities/activityConfig";
 import AgentSelector from "../../../../elements/Selectors/AgentSelector/AgentSelector";
-import { Person } from "empire-of-evil/src/types/interfaces/entities";
-import Activity from "empire-of-evil/src/managers/activities/Activity";
+import { Person } from "empire-of-evil/types";
 
 type ActivityParticipantDialogProps = {
   open: boolean;

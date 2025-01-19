@@ -1,7 +1,7 @@
 import { Box, Paper, Typography } from "@mui/material";
 import { Check as CheckIcon, Close as CloseIcon } from "@mui/icons-material";
 import DataGrid from "react-data-grid";
-import { Person } from "empire-of-evil/src/types/interfaces/entities";
+import { Person } from "empire-of-evil/types";
 import { managers } from "empire-of-evil";
 import { dataGridButton } from "../datagridRenderers/dataGridButton";
 import { useAppSelector } from "../../app/hooks";

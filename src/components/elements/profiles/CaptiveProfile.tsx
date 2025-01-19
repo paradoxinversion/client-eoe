@@ -1,6 +1,6 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { actions } from "empire-of-evil/";
+import { actions } from "empire-of-evil";
 import { updateGameData } from "../../../actions/dataManagement";
 import { clearSelections } from "../../../features/selectionSlice";
 

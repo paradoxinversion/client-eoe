@@ -29,12 +29,9 @@ import { managers, actions, utils } from "empire-of-evil";
 import { selectEntity } from "../../../features/selectionSlice";
 import { useEffect, useState } from "react";
 import { setPeople } from "../../../features/personSlice";
-import { getCodeName } from "empire-of-evil/src/generators/names";
+import { generators } from "empire-of-evil";
 import HeaderGridItem from "../HeaderGridItem/HeaderGridItem";
-import {
-  AgentDepartment,
-  Person,
-} from "empire-of-evil/src/types/interfaces/entities";
+import { AgentDepartment, Person } from "empire-of-evil/types";
 
 const AgentProfile = () => {
   const selectedAgent = useAppSelector((state) => state.selections.person);
@@ -96,7 +93,7 @@ const AgentProfile = () => {
             />
             <Button
               onClick={() => {
-                setCodenameValue(getCodeName());
+                setCodenameValue(generators.nameGenerators.getCodeName());
               }}
             >
               Random

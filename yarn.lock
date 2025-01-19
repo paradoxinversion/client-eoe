@@ -9296,7 +9296,7 @@ __metadata:
     babel-loader: "npm:^9.1.3"
     cross-env: "npm:^7.0.3"
     css-loader: "npm:^6.10.0"
-    empire-of-evil: ../lib-eoe
+    empire-of-evil: ../empire-of-evil
     eslint: "npm:8.57.0"
     eslint-plugin-react-hooks: "npm:4.6.0"
     eslint-plugin-react-refresh: "npm:0.4.6"
@@ -9329,13 +9329,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"empire-of-evil@file:../lib-eoe::locator=empire-of-evil-client%40workspace%3A.":
+"empire-of-evil@file:../empire-of-evil::locator=empire-of-evil-client%40workspace%3A.":
   version: 1.0.0
-  resolution: "empire-of-evil@file:../lib-eoe#../lib-eoe::hash=7aa764&locator=empire-of-evil-client%40workspace%3A."
+  resolution: "empire-of-evil@file:../empire-of-evil#../empire-of-evil::hash=c100c1&locator=empire-of-evil-client%40workspace%3A."
   dependencies:
-    typescript: "npm:^5.3.3"
+    typescript: "npm:5.4.5"
     uuid: "npm:^9.0.0"
-  checksum: 10c0/9dd5822c9c3be31a530a9be8ffa497d33b0dc906e78037eb4b5e3fb7bce1aa7219c79dec1cc3e7f2367792d7fc38762b88382a2ede9d2320bebbd55e19f2489f
+  checksum: 10c0/455a2bbe7c41385b13dc1fbd38d813192db17ef39b3d5470681fdd21fa9d174883ac39b53ab2c1c6be974bae53d69f0bb0296144d05e98dc133d073a4db08b58
   languageName: node
   linkType: hard
 
@@ -15789,7 +15789,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.3.3, typescript@npm:^5.4.5":
+"typescript@npm:5.4.5, typescript@npm:^5.4.5":
   version: 5.4.5
   resolution: "typescript@npm:5.4.5"
   bin:
@@ -15799,7 +15799,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.3.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.4.5#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.4.5#optional!builtin<compat/typescript>":
   version: 5.4.5
   resolution: "typescript@patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>::version=5.4.5&hash=5adc0c"
   bin:

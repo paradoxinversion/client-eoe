@@ -1,4 +1,3 @@
-import { getAgentSubordinates } from "empire-of-evil/src/organization";
 import { useState } from "react";
 import {
   Box,
@@ -108,7 +107,8 @@ const EventScreenRecruit = ({ currentGameEvent, resolveEvent }) => {
                   agentFilter: { agentsOnly: true },
                 })
                 .map((agent) => {
-                  const subordinates = getAgentSubordinates(agent);
+                  const subordinates =
+                    actions.organization.getAgentSubordinates(agent);
                   return (
                     <FormControlLabel
                       value={agent.id}
