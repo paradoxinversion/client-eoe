@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { LocationCity as LocationCityIcon } from "@mui/icons-material";
-import managers from "empire-of-evil";
+import { managers } from "empire-of-evil";
 import { Person } from "empire-of-evil/types";
 import { selectEntity } from "../../../../features/selectionSlice";
 import IconContent from "../../IconInt/IconInt";
