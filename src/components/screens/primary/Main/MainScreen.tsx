@@ -52,14 +52,15 @@ const MainScreen = () => {
           <Grid container padding={"1rem"} spacing={"1rem"} columns={5}>
             <HeaderGridItem
               title="EVIL"
-              content={actions.organization.getEvilEmpire().totalEvil}
+              content={actions.organization.getEvilEmpire()?.totalEvil}
               span={{ xs: 1 }}
             />
             <HeaderGridItem
               title="Wealth"
               content={`${currencyFormatter.format(
                 managers.game.GameManager.getInstance().gameData
-                  .governingOrganizations[gameData.player.organizationId].wealth
+                  .governingOrganizations[gameData.player.organizationId]
+                  ?.wealth
               )}
                   (+${currencyFormatter.format(
                     Math.trunc(actions.organization.getOrgIncome())
@@ -87,7 +88,7 @@ const MainScreen = () => {
             <HeaderGridItem
               title="Science"
               content={`${
-                actions.organization.getEvilEmpire().science
+                actions.organization.getEvilEmpire()?.science
               } (+${Math.trunc(actions.organization.getOrgScienceOutput())})`}
               span={{ xs: 1 }}
             />
@@ -95,7 +96,8 @@ const MainScreen = () => {
               title="Zones"
               content={`${
                 actions.zones.getZones({
-                  organizationId: gameData.player.empireId,
+                  nationId: actions.organization.getEvilEmpire()?.nationId,
+                  organizationId: actions.organization.getEvilEmpire()?.id,
                 }).length
               }/${Object.keys(gameData.zones).length}`}
               span={{ xs: 1 }}

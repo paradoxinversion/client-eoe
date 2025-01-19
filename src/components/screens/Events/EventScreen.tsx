@@ -17,10 +17,9 @@ import { setScreen } from "../../../features/screenSlice";
 import EventScreenIntruder from "../../elements/EventScreens/Intruder";
 import ScienceProjectComplete from "../../elements/EventScreens/ScienceProjectComplete";
 import { updateGameData } from "../../../actions/dataManagement";
-import GameEvent from "empire-of-evil/src/managers/events/GameEvent";
 import { addEventLog } from "../../../features/gameLogSlice";
-import { eventConfig } from "empire-of-evil/src/gameEvents";
 import { managers } from "empire-of-evil";
+
 import EventScreenPetEvent from "../../elements/EventScreens/EventScreenPetEvent";
 import EmbedAgents from "../../elements/EventScreens/EmbedAgents";
 import RecallEmbeddedAgents from "../../elements/EventScreens/RecallEmbeddedAgents";
@@ -64,14 +63,16 @@ const EventsScreen = () => {
 
   const resolveEvent = (resolveArgs) => {
     eventQueue.resolveCurrentEvent(resolveArgs);
-    const event = eventConfig[eventQueue.getCurrentEvent().type];
+    const event =
+      managers.events.eventConfig[eventQueue.getCurrentEvent().type];
     if (event) {
       let color = "primary";
       dispatch(
         addEventLog({
           text: eventQueue.getCurrentEvent().eventText,
           color,
-          icon: eventConfig[eventQueue.getCurrentEvent().type].icon,
+          icon: managers.events.eventConfig[eventQueue.getCurrentEvent().type]
+            .icon,
         })
       );
     }

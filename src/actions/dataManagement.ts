@@ -9,15 +9,13 @@ import { setInitialized } from "../features/gameManagerSlice";
 import { setProjects } from "../features/scienceSlice";
 import { setScreen } from "../features/screenSlice";
 import { updateSimActions } from "../features/gameLogSlice";
-import PlayerManager from "empire-of-evil/src/managers/cpu/PlayerManager";
-import Player from "empire-of-evil/src/managers/cpu/Player";
-import { SaveData } from "empire-of-evil/src/dataManagement/dataManagement";
-import { NewGameOptions } from "empire-of-evil/src/gameSetup";
+
 import {
+  NewGameOptions,
   GameData,
   GameLog,
-} from "empire-of-evil/src/managers/game/GameManager";
-import Activity from "empire-of-evil/src/managers/activities/Activity";
+  SaveData,
+} from "empire-of-evil/types";
 
 const GameManager = managers.game.GameManager;
 
@@ -29,8 +27,10 @@ export const loadGame = (saveData: SaveData) => {
   GameManager.getInstance();
 
   // load players
-  const players = saveData.playerData.map((player) => new Player(player));
-  PlayerManager.getInstance().setPlayers(players);
+  const players = saveData.playerData.map(
+    (player) => new managers.cpu.Player(player)
+  );
+  managers.cpu.PlayerManager.getInstance().setPlayers(players);
   managers.activities.ActivityManager.getInstance().populateActivities();
   managers.plots.PlotManager.getInstance().populatePlots();
 

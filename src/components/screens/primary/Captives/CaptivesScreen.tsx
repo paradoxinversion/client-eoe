@@ -7,7 +7,6 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { getEvilEmpire } from "empire-of-evil/src/organization";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import CaptiveProfile from "../../../elements/profiles/CaptiveProfile";
 import { managers, actions } from "empire-of-evil";
@@ -26,7 +25,7 @@ const CaptivesScreen = () => {
               excludeDeceased: true,
             },
             captive: {
-              capturedBy: getEvilEmpire().id,
+              capturedBy: actions.organization.getEvilEmpire().id,
             },
           })
           .map((person) => {
