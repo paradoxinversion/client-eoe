@@ -9331,11 +9331,11 @@ __metadata:
 
 "empire-of-evil@file:../empire-of-evil::locator=empire-of-evil-client%40workspace%3A.":
   version: 1.0.0
-  resolution: "empire-of-evil@file:../empire-of-evil#../empire-of-evil::hash=c100c1&locator=empire-of-evil-client%40workspace%3A."
+  resolution: "empire-of-evil@file:../empire-of-evil#../empire-of-evil::hash=bd1943&locator=empire-of-evil-client%40workspace%3A."
   dependencies:
     typescript: "npm:5.4.5"
     uuid: "npm:^9.0.0"
-  checksum: 10c0/455a2bbe7c41385b13dc1fbd38d813192db17ef39b3d5470681fdd21fa9d174883ac39b53ab2c1c6be974bae53d69f0bb0296144d05e98dc133d073a4db08b58
+  checksum: 10c0/e659b72cc80a8e52efafc057a7ab490aff94f90ff5168b17cb4f11b6d159ebc5519029d1f02045d357743c87275e70df2d069c138e692f0e5f862ebc7c2d4223
   languageName: node
   linkType: hard
 
