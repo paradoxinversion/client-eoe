@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { GameEventComponentProps } from "../screens/Events/EventScreen";
 import { useAppSelector } from "../../app/hooks";
-import { ReconZoneEventParams } from "empire-of-evil/src/managers/events/eventFunctions/recon";
+import { ReconZoneEventParams } from "empire-of-evil/types";
 import { MonitorHeart as MonitorHeartIcon } from "@mui/icons-material";
 
 const EventScreenReconZone = ({

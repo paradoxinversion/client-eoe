@@ -19,12 +19,12 @@ import ScienceProjectComplete from "../../elements/EventScreens/ScienceProjectCo
 import { updateGameData } from "../../../actions/dataManagement";
 import { addEventLog } from "../../../features/gameLogSlice";
 import { managers } from "empire-of-evil";
-
 import EventScreenPetEvent from "../../elements/EventScreens/EventScreenPetEvent";
 import EmbedAgents from "../../elements/EventScreens/EmbedAgents";
 import RecallEmbeddedAgents from "../../elements/EventScreens/RecallEmbeddedAgents";
 import DomesticCombatEncounter from "../../elements/EventScreens/DomesticCombatEncounter";
 import Raid from "../../elements/EventScreens/Raid";
+import { GameEvent } from "empire-of-evil/types";
 export interface GameEventComponentProps {
   resolveEvent: () => void;
   currentGameEvent: GameEvent;
